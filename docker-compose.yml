@@ -1,0 +1,74 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: web
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+    - .:/app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      # S3_ENDPOINT: http://localhost:9000
+      # S3_FORCE_PATH_STYLE: "true"
+      # AWS_ACCESS_KEY_ID: minioadmin
+      # AWS_SECRET_ACCESS_KEY: minioadmin
+      S3_BUCKET: feedback-audios
+    depends_on:
+      - postgres
+      - redis
+    links:
+      - postgres
+      - redis
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"  # API S3-compatible
+      - "9001:9001"  # Web UI
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_SERVER_URL: http://localhost:9000
+      S3_BUCKET: feedback-audios
+    volumes:
+      - minio-data:/data
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bash -c "bundle exec sidekiq -C config/sidekiq.yml"
+    volumes:
+      - .:/app
+    environment:
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/0
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+  postgres:
+    image: pgvector/pgvector:pg13
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+volumes:
+  minio-data:
+  redis-data:

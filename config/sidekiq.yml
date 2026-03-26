@@ -1,0 +1,16 @@
+:concurrency: 5
+:queues:
+  - [default, 1]
+  - [mailers, 2]
+  - [critical, 3]
+
+:pidfile: tmp/pids/sidekiq.pid
+:logfile: log/sidekiq.log
+
+:max_retries: 3
+:retry_interval: 10
+
+# Redis configuration
+:redis:
+  :url: <%= ENV['REDIS_URL'] || 'redis://localhost:6379/0' %>
+  :namespace: chista_api 
