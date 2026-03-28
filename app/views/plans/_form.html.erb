@@ -1,9 +1,9 @@
-<%= form_with(model: plan) do |form| %>
+<%= form_with(model: plan, class: "space-y-6") do |form| %>
   <% if plan.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(plan.errors.count, "error") %> prohibited this plan from being saved:</h2>
-
-      <ul>
+    <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900 shadow-[var(--shadow-card)]" role="alert">
+      <% err_n = plan.errors.count %>
+      <p class="font-medium"><%= err_n %> <%= err_n == 1 ? "erro impediu" : "erros impediram" %> salvar este plano:</p>
+      <ul class="mt-2 list-inside list-disc space-y-0.5 text-red-800">
         <% plan.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,22 +11,25 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="space-y-5">
+    <div>
+      <%= form.label :name, "Nome", class: "app-label" %>
+      <%= form.text_field :name, class: "app-input", autocomplete: "off" %>
+    </div>
+
+    <div>
+      <%= form.label :price, "Preço", class: "app-label" %>
+      <%= form.number_field :price, class: "app-input", min: 0, step: 1 %>
+    </div>
+
+    <div>
+      <%= form.label :status, "Status", class: "app-label" %>
+      <%= form.text_field :status, class: "app-input", placeholder: "ex.: ativo, rascunho" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :price, style: "display: block" %>
-    <%= form.number_field :price %>
-  </div>
-
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.text_field :status %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="flex flex-col-reverse gap-3 border-t border-zinc-100 pt-6 sm:flex-row sm:justify-end">
+    <%= link_to "Cancelar", plans_path, class: "app-btn-secondary text-center sm:text-left" %>
+    <%= form.submit plan.persisted? ? "Atualizar plano" : "Criar plano", class: "app-btn-primary cursor-pointer border-0" %>
   </div>
 <% end %>

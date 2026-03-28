@@ -7,39 +7,41 @@ class PlansTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     visit plans_url
-    assert_selector "h1", text: "Plans"
+    assert_selector "h1", text: "Ativos adicionados recentemente"
   end
 
   test "should create plan" do
     visit plans_url
-    click_on "New plan"
+    click_on "Novo plano"
 
-    fill_in "Name", with: @plan.name
-    fill_in "Price", with: @plan.price
+    fill_in "Nome", with: @plan.name
+    fill_in "Preço", with: @plan.price
     fill_in "Status", with: @plan.status
-    click_on "Create Plan"
+    click_on "Criar plano"
 
-    assert_text "Plan was successfully created"
-    click_on "Back"
+    assert_text "Plano criado com sucesso."
+    click_on "Voltar"
   end
 
   test "should update Plan" do
     visit plan_url(@plan)
-    click_on "Edit this plan", match: :first
+    click_on "Editar", match: :first
 
-    fill_in "Name", with: @plan.name
-    fill_in "Price", with: @plan.price
+    fill_in "Nome", with: @plan.name
+    fill_in "Preço", with: @plan.price
     fill_in "Status", with: @plan.status
-    click_on "Update Plan"
+    click_on "Atualizar plano"
 
-    assert_text "Plan was successfully updated"
-    click_on "Back"
+    assert_text "Plano atualizado com sucesso."
+    click_on "Voltar"
   end
 
   test "should destroy Plan" do
     visit plan_url(@plan)
-    click_on "Destroy this plan", match: :first
+    accept_confirm do
+      click_on "Excluir plano", match: :first
+    end
 
-    assert_text "Plan was successfully destroyed"
+    assert_text "Plano excluído com sucesso."
   end
 end

@@ -1,11 +1,17 @@
-<% content_for :title, "New plan" %>
+<% content_for :title, "Novo plano · Docfy" %>
 
-<h1>New plan</h1>
+<div class="mx-auto max-w-xl space-y-6">
+  <header>
+    <p class="text-xs font-semibold uppercase tracking-wide text-accent">Coleções</p>
+    <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Novo plano</h1>
+    <p class="mt-2 text-sm leading-relaxed text-zinc-600">Adicione um item à coleção com nome, valor e status.</p>
+  </header>
 
-<%= render "form", plan: @plan %>
+  <div class="app-card p-6 sm:p-8">
+    <%= render "form", plan: @plan %>
+  </div>
 
-<br>
-
-<div>
-  <%= link_to "Back to plans", plans_path %>
+  <p>
+    <%= link_to "← Voltar aos planos", plans_path, class: "text-sm font-medium text-zinc-600 no-underline transition-colors hover:text-zinc-900" %>
+  </p>
 </div>

@@ -1,16 +1,35 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Painel · Docfy" %>
+<% content_for :right_sidebar do %>
+  <%= render "shared/insights_panel" %>
+<% end %>
 
-<% content_for :title, "Plans" %>
+<div class="space-y-8">
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-accent">Coleção</p>
+      <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Ativos adicionados recentemente</h1>
+      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
+        Painel de gestão com IA — visualize entradas, metadados e saúde da coleção em um só lugar.
+      </p>
+    </div>
+    <%= link_to "Novo plano", new_plan_path, class: "app-btn-primary w-full shrink-0 sm:w-auto" %>
+  </header>
 
-<h1>Plans</h1>
-
-<div id="plans">
-  <% @plans.each do |plan| %>
-    <%= render plan %>
-    <p>
-      <%= link_to "Show this plan", plan %>
-    </p>
+  <% if @plans.any? %>
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <% @plans.each do |plan| %>
+        <%= render "plans/asset_card", plan: plan %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="app-card px-6 py-16 text-center">
+      <p class="text-sm font-medium text-zinc-900">Nenhum ativo ainda</p>
+      <p class="mt-1 text-sm text-zinc-500">Crie um plano para ver o cartão aparecer nesta grade.</p>
+      <%= link_to "Criar primeiro plano", new_plan_path, class: "app-btn-primary mt-6 inline-flex" %>
+    </div>
   <% end %>
-</div>
 
-<%= link_to "New plan", new_plan_path %>
+  <div class="mt-10 xl:hidden">
+    <%= render "shared/insights_panel" %>
+  </div>
+</div>

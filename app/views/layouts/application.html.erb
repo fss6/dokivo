@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR" class="h-full">
   <head>
     <title><%= content_for(:title) || "Docfy" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -10,19 +10,48 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap" rel="stylesheet">
+
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="min-h-dvh bg-zinc-100 font-sans text-zinc-900 antialiased">
+    <div class="flex min-h-dvh w-full items-stretch">
+      <%= render "layouts/nav_sidebar" %>
+
+      <div class="flex min-h-dvh min-w-0 flex-1 flex-col">
+        <%= render "layouts/top_bar" %>
+
+        <div class="flex min-h-0 flex-1 items-stretch">
+          <main class="min-w-0 flex-1 overflow-y-auto">
+            <div class="mx-auto flex min-h-full max-w-6xl flex-col px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+              <%= render "shared/flash" %>
+              <div class="flex-1">
+                <%= yield %>
+              </div>
+            </div>
+          </main>
+
+          <% if content_for?(:right_sidebar) %>
+            <aside class="hidden w-80 shrink-0 overflow-y-auto border-l border-zinc-200/80 bg-white shadow-[inset_1px_0_0_0_rgb(0_0_0/0.03)] xl:block">
+              <div class="flex min-h-full flex-col p-6">
+                <%= yield :right_sidebar %>
+              </div>
+            </aside>
+          <% end %>
+        </div>
+
+        <%= render "layouts/app_footer" %>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,12 +1,19 @@
-<% content_for :title, "Editing plan" %>
+<% content_for :title, "Editar plano · Docfy" %>
 
-<h1>Editing plan</h1>
+<div class="mx-auto max-w-xl space-y-6">
+  <header>
+    <p class="text-xs font-semibold uppercase tracking-wide text-accent">Coleções</p>
+    <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Editar plano</h1>
+    <p class="mt-2 text-sm leading-relaxed text-zinc-600">Atualize os dados deste item da coleção.</p>
+  </header>
 
-<%= render "form", plan: @plan %>
+  <div class="app-card p-6 sm:p-8">
+    <%= render "form", plan: @plan %>
+  </div>
 
-<br>
-
-<div>
-  <%= link_to "Show this plan", @plan %> |
-  <%= link_to "Back to plans", plans_path %>
+  <p class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+    <%= link_to "Ver detalhes", plan_path(@plan), class: "font-medium text-accent no-underline hover:text-teal-700" %>
+    <span class="text-zinc-300" aria-hidden="true">|</span>
+    <%= link_to "← Voltar aos planos", plans_path, class: "font-medium text-zinc-600 no-underline hover:text-zinc-900" %>
+  </p>
 </div>

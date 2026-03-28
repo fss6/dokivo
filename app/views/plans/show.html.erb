@@ -1,10 +1,23 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "#{@plan.name} · Docfy" %>
 
-<%= render @plan %>
+<div class="space-y-6">
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-accent">Coleções</p>
+      <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl"><%= @plan.name %></h1>
+      <p class="mt-1 text-sm text-zinc-500">Detalhes do plano na coleção</p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <%= link_to "Editar", edit_plan_path(@plan), class: "app-btn-primary" %>
+      <%= link_to "Voltar", plans_path, class: "app-btn-secondary" %>
+    </div>
+  </header>
 
-<div>
-  <%= link_to "Edit this plan", edit_plan_path(@plan) %> |
-  <%= link_to "Back to plans", plans_path %>
+  <%= render @plan %>
 
-  <%= button_to "Destroy this plan", @plan, method: :delete %>
+  <div class="app-card border-red-100 bg-red-50/30 p-4 sm:p-5">
+    <p class="text-sm font-medium text-zinc-800">Zona de risco</p>
+    <p class="mt-1 text-sm text-zinc-600">Excluir remove permanentemente este plano.</p>
+    <%= button_to "Excluir plano", @plan, method: :delete, form: { class: "mt-4 inline" }, data: { turbo_confirm: "Excluir este plano? Esta ação não pode ser desfeita." }, class: "app-btn-danger cursor-pointer" %>
+  </div>
 </div>

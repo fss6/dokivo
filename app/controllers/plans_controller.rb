@@ -25,7 +25,7 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       if @plan.save
-        format.html { redirect_to @plan, notice: "Plan was successfully created." }
+        format.html { redirect_to @plan, notice: "Plano criado com sucesso." }
         format.json { render :show, status: :created, location: @plan }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class PlansController < ApplicationController
   def update
     respond_to do |format|
       if @plan.update(plan_params)
-        format.html { redirect_to @plan, notice: "Plan was successfully updated.", status: :see_other }
+        format.html { redirect_to @plan, notice: "Plano atualizado com sucesso.", status: :see_other }
         format.json { render :show, status: :ok, location: @plan }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,7 +52,7 @@ class PlansController < ApplicationController
     @plan.destroy!
 
     respond_to do |format|
-      format.html { redirect_to plans_path, notice: "Plan was successfully destroyed.", status: :see_other }
+      format.html { redirect_to plans_path, notice: "Plano excluído com sucesso.", status: :see_other }
       format.json { head :no_content }
     end
   end
