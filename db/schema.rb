@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_28_202441) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_29_101508) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,6 +40,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_202441) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "plan_id", null: false
+    t.string "status"
+    t.datetime "current_period_end"
+    t.datetime "trial_ends_at"
+    t.datetime "canceled_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_subscriptions_on_account_id"
+    t.index ["plan_id"], name: "index_subscriptions_on_plan_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "email"
@@ -53,5 +66,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_28_202441) do
 
   add_foreign_key "accounts", "plans"
   add_foreign_key "folders", "accounts"
+  add_foreign_key "subscriptions", "accounts"
+  add_foreign_key "subscriptions", "plans"
   add_foreign_key "users", "accounts"
 end

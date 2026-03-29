@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  plan: one
+  status: active
+  current_period_end: 2026-03-29 10:15:08
+  trial_ends_at: 2026-03-29 10:15:08
+  canceled_at:
+
+two:
+  account: two
+  plan: two
+  status: trialing
+  current_period_end: 2026-04-29 10:15:08
+  trial_ends_at: 2026-03-29 10:15:08
+  canceled_at:

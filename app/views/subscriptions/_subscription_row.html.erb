@@ -1,0 +1,34 @@
+<tr class="transition-colors hover:bg-zinc-50/80">
+  <td class="px-4 py-3">
+    <% if subscription.account %>
+      <%= link_to subscription.account.name, account_path(subscription.account), class: "font-medium text-zinc-900 no-underline hover:text-accent" %>
+    <% else %>
+      —
+    <% end %>
+  </td>
+  <td class="hidden px-4 py-3 text-sm text-zinc-600 sm:table-cell">
+    <% if subscription.plan %>
+      <%= link_to subscription.plan.name, plan_path(subscription.plan), class: "text-zinc-600 no-underline hover:text-accent" %>
+    <% else %>
+      —
+    <% end %>
+  </td>
+  <td class="px-4 py-3">
+    <span class="inline-flex rounded-md px-2 py-0.5 text-xs font-medium <%= subscription_status_badge_classes(subscription.status) %>">
+      <%= subscription_status_label(subscription.status) %>
+    </span>
+  </td>
+  <td class="hidden px-4 py-3 text-sm tabular-nums text-zinc-600 lg:table-cell">
+    <%= format_subscription_datetime(subscription.current_period_end) %>
+  </td>
+  <td class="px-4 py-3 text-right">
+    <div class="flex flex-wrap items-center justify-end gap-2">
+      <%= link_to "Ver", subscription, class: "app-btn-secondary px-3 py-1.5 text-xs" %>
+      <%= link_to "Editar", edit_subscription_path(subscription), class: "app-btn-secondary px-3 py-1.5 text-xs" %>
+      <%= button_to "Excluir", subscription, method: :delete,
+            form: { class: "inline" },
+            data: { turbo_confirm: "Excluir esta assinatura?" },
+            class: "app-btn-danger cursor-pointer px-3 py-1.5 text-xs" %>
+    </div>
+  </td>
+</tr>
