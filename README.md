@@ -1,35 +1,35 @@
 # README
 
 ## Account
- ├── id<br/>
- ├── name<br/>
- ├── plan_id<br/>
- ├── status<br/>
+ |── id<br/>
+ |── name<br/>
+ |── plan_id<br/>
+ |── status<br/>
  └── has_many Users, Documents, Queries, Folders, Groups (TODO)
 
 ## User
- ├── id<br/>
- ├── account_id<br/>
- ├── email<br/>
- ├── name<br/>
- ├── role<br/>
+ |── id<br/>
+ |── account_id<br/>
+ |── email<br/>
+ |── name<br/>
+ |── role<br/>
  └── has_many Queries, GroupMemberships
 
 ## Plan
- ├── id<br/>
- ├── name<br/>
- ├── price<br/>
- ├── max_documents (TODO)<br/>
- ├── max_queries (TODO)<br/>
- ├── storage_limit_mb (TODO)<br/>
+ |── id<br/>
+ |── name<br/>
+ |── price<br/>
+ |── max_documents (TODO)<br/>
+ |── max_queries (TODO)<br/>
+ |── storage_limit_mb (TODO)<br/>
  └── has_many Accounts (TODO)
 
 ## Subscription
- ├── id<br/>
- ├── account_id<br/>
- ├── plan_id<br/>
- ├── status<br/>
- ├── current_period_end<br/>
+ |── id<br/>
+ |── account_id<br/>
+ |── plan_id<br/>
+ |── status<br/>
+ |── current_period_end<br/>
  └── belongs_to Account, Plan (TODO)
 
  ### Statuses
@@ -53,19 +53,19 @@
     - sem pagamento ativo
 
 ## Folder
- ├── id<br/>
- ├── account_id<br/>
- ├── name<br/>
+ |── id<br/>
+ |── account_id<br/>
+ |── name<br/>
  └── has_many Documents, FolderPermissions (TODO)
 
  ## Group
- ├── id<br/>
- ├── account_id<br/>
- ├── name<br/>
+ |── id<br/>
+ |── account_id<br/>
+ |── name<br/>
  └── has_many GroupMemberships, FolderPermissions
 
 ## GroupMembership
- ├── id<br/>
- ├── group_id<br/>
- ├── user_id<br/>
+ |── id<br/>
+ |── group_id<br/>
+ |── user_id<br/>
  └── belongs_to Group, User
