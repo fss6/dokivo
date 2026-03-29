@@ -13,3 +13,10 @@ two:
   name: MyString
   role: MyString
   active: false
+
+three:
+  account: one
+  email: outro@example.com
+  name: Outro usuário
+  role: member
+  active: true

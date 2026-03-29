@@ -8,6 +8,14 @@ class GroupsController < ApplicationController
 
   # GET /groups/1 or /groups/1.json
   def show
+    @memberships = @group.group_memberships.joins(:user).includes(:user).order("users.name")
+    member_ids = @group.user_ids
+    @available_users =
+      if member_ids.empty?
+        @group.account.users.order(:name)
+      else
+        @group.account.users.where.not(id: member_ids).order(:name)
+      end
   end
 
   # GET /groups/new

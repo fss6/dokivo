@@ -1,0 +1,57 @@
+<%# locals: group, memberships, available_users %>
+
+<section class="app-card overflow-hidden" aria-labelledby="group-members-heading">
+  <div class="border-b border-zinc-100 bg-zinc-50/80 px-5 py-4 sm:px-6">
+    <h2 id="group-members-heading" class="text-sm font-semibold text-zinc-900">Membros do grupo</h2>
+    <p class="mt-1 text-sm text-zinc-600">Usuários da conta <strong class="font-medium text-zinc-800"><%= group.account.name %></strong> neste grupo.</p>
+  </div>
+
+  <% if available_users.any? %>
+    <div class="border-b border-zinc-100 px-5 py-4 sm:px-6">
+      <%= form_with model: [group, GroupMembership.new], url: group_memberships_path(group), class: "flex flex-col gap-3 sm:flex-row sm:items-end" do |f| %>
+        <div class="min-w-0 flex-1">
+          <%= f.label :user_id, "Adicionar usuário", class: "app-label" %>
+          <%= f.collection_select :user_id, available_users, :id, ->(u) { "#{u.name} (#{u.email})" },
+                { prompt: "Selecione um usuário…" },
+                class: "app-input" %>
+        </div>
+        <%= f.submit "Adicionar ao grupo", class: "app-btn-primary shrink-0 cursor-pointer border-0" %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="border-b border-zinc-100 px-5 py-4 sm:px-6">
+      <p class="text-sm text-zinc-600">Todos os usuários desta conta já estão no grupo, ou não há outros usuários para adicionar.</p>
+    </div>
+  <% end %>
+
+  <% if memberships.any? %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-left text-sm">
+        <thead>
+          <tr class="border-b border-zinc-100 bg-white text-xs font-semibold uppercase tracking-wide text-zinc-500">
+            <th class="px-5 py-3 font-semibold sm:px-6">Nome</th>
+            <th class="hidden px-5 py-3 font-semibold sm:table-cell sm:px-6">E-mail</th>
+            <th class="px-5 py-3 text-right font-semibold sm:px-6">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-100">
+          <% memberships.each do |membership| %>
+            <tr class="hover:bg-zinc-50/60">
+              <td class="px-5 py-3 font-medium text-zinc-900 sm:px-6"><%= membership.user.name %></td>
+              <td class="hidden px-5 py-3 text-zinc-600 sm:table-cell sm:px-6"><%= membership.user.email %></td>
+              <td class="px-5 py-3 text-right sm:px-6">
+                <%= button_to "Remover", group_membership_path(group, membership), method: :delete,
+                      form: { data: { turbo_confirm: "Remover #{membership.user.name} deste grupo?" } },
+                      class: "app-btn-danger cursor-pointer px-3 py-1.5 text-xs" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="px-5 py-10 text-center sm:px-6">
+      <p class="text-sm text-zinc-600">Nenhum membro ainda. Adicione usuários da conta acima.</p>
+    </div>
+  <% end %>
+</section>

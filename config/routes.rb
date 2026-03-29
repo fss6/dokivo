@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :groups
+  resources :groups do
+    resources :memberships, controller: "group_memberships", only: %i[create destroy]
+  end
   resources :subscriptions
   resources :folders
   resources :users
