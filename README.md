@@ -1,24 +1,53 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Account
+ ├── id
+ ├── name
+ ├── plan_id
+ ├── status
+ └── has_many Users, Documents, Queries, Folders, Groups (TODO)
 
-Things you may want to cover:
+## User
 
-* Ruby version
+## Plan
+ ├── id
+ ├── name
+ ├── price
+ ├── max_documents (TODO)
+ ├── max_queries (TODO)
+ ├── storage_limit_mb (TODO)
+ └── has_many Accounts (TODO)
 
-* System dependencies
+## Subscription
+ ├── id
+ ├── account_id
+ ├── plan_id
+ ├── status
+ ├── current_period_end
+ └── belongs_to Account, Plan (TODO)
 
-* Configuration
+ ### Statuses
+ - trialing (Ex: 7 dias grátis)
+    - cliente ainda não paga
+    - acesso liberado (às vezes com limite)
+- active
+    - pagamento ok
+    - acesso total conforme plano
+- past_due (pagamento falhou)
+    - cartão recusado
+    - tentativa de cobrança falhou
+- unpaid (dívida confirmada)
+    - várias tentativas falharam
+    - cliente não pagou
+- canceled (cancelado pelo usuário)
+    - não renova mais
+    - ainda pode usar até current_period_en
+- expired (acabou o período)
+    - trial terminou OU assinatura venceu
+    - sem pagamento ativo
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Folder
+ ├── id
+ ├── account_id
+ ├── name
+ └── has_many Documents, FolderPermissions (TODO)
