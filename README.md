@@ -1,36 +1,44 @@
 # README
 
 ## Account
- |── id<br/>
- |── name<br/>
- |── plan_id<br/>
- |── status<br/>
- └── has_many Users, Documents, Queries, Folders, Groups (TODO)
+```
+- id
+- name
+- plan_id
+- status
+- has_many Users, Documents, Queries, Folders, Groups (TODO)
+```
 
 ## User
- |── id<br/>
- |── account_id<br/>
- |── email<br/>
- |── name<br/>
- |── role<br/>
- └── has_many Queries, GroupMemberships
+```
+- id
+- account_id
+- email
+- name
+- role
+- has_many Queries, GroupMemberships
+```
 
 ## Plan
- |── id<br/>
- |── name<br/>
- |── price<br/>
- |── max_documents (TODO)<br/>
- |── max_queries (TODO)<br/>
- |── storage_limit_mb (TODO)<br/>
- └── has_many Accounts (TODO)
+```
+- id
+- name
+- price
+- max_documents (TODO)
+- max_queries (TODO)
+- storage_limit_mb (TODO)
+- has_many Accounts (TODO)
+```
 
 ## Subscription
- |── id<br/>
- |── account_id<br/>
- |── plan_id<br/>
- |── status<br/>
- |── current_period_end<br/>
- └── belongs_to Account, Plan (TODO)
+```
+- id
+- account_id
+- plan_id
+- status
+- current_period_end
+- belongs_to Account, Plan (TODO)
+```
 
  ### Statuses
  - trialing (Ex: 7 dias grátis)
@@ -53,19 +61,25 @@
     - sem pagamento ativo
 
 ## Folder
- |── id<br/>
- |── account_id<br/>
- |── name<br/>
- └── has_many Documents, FolderPermissions (TODO)
+```
+- id
+- account_id
+- name
+- has_many Documents, FolderPermissions (TODO)
+```
 
- ## Group
- |── id<br/>
- |── account_id<br/>
- |── name<br/>
- └── has_many GroupMemberships, FolderPermissions
+## Group
+```
+- id
+- account_id
+- name
+- has_many GroupMemberships, FolderPermissions
+```
 
 ## GroupMembership
- |── id<br/>
- |── group_id<br/>
- |── user_id<br/>
- └── belongs_to Group, User
+```
+- id
+- group_id
+- user_id
+- belongs_to Group, User
+```
