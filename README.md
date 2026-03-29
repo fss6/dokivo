@@ -40,25 +40,26 @@
 - belongs_to Account, Plan (TODO)
 ```
 
- ### Statuses
- - trialing (Ex: 7 dias grátis)
-    - cliente ainda não paga
-    - acesso liberado (às vezes com limite)
-- active
-    - pagamento ok
-    - acesso total conforme plano
-- past_due (pagamento falhou)
-    - cartão recusado
-    - tentativa de cobrança falhou
-- unpaid (dívida confirmada)
-    - várias tentativas falharam
-    - cliente não pagou
-- canceled (cancelado pelo usuário)
-    - não renova mais
-    - ainda pode usar até current_period_en
-- expired (acabou o período)
-    - trial terminou OU assinatura venceu
-    - sem pagamento ativo
+> [!IMPORTANT]
+> Subscription status
+> - trialing (Ex: 7 dias grátis)
+>   - cliente ainda não paga
+>   - acesso liberado (às vezes com limite)
+> - active
+>    - pagamento ok
+>    - acesso total conforme plano
+> - past_due (pagamento falhou)
+>    - cartão recusado
+>    - tentativa de cobrança falhou
+> - unpaid (dívida confirmada)
+>    - várias tentativas falharam
+>    - cliente não pagou
+> - canceled (cancelado pelo usuário)
+>    - não renova mais
+>    - ainda pode usar até current_period_en
+> - expired (acabou o período)
+>    - trial terminou OU assinatura venceu
+>    - sem pagamento ativo
 
 ## Folder
 ```
