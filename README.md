@@ -85,4 +85,18 @@
 - belongs_to Group, User
 ```
 
+
+## Document
+
+```
+- id
+- account_id
+- user_id (owner)
+- folder_id
+- content [Texto bruto extraído do arquivo (PDF, DOCX, etc.)]
+- summary [resumo com IA]
+- status [pending: 0, processing: 1, processed: 2, failed: 3]
+- metadata [Campo flexível (jsonb) para guardar informações extras (Ex: {"pages": 12, "language": "pt-BR", "file_type": "pdf"})]
+```
+
 > This Readme using [GitHub syntax](https://docs.github.com/pt/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
