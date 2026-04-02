@@ -1,0 +1,47 @@
+<% in_folder = local_assigns.fetch(:in_folder, false) %>
+<tr class="transition-colors hover:bg-zinc-50/80">
+  <td class="px-4 py-3">
+    <span class="font-medium text-zinc-900"><%= document_file_label(document) %></span>
+  </td>
+  <% if in_folder %>
+    <td class="hidden px-4 py-3 sm:table-cell">
+      <% if document.user %>
+        <%= link_to document.user.name.presence || document.user.email, user_path(document.user), class: "text-sm text-zinc-600 no-underline hover:text-accent" %>
+      <% else %>
+        —
+      <% end %>
+    </td>
+  <% else %>
+    <td class="hidden px-4 py-3 sm:table-cell">
+      <% if document.account %>
+        <%= link_to document.account.name, account_path(document.account), class: "text-sm text-zinc-600 no-underline hover:text-accent" %>
+      <% else %>
+        —
+      <% end %>
+    </td>
+    <td class="hidden px-4 py-3 md:table-cell">
+      <% if document.folder %>
+        <%= link_to document.folder.name, folder_path(document.folder), class: "text-sm text-zinc-600 no-underline hover:text-accent" %>
+      <% else %>
+        —
+      <% end %>
+    </td>
+  <% end %>
+  <td class="px-4 py-3">
+    <span class="inline-flex rounded-md px-2 py-0.5 text-xs font-medium <%= document_status_badge_classes(document.status) %>">
+      <%= document_status_label(document.status) %>
+    </span>
+  </td>
+  <td class="hidden px-4 py-3 text-sm tabular-nums text-zinc-600 lg:table-cell">
+    <%= l(document.updated_at, format: :short) %>
+  </td>
+  <td class="px-4 py-3 text-right">
+    <div class="flex flex-wrap items-center justify-end gap-2">
+      <%= link_to "Ver", document, class: "app-btn-secondary px-3 py-1.5 text-xs" %>
+      <%= button_to "Excluir", document, method: :delete,
+            form: { class: "inline" },
+            data: { turbo_confirm: "Excluir este documento?" },
+            class: "app-btn-danger cursor-pointer px-3 py-1.5 text-xs" %>
+    </div>
+  </td>
+</tr>

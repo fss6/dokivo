@@ -1,30 +1,70 @@
-<div id="<%= dom_id document %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Account:</strong>
-    <%= document.account_id %>
+<div id="<%= dom_id document %>" class="app-card overflow-hidden">
+  <div class="grid divide-y divide-zinc-100 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+    <div class="px-5 py-4 sm:px-6 sm:py-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Arquivo</p>
+      <p class="mt-1 text-base font-medium text-zinc-900"><%= document_file_label(document) %></p>
+      <% if document.file.attached? %>
+        <p class="mt-2">
+          <%= link_to "Baixar", rails_blob_path(document.file, disposition: "attachment"),
+                class: "text-sm font-medium text-accent no-underline hover:text-teal-700" %>
+        </p>
+      <% end %>
+    </div>
+    <div class="px-5 py-4 sm:px-6 sm:py-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Status</p>
+      <p class="mt-2">
+        <span class="inline-flex rounded-md px-2.5 py-1 text-sm font-medium <%= document_status_badge_classes(document.status) %>">
+          <%= document_status_label(document.status) %>
+        </span>
+      </p>
+    </div>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">User:</strong>
-    <%= document.user_id %>
+  <div class="grid divide-y divide-zinc-100 border-t border-zinc-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+    <div class="px-5 py-4 sm:px-6 sm:py-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Conta</p>
+      <p class="mt-1 text-sm font-medium text-zinc-900">
+        <% if document.account %>
+          <%= link_to document.account.name, account_path(document.account), class: "text-accent no-underline hover:text-teal-700" %>
+        <% else %>
+          —
+        <% end %>
+      </p>
+    </div>
+    <div class="px-5 py-4 sm:px-6 sm:py-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Usuário</p>
+      <p class="mt-1 text-sm font-medium text-zinc-900">
+        <% if document.user %>
+          <%= link_to document.user.name.presence || document.user.email, user_path(document.user), class: "text-accent no-underline hover:text-teal-700" %>
+        <% else %>
+          —
+        <% end %>
+      </p>
+    </div>
+    <div class="px-5 py-4 sm:px-6 sm:py-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Pasta</p>
+      <p class="mt-1 text-sm font-medium text-zinc-900">
+        <% if document.folder %>
+          <%= link_to document.folder.name, folder_path(document.folder), class: "text-accent no-underline hover:text-teal-700" %>
+        <% else %>
+          —
+        <% end %>
+      </p>
+    </div>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">Folder:</strong>
-    <%= document.folder_id %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Content:</strong>
-    <%= document.content %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Summary:</strong>
-    <%= document.summary %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Status:</strong>
-    <%= document.status %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Metadata:</strong>
-    <%= document.metadata %>
-  </div>
+  <% if document.content.present? || document.summary.present? %>
+    <div class="grid divide-y divide-zinc-100 border-t border-zinc-100 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+      <% if document.content.present? %>
+        <div class="px-5 py-4 sm:px-6 sm:py-5">
+          <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Conteúdo</p>
+          <p class="mt-1 whitespace-pre-wrap text-sm text-zinc-800"><%= document.content %></p>
+        </div>
+      <% end %>
+      <% if document.summary.present? %>
+        <div class="px-5 py-4 sm:px-6 sm:py-5">
+          <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Resumo</p>
+          <p class="mt-1 whitespace-pre-wrap text-sm text-zinc-800"><%= document.summary %></p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 </div>

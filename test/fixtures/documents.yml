@@ -6,8 +6,7 @@ one:
   folder: one
   content: MyText
   summary: MyText
-  status: MyString
-  metadata: 
+  status: pending
 
 two:
   account: two
@@ -15,5 +14,4 @@ two:
   folder: two
   content: MyText
   summary: MyText
-  status: MyString
-  metadata: 
+  status: pending

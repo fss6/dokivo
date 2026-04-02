@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
-  resources :documents
+  resources :folders do
+    resources :documents, shallow: true, only: %i[index create show destroy]
+  end
   resources :groups do
     resources :memberships, controller: "group_memberships", only: %i[create destroy]
   end
   resources :subscriptions
-  resources :folders
   resources :users
   resources :accounts
   resources :plans

@@ -3,51 +3,38 @@ require "application_system_test_case"
 class DocumentsTest < ApplicationSystemTestCase
   setup do
     @document = documents(:one)
+    @folder = @document.folder
   end
 
-  test "visiting the index" do
-    visit documents_url
-    assert_selector "h1", text: "Documents"
+  test "visiting folder documents index" do
+    visit folder_documents_url(@folder)
+    assert_selector "h1", text: "Documentos"
   end
 
-  test "should create document" do
-    visit documents_url
-    click_on "New document"
+  test "upload from folder show" do
+    visit folder_url(@folder)
 
-    fill_in "Account", with: @document.account_id
-    fill_in "Content", with: @document.content
-    fill_in "Folder", with: @document.folder_id
-    fill_in "Metadata", with: @document.metadata
-    fill_in "Status", with: @document.status
-    fill_in "Summary", with: @document.summary
-    fill_in "User", with: @document.user_id
-    click_on "Create Document"
+    find('input[name="document[file]"]', visible: :all).attach_file(
+      Rails.root.join("test/fixtures/files/sample.txt")
+    )
 
-    assert_text "Document was successfully created"
-    click_on "Back"
+    assert_text "Arquivo enviado com sucesso", wait: 5
   end
 
-  test "should update Document" do
+  test "upload from documents list" do
+    visit folder_documents_url(@folder)
+
+    find('input[name="document[file]"]', visible: :all).attach_file(
+      Rails.root.join("test/fixtures/files/sample.txt")
+    )
+
+    assert_text "Arquivo enviado com sucesso", wait: 5
+  end
+
+  test "should destroy document" do
     visit document_url(@document)
-    click_on "Edit this document", match: :first
+    accept_confirm { click_on "Excluir documento", match: :first }
 
-    fill_in "Account", with: @document.account_id
-    fill_in "Content", with: @document.content
-    fill_in "Folder", with: @document.folder_id
-    fill_in "Metadata", with: @document.metadata
-    fill_in "Status", with: @document.status
-    fill_in "Summary", with: @document.summary
-    fill_in "User", with: @document.user_id
-    click_on "Update Document"
-
-    assert_text "Document was successfully updated"
-    click_on "Back"
-  end
-
-  test "should destroy Document" do
-    visit document_url(@document)
-    accept_confirm { click_on "Destroy this document", match: :first }
-
-    assert_text "Document was successfully destroyed"
+    assert_text "Documento excluído com sucesso"
   end
 end

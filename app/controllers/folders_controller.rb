@@ -1,5 +1,5 @@
 class FoldersController < ApplicationController
-  before_action :set_folder, only: %i[ show edit update destroy ]
+  before_action :set_folder, only: %i[show edit update destroy]
 
   # GET /folders or /folders.json
   def index
@@ -8,6 +8,7 @@ class FoldersController < ApplicationController
 
   # GET /folders/1 or /folders/1.json
   def show
+    @recent_documents = @folder.documents.with_attached_file.includes(:user).order(created_at: :desc).limit(10)
   end
 
   # GET /folders/new
@@ -47,7 +48,7 @@ class FoldersController < ApplicationController
     end
   end
 
-  # DELETE /folders/1 or /folders/1.json
+  # DELETE /folders/1 or /folders.json
   def destroy
     @folder.destroy!
 
@@ -65,6 +66,6 @@ class FoldersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def folder_params
-      params.expect(folder: [ :account_id, :name ])
+      params.expect(folder: [:account_id, :name])
     end
 end
