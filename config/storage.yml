@@ -6,6 +6,19 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
+s3:
+  service: S3
+  endpoint: <%= ENV.fetch("S3_ENDPOINT") %>
+  force_path_style: <%= %w[1 true yes].include?(ENV.fetch("S3_FORCE_PATH_STYLE", "false").downcase) %>
+  access_key_id: <%= ENV.fetch("S3_ACCESS_KEY_ID") %>
+  secret_access_key: <%= ENV.fetch("S3_SECRET_ACCESS_KEY") %>
+  bucket: <%= ENV.fetch("S3_BUCKET") %>
+  region: <%= ENV.fetch("AWS_REGION", "us-east-1") %>
+  # aws-sdk-s3 1.178+ adds flexible checksums by default; Active Storage also
+  # sends Content-MD5, which S3-compatible endpoints reject as "multiple checksums".
+  request_checksum_calculation: when_required
+  response_checksum_validation: when_required
+
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:
 #   service: S3
