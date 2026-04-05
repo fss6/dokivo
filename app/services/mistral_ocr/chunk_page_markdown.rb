@@ -50,13 +50,24 @@ module MistralOcr
     private
 
     def normalize_max_chars(value)
-      n = value || ENV.fetch("OCR_CHUNK_MAX_CHARS", DEFAULT_MAX_CHARS).to_i
-      n = DEFAULT_MAX_CHARS unless n.positive?
-      [ n, MIN_MAX_CHARS ].max
+      if value.nil?
+        n = ENV.fetch("OCR_CHUNK_MAX_CHARS", DEFAULT_MAX_CHARS).to_i
+        n = DEFAULT_MAX_CHARS unless n.positive?
+        [ n, MIN_MAX_CHARS ].max
+      else
+        n = value.to_i
+        n = DEFAULT_MAX_CHARS unless n.positive?
+        [ n, 1 ].max
+      end
     end
 
     def normalize_overlap(value, max_chars)
-      o = value || ENV.fetch("OCR_CHUNK_OVERLAP_CHARS", DEFAULT_OVERLAP).to_i
+      o =
+        if value.nil?
+          ENV.fetch("OCR_CHUNK_OVERLAP_CHARS", DEFAULT_OVERLAP).to_i
+        else
+          value.to_i
+        end
       o = 0 if o.negative?
       [ o, [ max_chars - 1, 0 ].max ].min
     end

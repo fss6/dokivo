@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  document_id: 1
+  content: MyText
+  recordable_id: 1
+  recordable_type: MyString
+  metadata: 
+
+two:
+  account: two
+  document_id: 1
+  content: MyText
+  recordable_id: 1
+  recordable_type: MyString
+  metadata: 
