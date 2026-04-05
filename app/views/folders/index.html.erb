@@ -14,7 +14,7 @@
 
   <% if @folders.any? %>
     <div class="px-1 py-2 sm:px-2">
-      <div class="grid grid-cols-1 gap-8 bg-red-100 md:grid-cols-2 xl:grid-cols-3">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       <%= render partial: "folders/folder_card", collection: @folders, as: :folder %>
       </div>
     </div>
