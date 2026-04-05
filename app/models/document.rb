@@ -5,6 +5,8 @@ class Document < ApplicationRecord
 
   has_one_attached :file
 
+  has_many :embedding_records, as: :recordable, dependent: :destroy
+
   enum :status, {
     pending: "pending",
     processing: "processing",

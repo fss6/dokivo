@@ -20,11 +20,35 @@ class DocumentOcrJob < ApplicationJob
       "usage_info" => result[:response]["usage_info"]
     }.compact
 
-    document.update!(
-      content: result[:text],
-      status: :processed,
-      metadata: meta
-    )
+    pages = result[:response]["pages"] || []
+
+    Document.transaction do
+      document.embedding_records.destroy_all
+
+      pages.each_with_index do |page_data, fallback_index|
+        markdown = page_data["markdown"].to_s
+        next if markdown.blank?
+
+        page_number = page_data["index"]
+        page_number = fallback_index if page_number.nil?
+
+        ::MistralOcr::ChunkPageMarkdown.call(markdown).each_with_index do |chunk_text, chunk_index|
+          EmbeddingRecord.create!(
+            account: document.account,
+            recordable: document,
+            document_id: document.id,
+            content: chunk_text,
+            metadata: {
+              "page" => page_number,
+              "chunk_index" => chunk_index,
+              "source" => "ocr"
+            }
+          )
+        end
+      end
+
+      document.update!(status: :processed, metadata: meta)
+    end
   rescue ::MistralOcr::ExtractContent::Error => e
     mark_failed(document, e.message)
   rescue StandardError => e

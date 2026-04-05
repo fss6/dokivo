@@ -3,7 +3,7 @@ class DocumentsController < ApplicationController
   before_action :set_document, only: %i[show destroy]
 
   def index
-    @documents = @folder.documents.includes(:account, :user, :folder).with_attached_file.order(created_at: :desc)
+    @documents = @folder.documents.includes(:account, :user, :folder, :embedding_records).with_attached_file.order(created_at: :desc)
   end
 
   def show
@@ -46,7 +46,7 @@ class DocumentsController < ApplicationController
   end
 
   def set_document
-    @document = Document.includes(:account, :user, :folder).with_attached_file.find(params.expect(:id))
+    @document = Document.includes(:account, :user, :folder, :embedding_records).with_attached_file.find(params.expect(:id))
   end
 
   # Preenchimento automático: conta da pasta, primeiro usuário dessa conta, status pendente.

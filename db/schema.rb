@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_01_171818) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_04_222406) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "vector"
 
   create_table "accounts", force: :cascade do |t|
     t.string "name"
@@ -65,6 +66,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_01_171818) do
     t.index ["account_id"], name: "index_documents_on_account_id"
     t.index ["folder_id"], name: "index_documents_on_folder_id"
     t.index ["user_id"], name: "index_documents_on_user_id"
+  end
+
+  create_table "embedding_records", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.integer "document_id"
+    t.text "content"
+    t.vector "embedding", limit: 1536
+    t.string "recordable_type"
+    t.bigint "recordable_id"
+    t.jsonb "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "document_id"], name: "index_embedding_records_on_account_id_and_document_id"
+    t.index ["account_id"], name: "index_embedding_records_on_account_id"
+    t.index ["embedding"], name: "index_embedding_records_on_embedding", opclass: :vector_cosine_ops, using: :ivfflat
+    t.index ["recordable_type", "recordable_id"], name: "index_embedding_records_on_recordable"
   end
 
   create_table "folders", force: :cascade do |t|
@@ -131,6 +148,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_01_171818) do
   add_foreign_key "documents", "accounts"
   add_foreign_key "documents", "folders"
   add_foreign_key "documents", "users"
+  add_foreign_key "embedding_records", "accounts"
   add_foreign_key "folders", "accounts"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
