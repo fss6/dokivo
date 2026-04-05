@@ -16,9 +16,26 @@ class Document < ApplicationRecord
 
   validate :user_belongs_to_account
   validate :folder_belongs_to_account
+  validate :tags_are_strings
   # validates :file, attached: true, on: :create
 
+  def tags
+    v = read_attribute(:tags)
+    v.is_a?(Array) ? v : []
+  end
+
   private
+
+  def tags_are_strings
+    return unless tags.is_a?(Array)
+
+    tags.each do |t|
+      next if t.is_a?(String)
+
+      errors.add(:tags, "deve ser uma lista de textos")
+      break
+    end
+  end
 
   def user_belongs_to_account
     return if account_id.blank? || user_id.blank?

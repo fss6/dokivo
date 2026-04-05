@@ -13,5 +13,6 @@ class DocumentEmbeddingRecordsJob < ApplicationJob
     return if records.none?
 
     ::EmbeddingRecords::Embed.call(records)
+    DocumentTaggingJob.perform_later(document.id) if document.reload.embedding_records.where.not(content: [ nil, "" ]).exists?
   end
 end

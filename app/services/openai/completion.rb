@@ -13,15 +13,22 @@ module Openai
     DEFAULT_MODEL = "gpt-4o-mini"
     API_URL = "https://api.openai.com/v1/chat/completions"
 
-    def self.call(messages:, model: nil, max_tokens: 64, temperature: 0.3)
-      new(messages: messages, model: model, max_tokens: max_tokens, temperature: temperature).call
+    def self.call(messages:, model: nil, max_tokens: 64, temperature: 0.3, response_format: nil)
+      new(
+        messages: messages,
+        model: model,
+        max_tokens: max_tokens,
+        temperature: temperature,
+        response_format: response_format
+      ).call
     end
 
-    def initialize(messages:, model: nil, max_tokens: 64, temperature: 0.3)
+    def initialize(messages:, model: nil, max_tokens: 64, temperature: 0.3, response_format: nil)
       @messages = messages
       @model = model || ENV.fetch("OPENAI_TITLE_MODEL", ENV.fetch("OPENAI_CHAT_MODEL", DEFAULT_MODEL))
       @max_tokens = max_tokens
       @temperature = temperature
+      @response_format = response_format
     end
 
     def call
@@ -37,12 +44,14 @@ module Openai
       request = Net::HTTP::Post.new(uri.request_uri)
       request["Authorization"] = "Bearer #{ENV.fetch('OPENAI_API_KEY')}"
       request["Content-Type"] = "application/json"
-      request.body = JSON.generate(
+      payload = {
         model: @model,
         messages: @messages,
         max_tokens: @max_tokens,
         temperature: @temperature
-      )
+      }
+      payload[:response_format] = @response_format if @response_format.present?
+      request.body = JSON.generate(payload)
 
       response = http.request(request)
       unless response.is_a?(Net::HTTPSuccess)
