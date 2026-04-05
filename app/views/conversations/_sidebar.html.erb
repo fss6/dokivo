@@ -33,19 +33,26 @@
     <nav class="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain pr-2 [scrollbar-gutter:stable]" aria-label="Lista de conversas">
       <% sidebar_conversations.each do |conv| %>
         <% active = current_id.present? && conv.id == current_id %>
-        <%= link_to account_conversation_path(account, conv),
-              class: [
-                "group flex items-start gap-2 rounded-lg px-3 py-2.5 text-left text-sm no-underline transition-colors",
-                active ? "bg-teal-900/90 text-white shadow-[inset_0_0_0_1px_rgb(20_184_166/0.45)]" : "text-zinc-300 hover:bg-zinc-700/55 hover:text-white"
-              ].join(" ") do %>
-          <%= heroicon "chat-bubble-left-right", variant: :outline, options: { class: "mt-0.5 h-4 w-4 shrink-0 text-zinc-500 group-hover:text-zinc-400 #{active ? '!text-teal-300' : ''}", "aria-hidden": "true" } %>
-          <span class="min-w-0 flex-1">
-            <%= render "conversations/sidebar_title_span", conversation: conv, variant: :desktop %>
-            <span class="mt-1 block text-[11px] font-normal <%= active ? "text-teal-200/90" : "text-zinc-500 group-hover:text-zinc-400" %>">
-              <%= conv.updated_at.strftime("%d/%m/%Y") %>
+        <div
+          class="group flex items-start gap-0.5 rounded-lg <%= active ? "bg-teal-900/90 text-white shadow-[inset_0_0_0_1px_rgb(20_184_166/0.45)]" : "text-zinc-300 hover:bg-zinc-700/55 hover:text-white" %>"
+        >
+          <%= link_to account_conversation_path(account, conv),
+                class: [
+                  "flex min-w-0 flex-1 items-start gap-2 px-3 py-2.5 text-left text-sm no-underline transition-colors",
+                  active ? "" : "rounded-lg"
+                ].join(" ") do %>
+            <%= heroicon "chat-bubble-left-right", variant: :outline, options: { class: "mt-0.5 h-4 w-4 shrink-0 text-zinc-500 group-hover:text-zinc-400 #{active ? '!text-teal-300' : ''}", "aria-hidden": "true" } %>
+            <span class="min-w-0 flex-1">
+              <%= render "conversations/sidebar_title_span", conversation: conv, variant: :desktop %>
+              <span class="mt-1 block text-[11px] font-normal <%= active ? "text-teal-200/90" : "text-zinc-500 group-hover:text-zinc-400" %>">
+                <%= conv.updated_at.strftime("%d/%m/%Y") %>
+              </span>
             </span>
-          </span>
-        <% end %>
+          <% end %>
+          <div class="shrink-0 pt-2 pr-1 sm:pt-2.5">
+            <%= render "conversations/delete_button", account: account, conversation: conv, variant: :sidebar, active: active %>
+          </div>
+        </div>
       <% end %>
       <% if sidebar_conversations.empty? %>
         <p class="px-2 py-6 text-center text-xs leading-relaxed text-zinc-500">Nenhuma conversa ainda. Use Nova conversa acima.</p>
@@ -64,14 +71,16 @@
     <div class="mt-1 max-h-64 space-y-0.5 overflow-y-auto border-t border-zinc-700/40 pt-2">
       <% sidebar_conversations.each do |conv| %>
         <% active = current_id.present? && conv.id == current_id %>
-        <%= link_to account_conversation_path(account, conv),
-              class: [
-                "block rounded-lg px-2 py-2 text-sm no-underline",
-                active ? "bg-teal-900/90 text-white" : "text-zinc-300 hover:bg-zinc-700/50"
-              ].join(" ") do %>
-          <%= render "conversations/sidebar_title_span", conversation: conv, variant: :mobile %>
-          <span class="mt-0.5 block text-[11px] opacity-80"><%= conv.updated_at.strftime("%d/%m/%Y") %></span>
-        <% end %>
+        <div class="group flex items-start gap-0.5 rounded-lg <%= active ? "bg-teal-900/90 text-white" : "text-zinc-300" %>">
+          <%= link_to account_conversation_path(account, conv),
+                class: "min-w-0 flex-1 rounded-lg px-2 py-2 text-sm no-underline #{active ? "" : "hover:bg-zinc-700/50"}" do %>
+            <%= render "conversations/sidebar_title_span", conversation: conv, variant: :mobile %>
+            <span class="mt-0.5 block text-[11px] opacity-80"><%= conv.updated_at.strftime("%d/%m/%Y") %></span>
+          <% end %>
+          <div class="shrink-0 pt-1.5 pr-0.5">
+            <%= render "conversations/delete_button", account: account, conversation: conv, variant: :sidebar, active: active %>
+          </div>
+        </div>
       <% end %>
     </div>
   </details>

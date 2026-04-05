@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :subscriptions
   resources :users
   resources :accounts do
-    resources :conversations, only: %i[index show create] do
+    resources :conversations, only: %i[index show create destroy] do
       resources :messages, only: [:create]
     end
   end

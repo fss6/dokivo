@@ -38,6 +38,12 @@ class ConversationsController < ApplicationController
     end
   end
 
+  def destroy
+    @conversation = @account.conversations.find(params.expect(:id))
+    @conversation.destroy
+    redirect_to account_conversations_path(@account), notice: "Conversa removida.", status: :see_other
+  end
+
   private
 
   def set_account

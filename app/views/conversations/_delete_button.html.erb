@@ -1,0 +1,22 @@
+<%# locals: (account:, conversation:, variant: :sidebar, active: false) %>
+<% label = conversation.title.presence || "Conversa ##{conversation.id}" %>
+<% if variant == :sidebar %>
+  <% btn_class = [
+    "inline-flex shrink-0 cursor-pointer rounded-md p-1.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-400/50",
+    "text-zinc-500 hover:bg-zinc-600/80 hover:text-red-300 sm:opacity-0 sm:group-hover:opacity-100",
+    active ? "text-zinc-400 sm:!opacity-100 hover:text-red-200" : ""
+  ].join(" ") %>
+<% else %>
+  <% btn_class = "inline-flex shrink-0 cursor-pointer rounded-md p-2 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-400/50" %>
+<% end %>
+<%= button_tag type: "button",
+      class: btn_class,
+      title: "Excluir conversa",
+      data: {
+        action: "click->conversation-delete-modal#open",
+        delete_url: account_conversation_path(account, conversation),
+        conversation_title: label
+      },
+      aria: { label: "Excluir conversa" } do %>
+  <%= heroicon "trash", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
+<% end %>
