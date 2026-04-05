@@ -5,8 +5,10 @@
 - id
 - name
 - plan_id
-- status
-- has_many Users, Documents, Queries, Folders, Groups (TODO)
+- active
+- description
+- belongs_to Plan
+- has_many Users, Documents, Conversations
 ```
 
 ## User
@@ -16,7 +18,9 @@
 - email
 - name
 - role
-- has_many Queries, GroupMemberships
+- active
+- has_many Conversations, Documents, GroupMemberships
+- has_many Groups, through: GroupMemberships
 ```
 
 ## Plan
@@ -24,10 +28,8 @@
 - id
 - name
 - price
-- max_documents (TODO)
-- max_queries (TODO)
-- storage_limit_mb (TODO)
-- has_many Accounts (TODO)
+- status
+- has_many Accounts (FK plan_id)
 ```
 
 ## Subscription
@@ -37,7 +39,9 @@
 - plan_id
 - status
 - current_period_end
-- belongs_to Account, Plan (TODO)
+- trial_ends_at
+- canceled_at
+- belongs_to Account, Plan
 ```
 
 > [!IMPORTANT]
@@ -56,7 +60,7 @@
 >    - cliente não pagou
 > - canceled (cancelado pelo usuário)
 >    - não renova mais
->    - ainda pode usar até current_period_en
+>    - ainda pode usar até current_period_end
 > - expired (acabou o período)
 >    - trial terminou OU assinatura venceu
 >    - sem pagamento ativo
@@ -66,7 +70,8 @@
 - id
 - account_id
 - name
-- has_many Documents, FolderPermissions (TODO)
+- belongs_to Account
+- has_many Documents
 ```
 
 ## Group
@@ -74,7 +79,8 @@
 - id
 - account_id
 - name
-- has_many GroupMemberships, FolderPermissions
+- belongs_to Account
+- has_many GroupMemberships
 ```
 
 ## GroupMembership
@@ -85,6 +91,27 @@
 - belongs_to Group, User
 ```
 
+## Conversation
+```
+- id
+- title
+- user_id
+- account_id
+- belongs_to User, Account
+- has_many Messages
+```
+
+## Message
+```
+- id
+- conversation_id
+- role [user | assistant]
+- content
+- sources (jsonb; citações RAG / referências)
+- metadata (jsonb; ex.: focus_document_id para RAG num único documento)
+- streaming
+- belongs_to Conversation
+```
 
 ## Document
 
@@ -95,8 +122,23 @@
 - folder_id
 - content [Texto bruto extraído do arquivo (PDF, DOCX, etc.)]
 - summary [resumo com IA]
-- status [pending: 0, processing: 1, processed: 2, failed: 3]
+- status [pending, processing, processed, failed]
 - metadata [Campo flexível (jsonb) para guardar informações extras (Ex: {"pages": 12, "language": "pt-BR", "file_type": "pdf"})]
+- file (Active Storage)
+- belongs_to Account, User, Folder
+- has_many EmbeddingRecords, as: :recordable
+```
+
+## EmbeddingRecord
+```
+- id
+- account_id
+- document_id (opcional; deve coincidir com recordable quando recordable é Document)
+- content (trecho indexado)
+- embedding (pgvector, 1536 dim.; similaridade via neighbor / ivfflat)
+- recordable_type, recordable_id (polymorphic; tipicamente Document)
+- metadata (jsonb; ex.: page, chunk_index)
+- belongs_to Account, optional Document, polymorphic: recordable
 ```
 
 > This Readme using [GitHub syntax](https://docs.github.com/pt/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
