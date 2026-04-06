@@ -1,0 +1,35 @@
+<section class="app-card overflow-hidden">
+  <div class="border-b border-zinc-200/80 bg-white/80 px-6 py-6 sm:px-8">
+    <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Entrar</h1>
+    <p class="mt-2 text-sm text-zinc-600">Acesse sua conta para continuar no Docfy.</p>
+  </div>
+
+  <div class="px-6 py-6 sm:px-8">
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-5" }) do |f| %>
+      <div>
+        <%= f.label :email, "E-mail", class: "app-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "app-input", placeholder: "voce@empresa.com" %>
+      </div>
+
+      <div>
+        <%= f.label :password, "Senha", class: "app-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "app-input", placeholder: "Sua senha" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-zinc-600">
+          <%= f.check_box :remember_me, class: "h-4 w-4 rounded border-zinc-300 text-accent focus:ring-accent/30" %>
+          <span>Lembrar de mim</span>
+        </label>
+      <% end %>
+
+      <%= f.submit "Entrar", class: "app-btn-primary w-full py-2.5 text-sm font-semibold" %>
+    <% end %>
+
+    <div class="mt-6 border-t border-zinc-200/80 pt-5 text-sm text-zinc-600">
+      <div class="space-y-2 [&_a]:font-medium [&_a]:text-accent [&_a]:transition-colors [&_a:hover]:text-teal-600">
+        <%= render "users/shared/links" %>
+      </div>
+    </div>
+  </div>
+</section>

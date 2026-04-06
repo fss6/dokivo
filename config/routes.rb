@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
   get "chat", to: "chat#index", as: :chat
 
   resources :folders do

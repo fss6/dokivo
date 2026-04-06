@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+  <head>
+    <title><%= content_for(:title) || "Docfy" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap" rel="stylesheet">
+
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-dvh bg-zinc-100 font-sans text-zinc-900 antialiased">
+    <main class="mx-auto flex min-h-dvh w-full max-w-6xl flex-col justify-center px-4 py-10 sm:px-6 lg:px-8">
+      <div class="mx-auto mb-8 flex w-full max-w-lg items-center justify-center gap-2">
+        <span class="flex h-8 w-8 items-center justify-center rounded-md bg-accent text-sm font-semibold text-white shadow-sm">D</span>
+        <span class="text-sm font-semibold tracking-tight text-zinc-900">Docfy</span>
+      </div>
+
+      <div class="mx-auto w-full max-w-lg">
+        <%= render "shared/flash" %>
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>
