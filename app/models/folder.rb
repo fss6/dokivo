@@ -1,5 +1,5 @@
 class Folder < ApplicationRecord
-  belongs_to :account
+  acts_as_tenant(:account)
 
   has_many :documents, dependent: :destroy
 end

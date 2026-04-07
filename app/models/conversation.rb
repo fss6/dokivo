@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class Conversation < ApplicationRecord
+  acts_as_tenant(:account)
   DEFAULT_TITLE = "Nova conversa"
   TITLE_MAX_LENGTH = 255
 
   belongs_to :user
-  belongs_to :account
 
   has_many :messages, dependent: :destroy
 

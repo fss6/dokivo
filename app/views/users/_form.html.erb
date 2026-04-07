@@ -31,7 +31,7 @@
 
     <div>
       <%= form.label :role, "Função", class: "app-label" %>
-      <%= form.text_field :role, class: "app-input", placeholder: "ex.: admin, editor, leitor" %>
+      <%= form.select :role, User.roles.keys, { prompt: "Selecione uma função" }, class: "app-input" %>
     </div>
 
     <div class="flex items-center gap-3 rounded-lg border border-zinc-200 bg-zinc-50/80 px-4 py-3">

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  acts_as_tenant(:account)
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -9,5 +10,10 @@ class User < ApplicationRecord
   has_many :documents, dependent: :destroy
   has_many :group_memberships, dependent: :destroy
   has_many :groups, through: :group_memberships
-  belongs_to :account
+
+  enum :role, {
+    member: "member", # Membro da conta
+    owner: "owner", # Administrador da conta
+    administrator: "administrator" # Administrador do SaaS
+  }, prefix: true
 end
