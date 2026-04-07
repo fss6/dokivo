@@ -2,13 +2,13 @@
 
 class ChatController < ApplicationController
   def index
-    account = Account.order(:id).first
+    account = current_tenant
     unless account
       redirect_to accounts_path, alert: "Crie uma conta para usar o chat."
       return
     end
 
-    user = account.users.order(:id).first
+    user = current_user
     unless user
       redirect_to account_path(account), alert: "Adicione um usuário à conta para usar o chat."
       return

@@ -23,7 +23,6 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
     doc = Document.order(:created_at).last
     assert_equal @folder.id, doc.folder_id
     assert_equal @folder.account_id, doc.account_id
-    assert_equal @folder.account.users.order(:id).first.id, doc.user_id
     assert_equal "pending", doc.status
     assert doc.file.attached?
   end

@@ -49,12 +49,10 @@ class DocumentsController < ApplicationController
     @document = Document.includes(:account, :user, :folder, :embedding_records).with_attached_file.find(params.expect(:id))
   end
 
-  # Preenchimento automático: conta da pasta, primeiro usuário dessa conta, status pendente.
-  # Para forçar Account.first global, troque `account` por `Account.order(:id).first`
-  # e garanta que a pasta pertença a essa conta.
+  # Preenchimento automático: conta da pasta, usuário logado, status pendente.
   def assign_defaults_for_upload!(doc)
     account = @folder.account
-    user = account&.users&.order(:id)&.first
+    user = current_user
 
     doc.assign_attributes(
       account_id: account&.id,

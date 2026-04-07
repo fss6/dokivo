@@ -11,7 +11,7 @@
       <span class="text-sm font-semibold tracking-tight">Conversas</span>
     </div>
 
-    <% chat_user_id = conversation&.user_id || account.users.order(:id).first&.id %>
+    <% chat_user_id = current_user&.id || conversation&.user_id %>
     <% if chat_user_id %>
       <%= button_to account_conversations_path(account),
             method: :post,

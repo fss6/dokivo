@@ -27,7 +27,7 @@ class ConversationsController < ApplicationController
 
   def create
     @conversation = @account.conversations.build(conversation_params)
-    @conversation.user_id ||= @account.users.order(:id).first&.id
+    @conversation.user_id ||= current_user&.id
 
     if @conversation.save
       redirect_to account_conversation_path(@account, @conversation),
