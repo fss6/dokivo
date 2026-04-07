@@ -8,7 +8,7 @@
 
   <nav class="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto p-2">
     <% nav = [
-      { key: :dashboard, label: "Painel", path: root_path, icon: :home },
+      { key: :dashboard, label: "Painel", path: dashboard_path, icon: :home },
       { key: :chat, label: "Chat", path: nav_chat_path, icon: :chat },
       { key: :folders, label: "Pastas", path: folders_path, icon: :folder },
       { key: :users, label: "Usuários", path: users_path, icon: :users },
@@ -19,7 +19,7 @@
       { key: :settings, label: "Configurações", path: "#", icon: :cog }
     ] %>
     <% nav.each do |item| %>
-      <% active = (item[:key] == :dashboard && current_page?(root_path)) ||
+      <% active = (item[:key] == :dashboard && (current_page?(root_path) || request.path.start_with?("/dashboard"))) ||
                    (item[:key] == :plans && request.path.start_with?("/plans")) ||
                    (item[:key] == :accounts && request.path.start_with?("/accounts") && !request.path.match?(%r{\A/accounts/\d+/conversations})) ||
                    (item[:key] == :users && request.path.start_with?("/users")) ||
@@ -29,7 +29,7 @@
                    (item[:key] == :subscriptions && request.path.start_with?("/subscriptions")) %>
       
       <% allowed = case item[:key]
-        when :dashboard then true
+        when :dashboard then policy(:dashboard).index?
         when :plans then policy(Plan).index?
         when :accounts then policy(Account).index?
         when :users then policy(User).index? 

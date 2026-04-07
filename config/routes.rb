@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     sessions: 'users/sessions'
   }
+  get "dashboard", to: "dashboard#index", as: :dashboard
   get "chat", to: "chat#index", as: :chat
 
   resources :folders do
@@ -28,5 +29,5 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  root "folders#index"
+  root "dashboard#index"
 end

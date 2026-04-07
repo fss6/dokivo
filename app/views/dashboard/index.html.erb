@@ -1,0 +1,111 @@
+<% content_for :title, "Painel · Docfy" %>
+
+<div class="space-y-8">
+  <header>
+    <p class="text-xs font-semibold uppercase tracking-wide text-accent">Visao geral</p>
+    <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Dashboard</h1>
+    <p class="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
+      Indicadores principais da conta e atividade recente.
+    </p>
+  </header>
+
+  <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <article class="app-card p-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Tags unicas</p>
+      <p class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900"><%= @total_tags %></p>
+    </article>
+
+    <article class="app-card p-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Arquivos</p>
+      <p class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900"><%= @total_documents %></p>
+    </article>
+
+    <article class="app-card p-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Usuarios</p>
+      <p class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900"><%= @total_users %></p>
+    </article>
+
+    <article class="app-card p-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Pastas</p>
+      <p class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900"><%= @total_folders %></p>
+    </article>
+  </section>
+
+  <section class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+    <article class="app-card p-5">
+      <header class="mb-4 flex items-center justify-between">
+        <h2 class="text-base font-semibold text-zinc-900">Ultimas tags adicionadas</h2>
+      </header>
+      <% if @recent_tags.any? %>
+        <ul class="space-y-2">
+          <% @recent_tags.each do |entry| %>
+            <li class="flex items-center justify-between rounded-md border border-zinc-200 px-3 py-2 text-sm">
+              <div>
+                <p class="font-medium text-zinc-900"><%= entry[:name] %></p>
+                <p class="text-xs text-zinc-500">
+                  <%= l(entry[:created_at], format: :short) %> em <%= entry[:document].folder&.name || "Sem pasta" %>
+                </p>
+              </div>
+              <%= link_to "Ver", document_path(entry[:document]), class: "text-xs font-medium text-accent no-underline hover:underline" %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm text-zinc-500">Nenhuma tag encontrada nos documentos.</p>
+      <% end %>
+    </article>
+
+    <article class="app-card p-5">
+      <header class="mb-4 flex items-center justify-between">
+        <h2 class="text-base font-semibold text-zinc-900">Arquivos por tipo</h2>
+      </header>
+      <% if @documents_by_type.any? %>
+        <ul class="space-y-2">
+          <% @documents_by_type.each do |content_type, total| %>
+            <li class="flex items-center justify-between rounded-md border border-zinc-200 px-3 py-2 text-sm">
+              <span class="font-medium text-zinc-900"><%= content_type %></span>
+              <span class="rounded bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-700"><%= total %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm text-zinc-500">Ainda nao ha anexos para agrupar por tipo.</p>
+      <% end %>
+    </article>
+  </section>
+
+  <section class="app-card p-5">
+    <header class="mb-4 flex items-center justify-between">
+      <h2 class="text-base font-semibold text-zinc-900">Arquivos recentes</h2>
+      <%= link_to "Ver todos", folders_path, class: "text-xs font-medium text-accent no-underline hover:underline" %>
+    </header>
+    <% if @recent_documents.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-zinc-200 text-xs uppercase tracking-wide text-zinc-500">
+              <th class="px-2 py-2">Arquivo</th>
+              <th class="px-2 py-2">Pasta</th>
+              <th class="px-2 py-2">Usuario</th>
+              <th class="px-2 py-2">Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_documents.each do |document| %>
+              <tr class="border-b border-zinc-100">
+                <td class="px-2 py-2 font-medium text-zinc-900">
+                  <%= link_to(document.file.filename.to_s.presence || "Documento ##{document.id}", document_path(document), class: "no-underline text-zinc-900 hover:text-accent") %>
+                </td>
+                <td class="px-2 py-2 text-zinc-600"><%= document.folder&.name || "-" %></td>
+                <td class="px-2 py-2 text-zinc-600"><%= document.user&.name || document.user&.email || "-" %></td>
+                <td class="px-2 py-2 text-zinc-500"><%= l(document.created_at, format: :short) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-sm text-zinc-500">Nenhum documento recente para exibir.</p>
+    <% end %>
+  </section>
+</div>
