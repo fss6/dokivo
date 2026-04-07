@@ -50,10 +50,12 @@
 
       <% next unless allowed %>
 
-      <%= link_to item[:path], class: [
-            "group flex items-center justify-center gap-3 rounded-md px-2 py-2.5 text-zinc-400 transition-colors no-underline xl:justify-start",
-            (active ? "bg-zinc-800/80 text-white" : "hover:bg-zinc-800/60 hover:text-zinc-200")
-          ].join(" ") do %>
+      <%= link_to item[:path],
+            class: [
+              "group flex items-center justify-center gap-3 rounded-md px-2 py-2.5 text-zinc-400 transition-colors no-underline xl:justify-start",
+              (active ? "bg-zinc-800/80 text-white" : "hover:bg-zinc-800/60 hover:text-zinc-200")
+            ].join(" "),
+            data: (item[:key] == :dashboard ? { turbo: false } : {}) do %>
         <%= render "layouts/nav_icon", name: item[:icon] %>
         <span class="hidden text-sm font-medium xl:inline"><%= item[:label] %></span>
       <% end %>
