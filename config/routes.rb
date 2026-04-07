@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   }
   get "dashboard", to: "dashboard#index", as: :dashboard
   get "documents/tags", to: "documents#tags_search", as: :documents_tags_search
+  get "documents/search", to: "documents#term_search", as: :documents_term_search
   get "chat", to: "chat#index", as: :chat
   resource :settings, only: %i[show update]
 

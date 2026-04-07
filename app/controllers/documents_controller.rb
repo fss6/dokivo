@@ -36,6 +36,23 @@ class DocumentsController < ApplicationController
     @documents = @documents.limit(50)
   end
 
+  def term_search
+    @query = params[:q].to_s.strip
+    @documents = Document.includes(:user, :folder).with_attached_file.order(created_at: :desc)
+
+    if @query.present?
+      like = "%#{ActiveRecord::Base.sanitize_sql_like(@query)}%"
+      @documents = @documents.where(
+        "documents.content ILIKE :q OR documents.summary ILIKE :q OR EXISTS (SELECT 1 FROM jsonb_array_elements_text(documents.tags) AS t(value) WHERE t.value ILIKE :q)",
+        q: like
+      )
+    else
+      @documents = @documents.none
+    end
+
+    @documents = @documents.limit(50)
+  end
+
   def create
     @document = @folder.documents.build
     assign_defaults_for_upload!(@document)

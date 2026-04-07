@@ -17,6 +17,10 @@ class DocumentPolicy < ApplicationPolicy
     index?
   end
 
+  def term_search?
+    index?
+  end
+
   def add_tag?
     update?
   end
