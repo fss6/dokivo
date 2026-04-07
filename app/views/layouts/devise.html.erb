@@ -12,13 +12,13 @@
 
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="/brand/favicon.ico" sizes="any">
+    <link rel="icon" href="/brand/logo.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/brand/logo_96x96.svg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
 
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
@@ -26,9 +26,16 @@
 
   <body class="min-h-dvh bg-zinc-100 font-sans text-zinc-900 antialiased">
     <main class="mx-auto flex min-h-dvh w-full max-w-6xl flex-col justify-center px-4 py-10 sm:px-6 lg:px-8">
-      <div class="mx-auto mb-8 flex w-full max-w-lg items-center justify-center gap-2">
-        <span class="flex h-8 w-8 items-center justify-center rounded-md bg-accent text-sm font-semibold text-white shadow-sm">D</span>
-        <span class="text-sm font-semibold tracking-tight text-zinc-900">Dokivo</span>
+      <div class="mx-auto mb-8 flex w-full max-w-lg justify-center">
+        <div class="flex items-center gap-3 sm:gap-4">
+          <%= image_tag "/brand/logo.svg", alt: "", class: "h-12 w-12 shrink-0 sm:h-14 sm:w-14", role: "presentation" %>
+          <div class="flex min-w-0 flex-col items-start gap-1">
+            <div class="logo-text-dark leading-none">Dok<span>ivo</span></div>
+            <p class="max-w-[min(100%,16rem)] text-left text-xs font-normal leading-snug text-slate-500 sm:max-w-xs sm:text-sm">
+              Gestão inteligente de documentos
+            </p>
+          </div>
+        </div>
       </div>
 
       <div class="mx-auto w-full max-w-lg">

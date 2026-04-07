@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="64" height="64" rx="16" fill="#1A6FFF"/>
+      <!-- Doc 1 (back) -->
+      <rect x="10" y="13" width="28" height="36" rx="4" fill="white" opacity="0.18"/>
+      <!-- Doc 2 (mid) -->
+      <rect x="16" y="10" width="28" height="36" rx="4" fill="white" opacity="0.35"/>
+      <!-- Doc 3 (front) -->
+      <rect x="22" y="7" width="28" height="36" rx="4" fill="white"/>
+      <!-- Lines on front doc -->
+      <rect x="28" y="16" width="15" height="2.5" rx="1.25" fill="#1A6FFF"/>
+      <rect x="28" y="22" width="11" height="2.5" rx="1.25" fill="#1A6FFF"/>
+      <rect x="28" y="28" width="13" height="2.5" rx="1.25" fill="#1A6FFF"/>
+      <rect x="28" y="34" width="9" height="2.5" rx="1.25" fill="#1A6FFF" opacity="0.5"/>
+    </svg>

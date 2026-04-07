@@ -1,8 +1,8 @@
 <aside class="hidden min-h-0 w-14 shrink-0 flex-col self-stretch border-r border-zinc-800/80 bg-zinc-950 lg:flex xl:w-52" aria-label="Navegação principal">
   <div class="flex h-14 items-center justify-center border-b border-zinc-800/80 xl:justify-start xl:px-4">
-    <%= link_to root_path, class: "flex items-center gap-2 text-white no-underline" do %>
-      <span class="flex h-8 w-8 items-center justify-center rounded-md bg-accent text-sm font-semibold text-white shadow-sm">D</span>
-      <span class="hidden text-sm font-semibold tracking-tight xl:inline">Dokivo</span>
+    <%= link_to root_path, class: "nav-sidebar-brand flex items-center gap-2 text-white no-underline", aria: { label: "Dokivo — início" } do %>
+      <%= image_tag "/brand/logo.svg", alt: "", class: "h-8 w-8 shrink-0", role: "presentation" %>
+      <div class="logo-text hidden xl:block">Dok<span>ivo</span></div>
     <% end %>
   </div>
 
