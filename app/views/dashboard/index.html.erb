@@ -123,72 +123,77 @@
 
 <script>
   (() => {
-    const canvas = document.getElementById("documents-per-day-chart");
-    if (!canvas || typeof Chart === "undefined") return;
+    const labelsPerDay = <%= raw(@documents_last_30_days.map { |point| point[:date] }.to_json) %>;
+    const totalsPerDay = <%= raw(@documents_last_30_days.map { |point| point[:total] }.to_json) %>;
+    const typeLabels = <%= raw(@documents_by_type.keys.to_json) %>;
+    const typeTotals = <%= raw(@documents_by_type.values.to_json) %>;
 
-    const labels = <%= raw(@documents_last_30_days.map { |point| point[:date] }.to_json) %>;
-    const totals = <%= raw(@documents_last_30_days.map { |point| point[:total] }.to_json) %>;
+    const bootCharts = () => {
+      if (typeof Chart === "undefined") return;
 
-    new Chart(canvas, {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [{
-          label: "Arquivos por dia",
-          data: totals,
-          borderColor: "#3b82f6",
-          backgroundColor: "rgba(59, 130, 246, 0.2)",
-          tension: 0.35,
-          fill: true,
-          pointRadius: 2,
-          pointHoverRadius: 4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { precision: 0 }
+      const perDayCanvas = document.getElementById("documents-per-day-chart");
+      if (perDayCanvas) {
+        const existing = Chart.getChart(perDayCanvas);
+        if (existing) existing.destroy();
+
+        new Chart(perDayCanvas, {
+          type: "line",
+          data: {
+            labels: labelsPerDay,
+            datasets: [{
+              label: "Arquivos por dia",
+              data: totalsPerDay,
+              borderColor: "#3b82f6",
+              backgroundColor: "rgba(59, 130, 246, 0.2)",
+              tension: 0.35,
+              fill: true,
+              pointRadius: 2,
+              pointHoverRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { beginAtZero: true, ticks: { precision: 0 } }
+            },
+            plugins: { legend: { display: false } }
           }
-        },
-        plugins: {
-          legend: { display: false }
-        }
+        });
       }
-    });
-  })();
 
-  (() => {
-    const canvas = document.getElementById("documents-by-type-chart");
-    if (!canvas || typeof Chart === "undefined") return;
+      const byTypeCanvas = document.getElementById("documents-by-type-chart");
+      if (byTypeCanvas) {
+        const existing = Chart.getChart(byTypeCanvas);
+        if (existing) existing.destroy();
 
-    const labels = <%= raw(@documents_by_type.keys.to_json) %>;
-    const totals = <%= raw(@documents_by_type.values.to_json) %>;
-
-    new Chart(canvas, {
-      type: "doughnut",
-      data: {
-        labels: labels,
-        datasets: [{
-          data: totals,
-          backgroundColor: [
-            "#3b82f6", "#14b8a6", "#f59e0b", "#ef4444", "#8b5cf6",
-            "#22c55e", "#06b6d4", "#f97316", "#eab308", "#a855f7"
-          ],
-          borderWidth: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: "bottom"
+        new Chart(byTypeCanvas, {
+          type: "doughnut",
+          data: {
+            labels: typeLabels,
+            datasets: [{
+              data: typeTotals,
+              backgroundColor: [
+                "#3b82f6", "#14b8a6", "#f59e0b", "#ef4444", "#8b5cf6",
+                "#22c55e", "#06b6d4", "#f97316", "#eab308", "#a855f7"
+              ],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: "bottom" } }
           }
-        }
+        });
       }
-    });
+    };
+
+    if (!window.__docfyDashboardChartsBound) {
+      document.addEventListener("turbo:load", bootCharts);
+      window.__docfyDashboardChartsBound = true;
+    }
+
+    bootCharts();
   })();
 </script>
