@@ -24,13 +24,13 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV.fetch("DB_NAME") { 'docfy_development' } %>
+  database: <%= ENV.fetch("DB_NAME") { 'dokivo_development' } %>
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
   # When left blank, PostgreSQL will use the default role. This is
   # the same name as the operating system user running Rails.
-  #username: docfy
+  #username: dokivo
 
   # The password associated with the PostgreSQL role (username).
   #password:
@@ -58,7 +58,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: docfy_test
+  database: dokivo_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -83,18 +83,18 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: docfy_production
-    username: docfy
-    password: <%= ENV["DOCFY_DATABASE_PASSWORD"] %>
+    database: dokivo_production
+    username: dokivo
+    password: <%= ENV["DOKIVO_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
-    database: docfy_production_cache
+    database: dokivo_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: docfy_production_queue
+    database: dokivo_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: docfy_production_cable
+    database: dokivo_production_cable
     migrations_paths: db/cable_migrate

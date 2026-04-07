@@ -39,7 +39,7 @@ class LlmService
 
   def self.smalltalk_system_prompt
     <<~PROMPT
-      Você é o assistente Docfy: um assistente de conversa dedicado a esta conta.
+      Você é o assistente Dokivo: um assistente de conversa dedicado a esta conta.
 
       O usuário mandou só uma saudação ou mensagem muito curta (sem pergunta ainda).
       Responda no mesmo idioma da mensagem, com tom caloroso e natural — como um assistente real cumprimentando e se colocando à disposição.

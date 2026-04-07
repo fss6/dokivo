@@ -1,4 +1,4 @@
-<% content_for :title, "Painel · Docfy" %>
+<% content_for :title, "Painel · Dokivo" %>
 <% content_for :head do %>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <% end %>
@@ -201,9 +201,9 @@
       }
     };
 
-    if (!window.__docfyDashboardChartsBound) {
+    if (!window.__dokivoDashboardChartsBound) {
       document.addEventListener("turbo:load", bootCharts);
-      window.__docfyDashboardChartsBound = true;
+      window.__dokivoDashboardChartsBound = true;
     }
 
     bootCharts();

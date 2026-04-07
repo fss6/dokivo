@@ -8,7 +8,7 @@ module Rag
 
       def meta_identity
         <<~TXT.strip
-          Sou o assistente Docfy desta conta. Não sou uma pessoa: sou o assistente configurado para ajudar você a consultar os documentos indexados aqui.
+          Sou o assistente Dokivo desta conta. Não sou uma pessoa: sou o assistente configurado para ajudar você a consultar os documentos indexados aqui.
 
           Posso responder perguntas com base nesses arquivos, resumir trechos, localizar cláusulas, valores ou prazos, e citar a fonte (arquivo e página) quando uso o conteúdo dos documentos.
 
@@ -18,7 +18,7 @@ module Rag
 
       def meta_capabilities
         <<~TXT.strip
-          Sou o assistente Docfy. Posso ajudar com:
+          Sou o assistente Dokivo. Posso ajudar com:
 
           - Consultas sobre o conteúdo dos documentos desta conta (só uso o que foi enviado e indexado)
           - Resumos e sínteses de trechos ou temas presentes nos arquivos
@@ -96,7 +96,7 @@ module Rag
       /\A\s*(em\s+)?que\s+você\s+pode\s+ajudar\b/i,
       /\A\s*o\s+que\s+você\s+(faz|pode\s+fazer|sabe\s+fazer|é\s+capaz)\b/i,
       /\A\s*como\s+(você|vc)\s+pode\s+ajudar\b/i,
-      /\bcomo\s+funciona\s+(o\s+docfy|este\s+assistente|aqui)\b/i,
+      /\bcomo\s+funciona\s+(o\s+dokivo|este\s+assistente|aqui)\b/i,
       /\A\s*(principais\s+)?func(ões|oes|ionalidades)\b/i,
       /\A\s*what\s+can\s+you\s+do\b/i,
       /\A\s*how\s+does\s+(it|this)\s+work\b/i,
