@@ -141,4 +141,21 @@
 - belongs_to Account, optional Document, polymorphic: recordable
 ```
 
+## Dashboard
+```
+- rota: /dashboard
+- root: dashboard#index
+- policy: DashboardPolicy
+- KPIs:
+  - total de tags unicas (documents.tags)
+  - total de arquivos
+  - total de usuarios
+  - total de pastas
+- widgets:
+  - Arquivos por tipo (doughnut chart)
+  - Arquivos criados por dia (line chart, ultimos 30 dias)
+  - Ultimas tags adicionadas
+  - Arquivos recentes
+```
+
 > This Readme using [GitHub syntax](https://docs.github.com/pt/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
