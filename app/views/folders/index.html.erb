@@ -1,6 +1,6 @@
 <% content_for :title, "Pastas · Docfy" %>
 
-<div class="space-y-8">
+<div class="space-y-8" data-controller="folder-explorer" data-folder-explorer-selected-folder-id-value="<%= @selected_folder&.id %>">
   <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
     <div>
       <p class="text-xs font-semibold uppercase tracking-wide text-accent">Organização</p>
@@ -22,7 +22,12 @@
             <%= link_to folders_path(folder_id: folder.id), class: [
                   "flex items-center justify-between rounded-md px-3 py-2 text-sm no-underline transition-colors",
                   (active ? "bg-zinc-900 text-white" : "text-zinc-700 hover:bg-zinc-100")
-                ].join(" ") do %>
+                ].join(" "),
+                data: {
+                  folder_explorer_target: "folder",
+                  folder_id: folder.id,
+                  action: "dragover->folder-explorer#dragOver dragenter->folder-explorer#dragEnter dragleave->folder-explorer#dragLeave drop->folder-explorer#drop"
+                } do %>
               <span class="font-medium"><%= folder.name %></span>
               <span class="<%= active ? 'text-zinc-300' : 'text-zinc-500' %> text-xs">
                 <%= folder.try(:documents_count).to_i %>
@@ -51,7 +56,6 @@
                   <th class="px-4 py-3 font-semibold">Arquivo</th>
                   <th class="hidden px-4 py-3 font-semibold sm:table-cell">Usuário</th>
                   <th class="px-4 py-3 font-semibold">Status</th>
-                  <th class="hidden px-4 py-3 font-semibold lg:table-cell">Atualizado</th>
                   <th class="px-4 py-3 text-right font-semibold">Ações</th>
                 </tr>
               </thead>
@@ -61,7 +65,7 @@
                       as: :document,
                       locals: {
                         in_folder: true,
-                        folder_move_options: @folders.map { |folder| [folder.name, folder.id] }
+                        folder_explorer: true
                       } %>
               </tbody>
             </table>

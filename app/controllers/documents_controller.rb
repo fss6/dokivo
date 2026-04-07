@@ -69,9 +69,13 @@ class DocumentsController < ApplicationController
   def move
     destination_folder = Folder.find(params.expect(:folder_id))
     @document.update!(folder: destination_folder)
-
-    redirect_back fallback_location: folders_path(folder_id: destination_folder.id),
-                  notice: "Arquivo movido com sucesso."
+    respond_to do |format|
+      format.html do
+        redirect_back fallback_location: folders_path(folder_id: destination_folder.id),
+                      notice: "Arquivo movido com sucesso."
+      end
+      format.json { render json: { ok: true, folder_id: destination_folder.id } }
+    end
   end
 
   def add_tag

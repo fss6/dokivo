@@ -1,7 +1,16 @@
 <% in_folder = local_assigns.fetch(:in_folder, false) %>
-<tr class="transition-colors hover:bg-zinc-50/80">
+<tr
+  class="transition-colors hover:bg-zinc-50/80"
+  <% if local_assigns[:folder_explorer] %>
+    draggable="true"
+    data-controller="folder-explorer"
+    data-folder-explorer-document-id-value="<%= document.id %>"
+    data-action="dragstart->folder-explorer#dragStart dragend->folder-explorer#dragEnd"
+  <% end %>
+>
   <td class="px-4 py-3">
     <span class="font-medium text-zinc-900"><%= document_file_label(document) %></span>
+    <small class="mt-0.5 block text-xs text-zinc-500">Atualizado em <%= l(document.updated_at, format: :short) %></small>
   </td>
   <% if in_folder %>
     <td class="hidden px-4 py-3 sm:table-cell">
@@ -32,25 +41,22 @@
       <%= document_status_label(document.status) %>
     </span>
   </td>
-  <td class="hidden px-4 py-3 text-sm tabular-nums text-zinc-600 lg:table-cell">
-    <%= l(document.updated_at, format: :short) %>
-  </td>
   <td class="px-4 py-3 text-right">
     <div class="flex flex-wrap items-center justify-end gap-2">
-      <% if local_assigns[:folder_move_options].present? %>
-        <%= form_with url: move_document_path(document), method: :patch, class: "inline-flex items-center gap-2" do |form| %>
-          <%= form.select :folder_id,
-                options_for_select(local_assigns[:folder_move_options], document.folder_id),
-                {},
-                class: "app-input !py-1.5 !text-xs !w-40" %>
-          <%= form.submit "Mover", class: "app-btn-secondary px-3 py-1.5 text-xs border-0 cursor-pointer" %>
-        <% end %>
+      <%= link_to document,
+            class: "app-btn-secondary inline-flex items-center justify-center px-2.5 py-1.5 text-xs",
+            title: "Ver documento",
+            aria: { label: "Ver documento" } do %>
+        <%= heroicon "eye", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
       <% end %>
-      <%= link_to "Ver", document, class: "app-btn-secondary px-3 py-1.5 text-xs" %>
-      <%= button_to "Excluir", document, method: :delete,
+      <%= button_to document, method: :delete,
             form: { class: "inline" },
             data: { turbo_confirm: "Excluir este documento?" },
-            class: "app-btn-danger cursor-pointer px-3 py-1.5 text-xs" %>
+            class: "app-btn-danger inline-flex items-center justify-center cursor-pointer px-2.5 py-1.5 text-xs",
+            title: "Excluir documento",
+            aria: { label: "Excluir documento" } do %>
+        <%= heroicon "trash", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
+      <% end %>
     </div>
   </td>
 </tr>
