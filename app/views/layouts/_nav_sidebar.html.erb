@@ -9,7 +9,7 @@
   <nav class="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto p-2">
     <% nav = [
       { key: :dashboard, label: "Painel", path: dashboard_path, icon: :home },
-      { key: :chat, label: "Chat", path: nav_chat_path, icon: :chat },
+      { key: :conversations, label: "Conversas", path: nav_chat_path, icon: :conversations },
       { key: :documents_term_search, label: "Busca por termo", path: documents_term_search_path, icon: :search_document },
       { key: :documents_tags_search, label: "Busca por tags", path: documents_tags_search_path, icon: :search },
       { key: :folders, label: "Pastas", path: folders_path, icon: :folder },
@@ -29,7 +29,7 @@
                    (item[:key] == :documents_term_search && request.path.start_with?("/documents/search")) ||
                    (item[:key] == :documents_tags_search && request.path.start_with?("/documents/tags")) ||
                    (item[:key] == :settings && request.path.start_with?("/settings")) ||
-                   (item[:key] == :chat && (request.path == "/chat" || request.path.match?(%r{\A/accounts/\d+/conversations}))) ||
+                   (item[:key] == :conversations && request.path.match?(%r{\A/accounts/\d+/conversations})) ||
                    (item[:key] == :groups && request.path.start_with?("/groups")) ||
                    (item[:key] == :subscriptions && request.path.start_with?("/subscriptions")) %>
       
@@ -40,7 +40,7 @@
         when :users then policy(User).index? 
         when :subscriptions then policy(Subscription).index?
         when :groups then policy(Group).index?
-        when :chat then policy(Conversation).index?
+        when :conversations then policy(Conversation).index?
         when :folders then policy(Folder).index?
         when :documents_term_search then policy(Document).index?
         when :documents_tags_search then policy(Document).index?

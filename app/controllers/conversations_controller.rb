@@ -5,12 +5,12 @@ class ConversationsController < ApplicationController
   before_action :authorize_policy
 
   def index
-    @conversations = @account.conversations.includes(:user).order(updated_at: :desc)
+    @conversations = scoped_conversations.includes(:user).order(updated_at: :desc)
     @sidebar_conversations = @conversations.limit(40)
   end
 
   def show
-    @conversation = @account.conversations.find(params.expect(:id))
+    @conversation = scoped_conversations.find(params.expect(:id))
     @messages = @conversation.messages.order(:id)
     @document_count = @account.documents.count
     @focus_document_id = params[:focus_document_id].presence
@@ -20,7 +20,7 @@ class ConversationsController < ApplicationController
       end
     @focus_document_id = nil if @focus_document.blank? && @focus_document_id.present?
 
-    @sidebar_conversations = @account.conversations
+    @sidebar_conversations = scoped_conversations
       .includes(:user)
       .order(updated_at: :desc)
       .limit(40)
@@ -40,7 +40,7 @@ class ConversationsController < ApplicationController
   end
 
   def destroy
-    @conversation = @account.conversations.find(params.expect(:id))
+    @conversation = scoped_conversations.find(params.expect(:id))
     @conversation.destroy
     redirect_to account_conversations_path(@account), notice: "Conversa removida.", status: :see_other
   end
@@ -57,6 +57,10 @@ class ConversationsController < ApplicationController
 
   def conversation_params
     params.expect(conversation: [:title, :user_id])
+  end
+
+  def scoped_conversations
+    policy_scope(@account.conversations)
   end
 
   def redirect_back_or_root(alert:)

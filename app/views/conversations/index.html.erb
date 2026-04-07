@@ -12,9 +12,12 @@
 
   <div class="flex min-h-0 min-w-0 flex-1 flex-col bg-gradient-to-b from-zinc-50/90 to-white">
     <header class="border-b border-zinc-200/90 bg-white/90 px-4 py-5 backdrop-blur-sm sm:px-6 lg:px-8">
-      <h2 class="text-lg font-bold tracking-tight text-zinc-900 sm:text-xl">Docfy</h2>
+      <h2 class="inline-flex items-center gap-2 text-lg font-bold tracking-tight text-zinc-900 sm:text-xl">
+        <%= heroicon "sparkles", variant: :outline, options: { class: "h-5 w-5 text-accent", "aria-hidden": "true" } %>
+        <span>Assistente de IA</span>
+      </h2>
       <p class="mt-0.5 max-w-2xl text-sm leading-relaxed text-zinc-600">
-        Todas as conversas desta conta. Abra uma na lista à esquerda ou inicie uma nova.
+        Acompanhe seu histórico de interações com IA e retome qualquer conversa quando precisar.
       </p>
       <p class="mt-3 text-xs text-zinc-500">
         Conta <span class="font-medium text-zinc-700"><%= @account.name.presence || "Conta ##{@account.id}" %></span>
