@@ -179,48 +179,11 @@
   </div>
 </section>
 
-<%# ─── DEPOIMENTOS ─── %>
-<section class="relative overflow-hidden border-b py-20" style="border-color:rgba(255,255,255,0.1);background:linear-gradient(180deg,#060E1C 0%,#091626 50%,#060E1C 100%);">
-  <div class="pointer-events-none absolute left-1/4 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full opacity-40" style="background:radial-gradient(circle,rgba(26,111,255,0.14) 0%,transparent 70%);filter:blur(60px);"></div>
-  <div class="mx-auto max-w-[1160px] px-8 relative z-10">
-    <div class="mb-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#A8C8FF]">O que dizem os clientes</div>
-    <h2 class="heading mb-12 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(24px,3vw,36px);">Equipes que já economizam horas<br>com o Dokivo.</h2>
-
-    <div class="grid gap-5 md:grid-cols-3">
-      <% [
-        ["Antes perdíamos horas procurando cláusulas em contratos antigos. Agora fazemos a pergunta e o Dokivo localiza o trecho em segundos, com a referência exata.",
-         "Ana Lima", "Advogada Sênior", "Escritório Lima & Associados"],
-        ["Implementamos em menos de um dia. Nossa equipe financeira parou de depender de e-mail para localizar documentos — tudo centralizado e pesquisável.",
-         "Carlos Mendes", "CFO", "Grupo Meridian"],
-        ["O controle de acesso por equipe foi decisivo para nós. Cada área vê apenas o que deve ver, com auditoria completa para nossas exigências de compliance.",
-         "Rafaela Souza", "Gerente de Compliance", "TechFab Indústrias"]
-      ].each_with_index do |(quote, name, role, company), i| %>
-        <div class="flex flex-col rounded-[20px] border p-7" style="background:rgba(255,255,255,0.055);border-color:rgba(255,255,255,0.12);">
-          <div class="mb-4 flex gap-0.5 text-[#1A6FFF]">
-            <% 5.times do %><span class="text-[14px]">★</span><% end %>
-          </div>
-          <p class="flex-1 text-[14px] font-light leading-[1.75] text-[#C8D8EE]">"<%= quote %>"</p>
-          <div class="mt-6 flex items-center gap-3 border-t pt-5" style="border-color:rgba(255,255,255,0.08);">
-            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1A6FFF] text-[12px] font-semibold text-white">
-              <%= name.split.map(&:first).first(2).join %>
-            </div>
-            <div>
-              <p class="text-[13px] font-semibold text-white"><%= name %></p>
-              <p class="text-[11px] text-[#8CA0BC]"><%= role %> · <%= company %></p>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</section>
-
 <%# ─── PROBLEM / SOLUTION ─── %>
 <section class="relative overflow-hidden py-24" id="funcionalidades">
   <div class="pointer-events-none absolute right-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/3 rounded-full" style="background:radial-gradient(circle,rgba(26,111,255,0.09) 0%,transparent 70%);filter:blur(70px);"></div>
   <div class="mx-auto max-w-[1160px] px-8">
     <div class="mb-4 flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#A8C8FF]">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/></svg>
       O cenário atual
     </div>
     <h2 class="heading mb-4 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(28px,3.5vw,42px);">Documentos espalhados custam<br>tempo e dinheiro.</h2>
@@ -254,6 +217,42 @@
           <% end %>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<%# ─── DEPOIMENTOS ─── %>
+<section class="relative overflow-hidden border-b py-20" style="border-color:rgba(255,255,255,0.1);background:linear-gradient(180deg,#060E1C 0%,#091626 50%,#060E1C 100%);">
+  <div class="pointer-events-none absolute left-1/4 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full opacity-40" style="background:radial-gradient(circle,rgba(26,111,255,0.14) 0%,transparent 70%);filter:blur(60px);"></div>
+  <div class="mx-auto max-w-[1160px] px-8 relative z-10">
+    <div class="mb-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#A8C8FF]">O que dizem os clientes</div>
+    <h2 class="heading mb-12 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(24px,3vw,36px);">Equipes que já economizam horas<br>com o Dokivo.</h2>
+
+    <div class="grid gap-5 md:grid-cols-3">
+      <% [
+        ["Antes perdíamos horas procurando cláusulas em contratos antigos. Agora fazemos a pergunta e o Dokivo localiza o trecho em segundos, com a referência exata.",
+         "Ana Lima", "Advogada Sênior", "Escritório Lima & Associados"],
+        ["Implementamos em menos de um dia. Nossa equipe financeira parou de depender de e-mail para localizar documentos — tudo centralizado e pesquisável.",
+         "Carlos Mendes", "CFO", "Grupo Meridian"],
+        ["O controle de acesso por equipe foi decisivo para nós. Cada área vê apenas o que deve ver, com auditoria completa para nossas exigências de compliance.",
+         "Rafaela Souza", "Gerente de Compliance", "TechFab Indústrias"]
+      ].each_with_index do |(quote, name, role, company), i| %>
+        <div class="flex flex-col rounded-[20px] border p-7" style="background:rgba(255,255,255,0.055);border-color:rgba(255,255,255,0.12);">
+          <div class="mb-4 flex gap-0.5 text-[#1A6FFF]">
+            <% 5.times do %><span class="text-[14px]">★</span><% end %>
+          </div>
+          <p class="flex-1 text-[14px] font-light leading-[1.75] text-[#C8D8EE]">"<%= quote %>"</p>
+          <div class="mt-6 flex items-center gap-3 border-t pt-5" style="border-color:rgba(255,255,255,0.08);">
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#1A6FFF] text-[12px] font-semibold text-white">
+              <%= name.split.map(&:first).first(2).join %>
+            </div>
+            <div>
+              <p class="text-[13px] font-semibold text-white"><%= name %></p>
+              <p class="text-[11px] text-[#8CA0BC]"><%= role %> · <%= company %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
 </section>
