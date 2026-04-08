@@ -1,0 +1,10 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account: one
+  provider: whatsapp_cloud
+  phone_number_id: "123456789012345"
+  display_phone_number: "+55 11 90000-0000"
+  verify_token: "fixture-verify-token-one"
+  access_token: "fixture-access-token-one"
+  active: true

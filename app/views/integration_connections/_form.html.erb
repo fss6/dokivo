@@ -1,0 +1,75 @@
+<%= form_with model: [@account, @connection], class: "space-y-5" do |form| %>
+  <div class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+    <p class="font-medium">Dois tokens diferentes</p>
+    <ul class="mt-2 list-inside list-disc space-y-1 text-amber-900/90">
+      <li><strong>Verify token</strong> — curto, escolhido por ti; o mesmo em Meta → Webhooks. Serve só para o GET de verificação.</li>
+      <li><strong>Access token</strong> — longo (muitas vezes começa por <code class="rounded bg-amber-100 px-1">EAA</code>…); vem dos utilizadores do sistema / token permanente na Meta.</li>
+    </ul>
+  </div>
+
+  <% if @connection.errors.any? %>
+    <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+      <p class="font-medium">Revise os campos abaixo.</p>
+      <ul class="mt-2 list-inside list-disc space-y-0.5 text-red-800">
+        <% @connection.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :phone_number_id, "Phone number ID (Meta)", class: "block text-sm font-medium text-zinc-900" %>
+    <%= form.text_field :phone_number_id, class: "mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm", required: true, autocomplete: "off" %>
+  </div>
+
+  <div>
+    <%= form.label :display_phone_number, "Telefone exibido (opcional)", class: "block text-sm font-medium text-zinc-900" %>
+    <%= form.text_field :display_phone_number, class: "mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm", autocomplete: "off", placeholder: "+55 11 99999-9999" %>
+  </div>
+
+  <div>
+    <%= form.label :verify_token, "Verify token (webhook Meta)", class: "block text-sm font-medium text-zinc-900" %>
+    <%= form.text_field :verify_token, class: "mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm font-mono text-xs", required: true, autocomplete: "off" %>
+    <p class="mt-1 text-xs text-zinc-500">
+      Defina o <strong>mesmo</strong> texto em Meta → Webhooks → Verify token. Isto não é o access token permanente (esse vai no campo abaixo).
+    </p>
+  </div>
+
+  <div>
+    <%= form.label :access_token, "Access token (permanente / sistema)", class: "block text-sm font-medium text-zinc-900" %>
+    <% if @connection.persisted? && @connection.access_token.present? %>
+      <p class="mt-1 text-xs font-medium text-emerald-800">
+        Token já guardado na base de dados (<%= @connection.access_token.length %> caracteres). O campo abaixo fica vazio de propósito: cole um token novo apenas se quiser substituir.
+      </p>
+    <% end %>
+    <%# text_area em vez de password_field: tokens Meta são longos e alguns browsers não enviam bem password em formulários Turbo/HTML. %>
+    <%= form.text_area :access_token,
+                       value: (@connection.persisted? ? "" : form.object.access_token),
+                       rows: 4,
+                       class: "mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm font-mono text-xs",
+                       required: @connection.new_record?,
+                       autocomplete: "off",
+                       spellcheck: false,
+                       placeholder: @connection.persisted? ? "Cole aqui só para substituir o token…" : "Cole o token permanente da Meta…" %>
+    <% if @connection.persisted? %>
+      <p class="mt-1 text-xs text-zinc-500">Deixe em branco para manter o token atual.</p>
+    <% end %>
+  </div>
+
+  <div class="rounded-md border border-zinc-200 px-4 py-3">
+    <label class="flex cursor-pointer items-start justify-between gap-4">
+      <div>
+        <p class="text-sm font-medium text-zinc-900">Integração ativa</p>
+        <p class="mt-1 text-sm text-zinc-500">
+          Desative para parar de aceitar webhooks e de enviar respostas por este número.
+        </p>
+      </div>
+      <%= form.check_box :active, class: "mt-1 h-4 w-4 rounded border-zinc-300 text-accent focus:ring-accent" %>
+    </label>
+  </div>
+
+  <div>
+    <%= form.submit @connection.persisted? ? "Salvar" : "Criar integração", class: "app-btn-primary cursor-pointer border-0" %>
+  </div>
+<% end %>

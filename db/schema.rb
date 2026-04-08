@@ -59,7 +59,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_07_150000) do
     t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "integration_connection_id"
+    t.string "channel", default: "web", null: false
+    t.string "external_sender_id"
     t.index ["account_id"], name: "index_conversations_on_account_id"
+    t.index ["integration_connection_id", "external_sender_id", "channel"], name: "index_conversations_on_whatsapp_thread", unique: true, where: "(((channel)::text = 'whatsapp'::text) AND (external_sender_id IS NOT NULL))"
+    t.index ["integration_connection_id"], name: "index_conversations_on_integration_connection_id"
     t.index ["user_id"], name: "index_conversations_on_user_id"
   end
 
@@ -120,6 +125,31 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_07_150000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_groups_on_account_id"
+  end
+
+  create_table "integration_connections", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "provider", default: "whatsapp_cloud", null: false
+    t.string "phone_number_id", null: false
+    t.string "display_phone_number"
+    t.string "verify_token", null: false
+    t.text "access_token", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "phone_number_id"], name: "index_integration_connections_on_account_and_phone_number_id", unique: true
+    t.index ["account_id"], name: "index_integration_connections_on_account_id"
+    t.index ["phone_number_id"], name: "index_integration_connections_on_phone_number_id_unique", unique: true
+    t.index ["verify_token"], name: "index_integration_connections_on_verify_token", unique: true
+  end
+
+  create_table "integration_inbound_events", force: :cascade do |t|
+    t.bigint "integration_connection_id", null: false
+    t.string "provider_event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["integration_connection_id"], name: "index_integration_inbound_events_on_integration_connection_id"
+    t.index ["provider_event_id"], name: "index_integration_inbound_events_on_provider_event_id", unique: true
   end
 
   create_table "messages", force: :cascade do |t|
@@ -194,6 +224,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_07_150000) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "conversations", "accounts"
+  add_foreign_key "conversations", "integration_connections"
   add_foreign_key "conversations", "users"
   add_foreign_key "documents", "accounts"
   add_foreign_key "documents", "folders"
@@ -203,6 +234,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_07_150000) do
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
   add_foreign_key "groups", "accounts"
+  add_foreign_key "integration_connections", "accounts"
+  add_foreign_key "integration_inbound_events", "integration_connections"
   add_foreign_key "messages", "conversations"
   add_foreign_key "settings", "accounts"
   add_foreign_key "subscriptions", "accounts"

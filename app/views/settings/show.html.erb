@@ -39,4 +39,18 @@
       </div>
     <% end %>
   </section>
+
+  <% if current_user.role_owner? %>
+    <section class="app-card p-5">
+      <h2 class="text-sm font-medium text-zinc-900">Integrações</h2>
+      <p class="mt-2 text-sm text-zinc-600">
+        Conecte a WhatsApp Cloud API por conta.
+      </p>
+      <div class="mt-4">
+        <%= link_to "WhatsApp (Cloud API)",
+                    account_integration_connections_path(current_user.account),
+                    class: "inline-flex rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-800" %>
+      </div>
+    </section>
+  <% end %>
 </div>

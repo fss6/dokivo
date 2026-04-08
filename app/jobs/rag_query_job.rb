@@ -130,6 +130,8 @@ class RagQueryJob < ApplicationJob
       partial: "messages/message",
       locals: { message: ai_message.reload, account: conversation.account }
     )
+
+    enqueue_whatsapp_delivery(conversation, ai_message)
   end
 
   def indexed?(conversation, user_message)
@@ -147,5 +149,12 @@ class RagQueryJob < ApplicationJob
       partial: "messages/message",
       locals: { message: ai_message.reload, account: conversation.account }
     )
+    enqueue_whatsapp_delivery(conversation, ai_message)
+  end
+
+  def enqueue_whatsapp_delivery(conversation, ai_message)
+    return unless conversation.whatsapp?
+
+    Integrations::Whatsapp::DeliverReplyJob.perform_later(ai_message.id)
   end
 end

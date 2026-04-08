@@ -35,6 +35,8 @@ class ConversationPolicy < ApplicationPolicy
 
   class Scope < ApplicationPolicy::Scope
     def resolve
+      return scope if user.role_owner?
+
       scope.where(user_id: user.id)
     end
   end

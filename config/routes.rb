@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  namespace :webhooks do
+    get "whatsapp", to: "whatsapp#verify"
+    post "whatsapp", to: "whatsapp#receive"
+  end
+
   devise_for :users, controllers: {
     sessions: 'users/sessions'
   }
@@ -25,6 +30,11 @@ Rails.application.routes.draw do
   resources :subscriptions
   resources :users
   resources :accounts do
+    resources :integration_connections, except: [:show] do
+      member do
+        post :test_connection
+      end
+    end
     resources :conversations, only: %i[index show create destroy] do
       resources :messages, only: [:create]
     end

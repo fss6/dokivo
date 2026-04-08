@@ -1,0 +1,15 @@
+<% content_for :title, "Nova integração · Dokivo" %>
+
+<div class="mx-auto max-w-xl space-y-6">
+  <header>
+    <%= link_to "← Voltar", account_integration_connections_path(@account), class: "text-sm font-medium text-accent" %>
+    <h1 class="mt-3 text-2xl font-semibold tracking-tight text-zinc-900">Nova integração WhatsApp</h1>
+    <p class="mt-2 text-sm text-zinc-600">
+      Defina o mesmo verify token na Meta e use a URL de webhook acima na lista de integrações.
+    </p>
+  </header>
+
+  <section class="app-card p-5">
+    <%= render "form" %>
+  </section>
+</div>

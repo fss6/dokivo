@@ -4,6 +4,7 @@ class Account < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :documents, dependent: :destroy
   has_many :conversations, dependent: :destroy
+  has_many :integration_connections, dependent: :destroy
   has_one :setting, dependent: :destroy
 
   after_create :create_default_setting!

@@ -1,0 +1,69 @@
+<% content_for :title, "Integrações · Dokivo" %>
+
+<div class="space-y-6">
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-accent">Conta</p>
+      <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Integrações WhatsApp</h1>
+      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
+        WhatsApp Cloud API (Meta). URL do webhook:
+        <code class="rounded bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-800"><%= webhooks_whatsapp_url %></code>
+      </p>
+      <details class="mt-3 max-w-2xl rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-600">
+        <summary class="cursor-pointer font-medium text-zinc-800">Como testar a integração</summary>
+        <ul class="mt-2 list-inside list-disc space-y-1.5 text-zinc-600">
+          <li>
+            Use <strong>Testar conexão</strong> para validar o access token e o phone number ID na Meta (não envia mensagem ao cliente).
+          </li>
+          <li>
+            <strong>Verify token</strong> (campo nesta página) é <em>só</em> para o webhook — não é o access token da API. Tem de ser <strong>exactamente igual</strong> ao “Verify token” em Meta → Configuração do aplicativo → Webhooks.
+          </li>
+          <li>
+            Na lista abaixo vês os <strong>últimos 4 caracteres</strong> do verify token guardado; na Meta confirma que o valor configurado termina igual (e tem o mesmo comprimento).
+          </li>
+          <li>
+            Em desenvolvimento local, exponha a app com um túnel (ex.: ngrok) e use <code class="rounded bg-zinc-100 px-1 text-xs">WHATSAPP_APP_SECRET</code> no servidor.
+            Opcionalmente <code class="rounded bg-zinc-100 px-1 text-xs">SKIP_WHATSAPP_SIGNATURE=1</code> só para testar POST sem assinatura.
+          </li>
+          <li>
+            Teste completo: envie uma mensagem de texto pelo WhatsApp para o número da empresa e confira se a resposta da IA chega.
+          </li>
+        </ul>
+      </details>
+    </div>
+    <%= link_to "Nova integração", new_account_integration_connection_path(@account), class: "app-btn-primary inline-flex justify-center border-0" %>
+  </header>
+
+  <% if @connections.empty? %>
+    <div class="app-card p-8 text-center text-sm text-zinc-600">
+      Nenhuma integração configurada. Crie uma e informe o token de verificação e as credenciais da Meta.
+    </div>
+  <% else %>
+    <ul class="space-y-3">
+      <% @connections.each do |conn| %>
+        <li class="app-card flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="text-sm font-medium text-zinc-900">
+              <%= conn.display_phone_number.presence || "Número ##{conn.phone_number_id}" %>
+            </p>
+            <p class="mt-1 text-xs text-zinc-500">
+              phone_number_id <%= conn.phone_number_id %> ·
+              <%= conn.active? ? "ativa" : "inativa" %>
+            </p>
+            <p class="mt-1 font-mono text-xs text-zinc-700">
+              Verify token guardado: <span class="font-semibold"><%= conn.verify_token_hint %></span>
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <%= button_to "Testar conexão",
+                          test_connection_account_integration_connection_path(@account, conn),
+                          method: :post,
+                          class: "rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-900" %>
+            <%= link_to "Editar", edit_account_integration_connection_path(@account, conn), class: "rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-800" %>
+            <%= button_to "Remover", account_integration_connection_path(@account, conn), method: :delete, form: { data: { turbo_confirm: "Remover esta integração?" } }, class: "rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-800" %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
