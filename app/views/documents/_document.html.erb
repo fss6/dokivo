@@ -119,15 +119,20 @@
         </div>
       <% elsif chunks.any? %>
         <div class="px-5 py-4 sm:px-6 sm:py-5">
-          <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Conteúdo (OCR)</p>
-          <div class="mt-3 space-y-6">
-            <% chunks.each do |chunk| %>
-              <div>
-                <p class="text-xs font-medium text-zinc-500">Página <%= chunk.page_number %></p>
-                <p class="mt-1 whitespace-pre-wrap text-sm text-zinc-800"><%= chunk.content %></p>
-              </div>
-            <% end %>
-          </div>
+          <details class="group">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 rounded-lg py-0.5 [&::-webkit-details-marker]:hidden">
+              <span class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Conteúdo (OCR)</span>
+              <%= heroicon "chevron-down", variant: :outline, options: { class: "h-5 w-5 shrink-0 text-zinc-400 transition-transform duration-200 group-open:rotate-180", "aria-hidden": "true" } %>
+            </summary>
+            <div class="mt-3 space-y-6 border-t border-zinc-100 pt-4">
+              <% chunks.each do |chunk| %>
+                <div>
+                  <p class="text-xs font-medium text-zinc-500">Página <%= chunk.page_number %></p>
+                  <p class="mt-1 whitespace-pre-wrap text-sm text-zinc-800"><%= chunk.content %></p>
+                </div>
+              <% end %>
+            </div>
+          </details>
         </div>
       <% end %>
       <% if document.summary.present? %>

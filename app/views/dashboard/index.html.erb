@@ -12,7 +12,8 @@
     </p>
   </header>
 
-  <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+  <% kpi_grid_cols = @show_wiki_insights ? "md:grid-cols-5" : "md:grid-cols-4" %>
+  <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 <%= kpi_grid_cols %>">
     <article class="app-card p-5">
       <div class="flex items-center justify-between">
         <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Tags unicas</p>
@@ -44,93 +45,131 @@
       </div>
       <p class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900"><%= @total_folders %></p>
     </article>
+
+    <% if @show_wiki_insights %>
+      <article class="app-card p-5">
+        <div class="flex items-center justify-between">
+          <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Base de conhecimento</p>
+          <%= heroicon "book-open", variant: :outline, options: { class: "h-4 w-4 text-zinc-400", "aria-hidden": "true" } %>
+        </div>
+        <p class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900"><%= @total_wiki_pages %></p>
+        <%= link_to "Abrir base", wiki_path, class: "mt-2 inline-block text-xs font-medium text-accent no-underline hover:underline" %>
+      </article>
+    <% end %>
   </section>
 
   <section class="grid grid-cols-1 gap-4 xl:grid-cols-12">
-    <div class="space-y-4 xl:col-span-8">
-      <article class="app-card p-5">
-        <header class="mb-4 flex items-center justify-between">
-          <h2 class="text-base font-semibold text-zinc-900">Arquivos criados por dia (ultimos 30 dias)</h2>
-        </header>
+    <article class="app-card p-5 xl:col-span-8">
+      <header class="mb-4 flex items-center justify-between">
+        <h2 class="text-base font-semibold text-zinc-900">Arquivos criados por dia (ultimos 30 dias)</h2>
+      </header>
+      <div class="h-72">
+        <canvas id="documents-per-day-chart"></canvas>
+      </div>
+    </article>
+
+    <article class="app-card p-5 xl:col-span-4">
+      <header class="mb-4 flex items-center justify-between">
+        <h2 class="text-base font-semibold text-zinc-900">Arquivos por tipo</h2>
+      </header>
+      <% if @documents_by_type.any? %>
         <div class="h-72">
-          <canvas id="documents-per-day-chart"></canvas>
+          <canvas id="documents-by-type-chart"></canvas>
         </div>
-      </article>
+      <% else %>
+        <p class="text-sm text-zinc-500">Ainda nao ha anexos para agrupar por tipo.</p>
+      <% end %>
+    </article>
 
-      <article class="app-card p-5">
-        <header class="mb-4 flex items-center justify-between">
-          <h2 class="text-base font-semibold text-zinc-900">Arquivos recentes</h2>
-          <%= link_to "Ver todos", folders_path, class: "text-xs font-medium text-accent no-underline hover:underline" %>
-        </header>
-        <% if @recent_documents.any? %>
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
-              <thead>
-                <tr class="border-b border-zinc-200 text-xs uppercase tracking-wide text-zinc-500">
-                  <th class="px-2 py-2">Arquivo</th>
-                  <th class="px-2 py-2">Pasta</th>
-                  <th class="px-2 py-2">Usuario</th>
-                  <th class="px-2 py-2">Data</th>
+    <article class="app-card p-5 xl:col-span-8">
+      <header class="mb-4 flex items-center justify-between">
+        <h2 class="text-base font-semibold text-zinc-900">Arquivos recentes</h2>
+        <%= link_to "Ver todos", folders_path, class: "text-xs font-medium text-accent no-underline hover:underline" %>
+      </header>
+      <% if @recent_documents.any? %>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-left text-sm">
+            <thead>
+              <tr class="border-b border-zinc-200 text-xs uppercase tracking-wide text-zinc-500">
+                <th class="px-2 py-2">Arquivo</th>
+                <th class="px-2 py-2">Pasta</th>
+                <th class="px-2 py-2">Usuario</th>
+                <th class="px-2 py-2">Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @recent_documents.each do |document| %>
+                <tr class="border-b border-zinc-100">
+                  <td class="px-2 py-2 font-medium text-zinc-900">
+                    <%= link_to(document.file.filename.to_s.presence || "Documento ##{document.id}", document_path(document), class: "no-underline text-zinc-900 hover:text-accent") %>
+                  </td>
+                  <td class="px-2 py-2 text-zinc-600"><%= document.folder&.name || "-" %></td>
+                  <td class="px-2 py-2 text-zinc-600"><%= document.user&.name || document.user&.email || "-" %></td>
+                  <td class="px-2 py-2 text-zinc-500"><%= l(document.created_at, format: :short) %></td>
                 </tr>
-              </thead>
-              <tbody>
-                <% @recent_documents.each do |document| %>
-                  <tr class="border-b border-zinc-100">
-                    <td class="px-2 py-2 font-medium text-zinc-900">
-                      <%= link_to(document.file.filename.to_s.presence || "Documento ##{document.id}", document_path(document), class: "no-underline text-zinc-900 hover:text-accent") %>
-                    </td>
-                    <td class="px-2 py-2 text-zinc-600"><%= document.folder&.name || "-" %></td>
-                    <td class="px-2 py-2 text-zinc-600"><%= document.user&.name || document.user&.email || "-" %></td>
-                    <td class="px-2 py-2 text-zinc-500"><%= l(document.created_at, format: :short) %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        <% else %>
-          <p class="text-sm text-zinc-500">Nenhum documento recente para exibir.</p>
-        <% end %>
-      </article>
-    </div>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="text-sm text-zinc-500">Nenhum documento recente para exibir.</p>
+      <% end %>
+    </article>
 
-    <div class="space-y-4 xl:col-span-4">
-      <article class="app-card p-5">
-        <header class="mb-4 flex items-center justify-between">
-          <h2 class="text-base font-semibold text-zinc-900">Arquivos por tipo</h2>
-        </header>
-        <% if @documents_by_type.any? %>
-          <div class="h-72">
-            <canvas id="documents-by-type-chart"></canvas>
-          </div>
-        <% else %>
-          <p class="text-sm text-zinc-500">Ainda nao ha anexos para agrupar por tipo.</p>
-        <% end %>
-      </article>
-
-      <article class="app-card p-5">
-        <header class="mb-4 flex items-center justify-between">
-          <h2 class="text-base font-semibold text-zinc-900">Ultimas tags adicionadas</h2>
-        </header>
-        <% if @recent_tags.any? %>
-          <ul class="space-y-2">
-            <% @recent_tags.each do |entry| %>
-              <li class="flex items-center justify-between rounded-md border border-zinc-200 px-3 py-2 text-sm">
-                <div>
-                  <p class="font-medium text-zinc-900"><%= entry[:name] %></p>
-                  <p class="text-xs text-zinc-500">
-                    <%= l(entry[:created_at], format: :short) %> em <%= entry[:document].folder&.name || "Sem pasta" %>
-                  </p>
-                </div>
-                <%= link_to "Ver", document_path(entry[:document]), class: "text-xs font-medium text-accent no-underline hover:underline" %>
-              </li>
-            <% end %>
-          </ul>
-        <% else %>
-          <p class="text-sm text-zinc-500">Nenhuma tag encontrada nos documentos.</p>
-        <% end %>
-      </article>
-    </div>
+    <article class="app-card p-5 xl:col-span-4">
+      <header class="mb-4 flex items-center justify-between">
+        <h2 class="text-base font-semibold text-zinc-900">Ultimas tags adicionadas</h2>
+      </header>
+      <% if @recent_tags.any? %>
+        <ul class="space-y-2">
+          <% @recent_tags.each do |entry| %>
+            <li class="flex items-center justify-between rounded-md border border-zinc-200 px-3 py-2 text-sm">
+              <div>
+                <p class="font-medium text-zinc-900"><%= entry[:name] %></p>
+                <p class="text-xs text-zinc-500">
+                  <%= l(entry[:created_at], format: :short) %> em <%= entry[:document].folder&.name || "Sem pasta" %>
+                </p>
+              </div>
+              <%= link_to "Ver", document_path(entry[:document]), class: "text-xs font-medium text-accent no-underline hover:underline" %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm text-zinc-500">Nenhuma tag encontrada nos documentos.</p>
+      <% end %>
+    </article>
   </section>
+
+  <% if @show_wiki_insights %>
+    <section class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+      <article class="app-card p-5">
+        <header class="mb-4 flex items-center justify-between">
+          <h2 class="text-base font-semibold text-zinc-900">Base de conhecimento por tipo</h2>
+          <%= link_to "Wiki", wiki_path, class: "text-xs font-medium text-accent no-underline hover:underline" %>
+        </header>
+        <% if @wiki_pages_by_type.any? && @wiki_pages_by_type.sum { |entry| entry[:total] } > 0 %>
+          <div class="h-72">
+            <canvas id="wiki-pages-by-type-chart"></canvas>
+          </div>
+        <% else %>
+          <p class="text-sm text-zinc-500">Ainda nao ha paginas na base de conhecimento.</p>
+        <% end %>
+      </article>
+
+      <article class="app-card p-5">
+        <header class="mb-4 flex items-center justify-between">
+          <h2 class="text-base font-semibold text-zinc-900">Crescimento da base (30 dias)</h2>
+        </header>
+        <% if @wiki_pages_last_30_days.any? && @wiki_pages_last_30_days.sum { |point| point[:total] } > 0 %>
+          <div class="h-72">
+            <canvas id="wiki-pages-per-day-chart"></canvas>
+          </div>
+        <% else %>
+          <p class="text-sm text-zinc-500">Sem novas paginas nos ultimos 30 dias.</p>
+        <% end %>
+      </article>
+    </section>
+  <% end %>
 </div>
 
 <script>
@@ -139,6 +178,10 @@
     const totalsPerDay = <%= raw(@documents_last_30_days.map { |point| point[:total] }.to_json) %>;
     const typeLabels = <%= raw(@documents_by_type.keys.to_json) %>;
     const typeTotals = <%= raw(@documents_by_type.values.to_json) %>;
+    const wikiTypeLabels = <%= raw((@wiki_pages_by_type || []).map { |point| point[:label] }.to_json) %>;
+    const wikiTypeTotals = <%= raw((@wiki_pages_by_type || []).map { |point| point[:total] }.to_json) %>;
+    const wikiDayLabels = <%= raw((@wiki_pages_last_30_days || []).map { |point| point[:date] }.to_json) %>;
+    const wikiDayTotals = <%= raw((@wiki_pages_last_30_days || []).map { |point| point[:total] }.to_json) %>;
 
     const bootCharts = () => {
       if (typeof Chart === "undefined") return;
@@ -196,6 +239,66 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { position: "bottom" } }
+          }
+        });
+      }
+
+      const wikiByTypeCanvas = document.getElementById("wiki-pages-by-type-chart");
+      if (wikiByTypeCanvas) {
+        const existing = Chart.getChart(wikiByTypeCanvas);
+        if (existing) existing.destroy();
+
+        new Chart(wikiByTypeCanvas, {
+          type: "bar",
+          data: {
+            labels: wikiTypeLabels,
+            datasets: [{
+              label: "Paginas",
+              data: wikiTypeTotals,
+              backgroundColor: ["#0ea5e9", "#3b82f6", "#14b8a6", "#8b5cf6"],
+              borderRadius: 8,
+              borderSkipped: false
+            }]
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { beginAtZero: true, ticks: { precision: 0 } }
+            },
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+
+      const wikiPerDayCanvas = document.getElementById("wiki-pages-per-day-chart");
+      if (wikiPerDayCanvas) {
+        const existing = Chart.getChart(wikiPerDayCanvas);
+        if (existing) existing.destroy();
+
+        new Chart(wikiPerDayCanvas, {
+          type: "line",
+          data: {
+            labels: wikiDayLabels,
+            datasets: [{
+              label: "Paginas wiki por dia",
+              data: wikiDayTotals,
+              borderColor: "#14b8a6",
+              backgroundColor: "rgba(20, 184, 166, 0.2)",
+              tension: 0.35,
+              fill: true,
+              pointRadius: 2,
+              pointHoverRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { beginAtZero: true, ticks: { precision: 0 } }
+            },
+            plugins: { legend: { display: false } }
           }
         });
       }

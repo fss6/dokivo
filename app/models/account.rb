@@ -8,6 +8,7 @@ class Account < ApplicationRecord
   has_many :wiki_pages, dependent: :destroy
   has_many :wiki_logs, dependent: :destroy
   has_one :wiki_schema, dependent: :destroy
+  has_many :folders, dependent: :destroy
 
   after_create :create_default_setting!
 
