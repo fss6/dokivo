@@ -5,7 +5,7 @@
     <div>
       <p class="text-xs font-semibold uppercase tracking-wide text-accent"><%= t("users.breadcrumb") %></p>
       <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl"><%= @user.name %></h1>
-      <p class="mt-1 text-sm text-zinc-500"><%= @user.email %></p>
+      <p class="mt-1 text-sm text-zinc-500"><%= @user.account.name %></p>
     </div>
     <div class="flex flex-wrap gap-2">
       <%= link_to t("users.show.edit"), edit_user_path(@user), class: "app-btn-primary" %>

@@ -25,13 +25,42 @@
     </div>
   </dl>
   <div class="border-t border-zinc-100 px-5 py-4 sm:px-6 sm:py-5">
-    <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500"><%= Account.model_name.human %></p>
-    <p class="mt-2 text-sm font-medium text-zinc-900">
-      <% if user.account %>
-        <%= link_to user.account.name, account_path(user.account), class: "text-accent no-underline hover:text-teal-700" %>
-      <% else %>
-        —
+    <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500"><%= t("users.show.access.heading") %></p>
+    <dl class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div>
+        <dt class="text-xs font-medium text-zinc-500"><%= t("users.show.access.sign_in_count") %></dt>
+        <dd class="mt-1 text-sm font-medium text-zinc-900 tabular-nums"><%= user.sign_in_count %></dd>
+      </div>
+      <div>
+        <dt class="text-xs font-medium text-zinc-500"><%= t("users.show.access.last_sign_in") %></dt>
+        <dd class="mt-1 text-sm font-medium text-zinc-900">
+          <% if user.last_sign_in_at %>
+            <%= l(user.last_sign_in_at, format: :short) %>
+          <% else %>
+            <span class="text-zinc-500"><%= t("users.show.access.never_signed_in") %></span>
+          <% end %>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs font-medium text-zinc-500"><%= t("users.show.access.current_sign_in") %></dt>
+        <dd class="mt-1 text-sm font-medium text-zinc-900">
+          <%= user.current_sign_in_at ? l(user.current_sign_in_at, format: :short) : content_tag(:span, t("users.show.access.empty_datetime"), class: "text-zinc-500") %>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs font-medium text-zinc-500"><%= t("users.show.access.last_sign_in_ip") %></dt>
+        <dd class="mt-1 text-sm font-medium text-zinc-900"><%= user.last_sign_in_ip.presence || content_tag(:span, t("users.show.access.empty_datetime"), class: "text-zinc-500") %></dd>
+      </div>
+      <div>
+        <dt class="text-xs font-medium text-zinc-500"><%= t("users.show.access.current_sign_in_ip") %></dt>
+        <dd class="mt-1 text-sm font-medium text-zinc-900"><%= user.current_sign_in_ip.presence || content_tag(:span, t("users.show.access.empty_datetime"), class: "text-zinc-500") %></dd>
+      </div>
+      <% if user.remember_created_at %>
+        <div>
+          <dt class="text-xs font-medium text-zinc-500"><%= t("users.show.access.remember_since") %></dt>
+          <dd class="mt-1 text-sm font-medium text-zinc-900"><%= l(user.remember_created_at, format: :short) %></dd>
+        </div>
       <% end %>
-    </p>
+    </dl>
   </div>
 </div>

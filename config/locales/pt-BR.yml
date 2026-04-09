@@ -76,6 +76,16 @@ pt-BR:
     show:
       edit: Editar
       back: Voltar
+      access:
+        heading: Dados de acesso
+        sign_in_count: Total de acessos
+        last_sign_in: Último acesso
+        current_sign_in: Sessão atual
+        last_sign_in_ip: IP do último acesso
+        current_sign_in_ip: IP na sessão atual
+        remember_since: Lembrar-me ativo desde
+        empty_datetime: —
+        never_signed_in: Ainda não realizou login
       risk_zone: Zona de risco
       risk_disable_hint: Desabilitar bloqueia o login deste usuário no sistema.
       risk_enable_hint: Reativar permite que este usuário volte a entrar no sistema.
