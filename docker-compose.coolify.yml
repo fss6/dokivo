@@ -1,0 +1,38 @@
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: dokivo-web
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/app
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: ${REDIS_URL}
+    networks:
+      - coolify
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: dokivo-worker
+    command: bash -c "bundle exec sidekiq -C config/sidekiq.yml"
+    volumes:
+      - .:/app
+    environment:
+      REDIS_URL: ${REDIS_URL}
+    env_file:
+      - .env
+    networks:
+      - coolify
+
+networks:
+  coolify:
+    external: true
+    name: coolify
