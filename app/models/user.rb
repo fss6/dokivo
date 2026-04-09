@@ -16,4 +16,8 @@ class User < ApplicationRecord
     owner: "owner", # Administrador da conta
     administrator: "administrator" # Administrador do SaaS
   }, prefix: true
+
+  def active_for_authentication?
+    super && active?
+  end
 end

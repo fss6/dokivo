@@ -40,12 +40,12 @@ class UsersTest < ApplicationSystemTestCase
     click_on "Voltar"
   end
 
-  test "should destroy User" do
+  test "should disable User" do
     visit user_url(@user)
     accept_confirm do
-      click_on "Excluir usuário", match: :first
+      click_on "Desabilitar usuário", match: :first
     end
 
-    assert_text "Usuário excluído com sucesso."
+    assert_text "Usuário desabilitado com sucesso."
   end
 end

@@ -50,10 +50,10 @@ class UsersController < ApplicationController
 
   # DELETE /users/1 or /users/1.json
   def destroy
-    @user.destroy!
+    @user.update!(active: false)
 
     respond_to do |format|
-      format.html { redirect_to users_path, notice: "Usuário excluído com sucesso.", status: :see_other }
+      format.html { redirect_to users_path, notice: "Usuário desabilitado com sucesso.", status: :see_other }
       format.json { head :no_content }
     end
   end

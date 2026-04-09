@@ -17,10 +17,10 @@
 
   <div class="app-card border-red-100 bg-red-50/30 p-4 sm:p-5">
     <p class="text-sm font-medium text-zinc-800">Zona de risco</p>
-    <p class="mt-1 text-sm text-zinc-600">Excluir remove permanentemente este usuário.</p>
-    <%= button_to "Excluir usuário", @user, method: :delete,
+    <p class="mt-1 text-sm text-zinc-600">Desabilitar bloqueia o login deste usuário no sistema.</p>
+    <%= button_to "Desabilitar usuário", @user, method: :delete,
           form: { class: "mt-4 inline" },
-          data: { turbo_confirm: "Excluir este usuário? Esta ação não pode ser desfeita." },
+          data: { turbo_confirm: "Desabilitar este usuário?" },
           class: "app-btn-danger cursor-pointer" %>
   </div>
 </div>
