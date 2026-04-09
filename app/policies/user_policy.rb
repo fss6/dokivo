@@ -17,7 +17,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def new?
-    create? 
+    create?
   end
 
   def update?
@@ -29,11 +29,17 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.role_administrator? || user.role_owner?
+    return false unless user.role_administrator? || user.role_owner?
+    return false if disabling_self?
+
+    true
   end
 
   def enable?
-    destroy?
+    return false unless user.role_administrator? || user.role_owner?
+    return false if enabling_self?
+
+    true
   end
 
   class Scope < ApplicationPolicy::Scope
@@ -41,12 +47,23 @@ class UserPolicy < ApplicationPolicy
     def resolve
       user.role_administrator? ? all_users : scope.all
     end
-    
+
     private
+
     def all_users
       ActsAsTenant.without_tenant do
         scope.all
       end
     end
+  end
+
+  private
+
+  def disabling_self?
+    record.is_a?(User) && record.persisted? && record.id == user.id
+  end
+
+  def enabling_self?
+    disabling_self?
   end
 end

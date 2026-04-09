@@ -15,7 +15,7 @@
 
   <%= render @user %>
 
-  <% if @user.enabled? %>
+  <% if @user.enabled? && @user != current_user %>
     <div class="app-card border-red-100 bg-red-50/30 p-4 sm:p-5">
       <p class="text-sm font-medium text-zinc-800"><%= t("users.show.risk_zone") %></p>
       <p class="mt-1 text-sm text-zinc-600"><%= t("users.show.risk_disable_hint") %></p>
@@ -23,7 +23,7 @@
             class: "app-btn-danger mt-4 cursor-pointer",
             data: user_disable_modal_data(@user) %>
     </div>
-  <% else %>
+  <% elsif !@user.enabled? && @user != current_user %>
     <div class="app-card border-teal-100 bg-teal-50/30 p-4 sm:p-5">
       <p class="text-sm font-medium text-zinc-800"><%= t("users.show.risk_zone") %></p>
       <p class="mt-1 text-sm text-zinc-600"><%= t("users.show.risk_enable_hint") %></p>

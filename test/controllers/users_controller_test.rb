@@ -42,6 +42,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to user_url(@user)
   end
 
+  test "cannot disable own user" do
+    assert_raises(Pundit::NotAuthorizedError) do
+      delete user_url(users(:owner))
+    end
+  end
+
   test "should disable user from index returns to index" do
     active = users(:three)
     assert active.active?

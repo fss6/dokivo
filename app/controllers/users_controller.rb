@@ -66,7 +66,6 @@ class UsersController < ApplicationController
 
   # POST /users/1/enable
   def enable
-    authorize @user, :enable?
     @user.update!(active: true)
 
     respond_to do |format|
@@ -81,7 +80,11 @@ class UsersController < ApplicationController
 
   private
     def authorize_policy
-      authorize User
+      if @user
+        authorize @user
+      else
+        authorize User
+      end
     end
 
     # Use callbacks to share common setup or constraints between actions.
