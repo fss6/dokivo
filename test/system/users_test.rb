@@ -41,10 +41,25 @@ class UsersTest < ApplicationSystemTestCase
   end
 
   test "should disable User" do
-    visit user_url(@user)
+    active = users(:three)
+    visit user_url(active)
     click_on "Desabilitar usuário", match: :first
-    click_on "Sim, desabilitar"
+
+    within "dialog[open]" do
+      click_on "Sim, desabilitar"
+    end
 
     assert_text "Usuário desabilitado com sucesso."
+  end
+
+  test "should enable User" do
+    visit user_url(@user)
+    click_on "Habilitar usuário", match: :first
+
+    within "dialog[open]" do
+      click_on "Sim, habilitar"
+    end
+
+    assert_text "Usuário habilitado com sucesso."
   end
 end

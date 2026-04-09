@@ -27,6 +27,10 @@ class User < ApplicationRecord
     super && active?
   end
 
+  def enabled?
+    active?
+  end
+
   # Satisfies Devise validations on create; pair with +send_reset_password_instructions+ so the
   # user sets their own password (admin-created users).
   def assign_initial_random_password!

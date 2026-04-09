@@ -32,6 +32,10 @@ class UserPolicy < ApplicationPolicy
     user.role_administrator? || user.role_owner?
   end
 
+  def enable?
+    destroy?
+  end
+
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     def resolve

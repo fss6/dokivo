@@ -39,7 +39,11 @@ Rails.application.routes.draw do
     resources :memberships, controller: "group_memberships", only: %i[create destroy]
   end
   resources :subscriptions
-  resources :users
+  resources :users do
+    member do
+      post :enable
+    end
+  end
   resources :accounts do
     resources :conversations, only: %i[index show create destroy] do
       resources :messages, only: [:create]

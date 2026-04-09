@@ -15,13 +15,23 @@
 
   <%= render @user %>
 
-  <div class="app-card border-red-100 bg-red-50/30 p-4 sm:p-5">
-    <p class="text-sm font-medium text-zinc-800"><%= t("users.show.risk_zone") %></p>
-    <p class="mt-1 text-sm text-zinc-600"><%= t("users.show.risk_disable_hint") %></p>
-    <%= button_tag t("users.show.disable_button"), type: "button",
-          class: "app-btn-danger mt-4 cursor-pointer",
-          data: app_confirm_modal_open_data(url: user_path(@user), item_label: @user.name) %>
-  </div>
+  <% if @user.enabled? %>
+    <div class="app-card border-red-100 bg-red-50/30 p-4 sm:p-5">
+      <p class="text-sm font-medium text-zinc-800"><%= t("users.show.risk_zone") %></p>
+      <p class="mt-1 text-sm text-zinc-600"><%= t("users.show.risk_disable_hint") %></p>
+      <%= button_tag t("users.show.disable_button"), type: "button",
+            class: "app-btn-danger mt-4 cursor-pointer",
+            data: user_disable_modal_data(@user) %>
+    </div>
+  <% else %>
+    <div class="app-card border-teal-100 bg-teal-50/30 p-4 sm:p-5">
+      <p class="text-sm font-medium text-zinc-800"><%= t("users.show.risk_zone") %></p>
+      <p class="mt-1 text-sm text-zinc-600"><%= t("users.show.risk_enable_hint") %></p>
+      <%= button_tag t("users.show.enable_button"), type: "button",
+            class: "app-btn-primary mt-4 cursor-pointer",
+            data: user_enable_modal_data(@user) %>
+    </div>
+  <% end %>
 
   <%= render "shared/confirm_modal",
         heading: t("users.confirm_modal.heading"),

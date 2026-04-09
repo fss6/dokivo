@@ -42,10 +42,43 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to user_url(@user)
   end
 
-  test "should disable user" do
-    assert_no_difference("User.count") { delete user_url(@user) }
+  test "should disable user from index returns to index" do
+    active = users(:three)
+    assert active.active?
+
+    assert_no_difference("User.count") do
+      delete user_url(active), headers: { "Referer" => users_url }
+    end
 
     assert_redirected_to users_url
-    assert_equal false, @user.reload.active
+    assert_equal false, active.reload.active
+  end
+
+  test "should disable user from show returns to show" do
+    active = users(:three)
+    delete user_url(active), headers: { "Referer" => user_url(active) }
+
+    assert_redirected_to user_url(active)
+    assert_equal false, active.reload.active
+  end
+
+  test "should enable user without referer falls back to user show" do
+    inactive = users(:one)
+    assert_not inactive.active?
+
+    post enable_user_url(inactive)
+
+    assert_redirected_to user_url(inactive)
+    assert inactive.reload.active?
+  end
+
+  test "should enable user from index returns to index" do
+    inactive = users(:one)
+    inactive.update_column(:active, false)
+
+    post enable_user_url(inactive), headers: { "Referer" => users_url }
+
+    assert_redirected_to users_url
+    assert inactive.reload.active?
   end
 end

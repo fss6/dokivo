@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :set_user, only: %i[ show edit update destroy enable ]
   before_action :authorize_policy
 
   # GET /users or /users.json
@@ -55,8 +55,27 @@ class UsersController < ApplicationController
     @user.update!(active: false)
 
     respond_to do |format|
-      format.html { redirect_to users_path, notice: t("users.flashes.disabled"), status: :see_other }
+      format.html do
+        redirect_back fallback_location: user_path(@user),
+                      notice: t("users.flashes.disabled"),
+                      status: :see_other
+      end
       format.json { head :no_content }
+    end
+  end
+
+  # POST /users/1/enable
+  def enable
+    authorize @user, :enable?
+    @user.update!(active: true)
+
+    respond_to do |format|
+      format.html do
+        redirect_back fallback_location: user_path(@user),
+                      notice: t("users.flashes.enabled"),
+                      status: :see_other
+      end
+      format.json { render :show, status: :ok, location: @user }
     end
   end
 

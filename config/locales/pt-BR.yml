@@ -50,6 +50,7 @@ pt-BR:
       created: "Usuário criado com sucesso. Enviamos um e-mail com o link para definir a senha."
       updated: Usuário atualizado com sucesso.
       disabled: Usuário desabilitado com sucesso.
+      enabled: Usuário habilitado com sucesso.
     title_suffix: " · Dokivo"
     breadcrumb: Usuários
     status:
@@ -77,16 +78,24 @@ pt-BR:
       back: Voltar
       risk_zone: Zona de risco
       risk_disable_hint: Desabilitar bloqueia o login deste usuário no sistema.
+      risk_enable_hint: Reativar permite que este usuário volte a entrar no sistema.
       disable_button: Desabilitar usuário
+      enable_button: Habilitar usuário
     confirm_modal:
       heading: Desabilitar usuário?
       body_prefix: "Confirma desabilitar "
       body_suffix: "? Ele não poderá mais entrar até ser reativado no cadastro."
       confirm: Sim, desabilitar
+    confirm_modal_enable:
+      heading: Habilitar usuário?
+      body_prefix: "Confirma reativar "
+      body_suffix: "? Ele voltará a poder entrar no sistema."
+      confirm: Sim, habilitar
     row:
       view: Ver
       edit: Editar
       disable: Desabilitar
+      enable: Habilitar
     form:
       errors_header:
         one: "1 erro impediu salvar este usuário:"
