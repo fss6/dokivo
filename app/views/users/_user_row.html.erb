@@ -3,7 +3,7 @@
     <%= link_to user.name, user, class: "font-medium text-zinc-900 no-underline hover:text-accent" %>
   </td>
   <td class="hidden px-4 py-3 text-sm text-zinc-600 md:table-cell"><%= user.email %></td>
-  <td class="hidden px-4 py-3 text-sm text-zinc-600 sm:table-cell"><%= user.role %></td>
+  <td class="hidden px-4 py-3 text-sm text-zinc-600 sm:table-cell"><%= user.role_label %></td>
   <td class="hidden px-4 py-3 text-sm text-zinc-600 lg:table-cell">
     <% if user.account %>
       <%= link_to user.account.name, account_path(user.account), class: "text-zinc-600 no-underline hover:text-accent" %>
@@ -13,19 +13,18 @@
   </td>
   <td class="px-4 py-3">
     <% if user.active? %>
-      <span class="inline-flex rounded-md bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-800">Ativo</span>
+      <span class="inline-flex rounded-md bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-800"><%= t("users.status.active") %></span>
     <% else %>
-      <span class="inline-flex rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600">Inativo</span>
+      <span class="inline-flex rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600"><%= t("users.status.inactive") %></span>
     <% end %>
   </td>
   <td class="px-4 py-3 text-right">
     <div class="flex flex-wrap items-center justify-end gap-2">
-      <%= link_to "Ver", user, class: "app-btn-secondary px-3 py-1.5 text-xs" %>
-      <%= link_to "Editar", edit_user_path(user), class: "app-btn-secondary px-3 py-1.5 text-xs" %>
-      <%= button_to "Desabilitar", user, method: :delete,
-            form: { class: "inline" },
-            data: { turbo_confirm: "Desabilitar este usuário?" },
-            class: "app-btn-danger cursor-pointer px-3 py-1.5 text-xs" %>
+      <%= link_to t("users.row.view"), user, class: "app-btn-secondary px-3 py-1.5 text-xs" %>
+      <%= link_to t("users.row.edit"), edit_user_path(user), class: "app-btn-secondary px-3 py-1.5 text-xs" %>
+      <%= button_tag t("users.row.disable"), type: "button",
+            class: "app-btn-danger cursor-pointer px-3 py-1.5 text-xs",
+            data: app_confirm_modal_open_data(url: user_path(user), item_label: user.name) %>
     </div>
   </td>
 </tr>

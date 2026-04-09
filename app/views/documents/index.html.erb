@@ -1,6 +1,6 @@
 <% content_for :title, "Documentos · #{@folder.name} · Dokivo" %>
 
-<div class="space-y-8">
+<div class="space-y-8" data-controller="app-confirm-modal">
   <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
     <div>
       <p class="text-xs font-semibold uppercase tracking-wide text-accent">Pastas</p>
@@ -40,4 +40,6 @@
       <p class="mt-1 text-sm text-zinc-500">Use o formulário acima para enviar o primeiro arquivo.</p>
     </div>
   <% end %>
+
+  <%= render "documents/confirm_modal" %>
 </div>

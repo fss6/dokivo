@@ -33,7 +33,11 @@ class DocumentsTest < ApplicationSystemTestCase
 
   test "should destroy document" do
     visit document_url(@document)
-    accept_confirm { click_on "Excluir documento", match: :first }
+    click_on "Excluir documento", match: :first
+
+    within "dialog[open]" do
+      click_on "Excluir documento"
+    end
 
     assert_text "Documento excluído com sucesso"
   end

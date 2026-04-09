@@ -1,15 +1,15 @@
-<% content_for :title, "Usuários · Dokivo" %>
+<% content_for :title, t("users.index.heading") + t("users.title_suffix") %>
 
-<div class="space-y-8">
+<div class="space-y-8" data-controller="app-confirm-modal">
   <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
     <div>
-      <p class="text-xs font-semibold uppercase tracking-wide text-accent">Acesso</p>
-      <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Usuários</h1>
+      <p class="text-xs font-semibold uppercase tracking-wide text-accent"><%= t("users.index.eyebrow") %></p>
+      <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl"><%= t("users.index.heading") %></h1>
       <p class="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
-        Gerencie pessoas vinculadas às contas, funções e status de acesso.
+        <%= t("users.index.subtitle") %>
       </p>
     </div>
-    <%= link_to "Novo usuário", new_user_path, class: "app-btn-primary w-full shrink-0 sm:w-auto" %>
+    <%= link_to t("users.index.new_user"), new_user_path, class: "app-btn-primary w-full shrink-0 sm:w-auto" %>
   </header>
 
   <% if @users.any? %>
@@ -18,12 +18,12 @@
         <table class="min-w-full text-left text-sm">
           <thead>
             <tr class="border-b border-zinc-200 bg-zinc-50/90 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-              <th class="px-4 py-3 font-semibold">Nome</th>
-              <th class="hidden px-4 py-3 font-semibold md:table-cell">E-mail</th>
-              <th class="hidden px-4 py-3 font-semibold sm:table-cell">Função</th>
-              <th class="hidden px-4 py-3 font-semibold lg:table-cell">Conta</th>
-              <th class="px-4 py-3 font-semibold">Status</th>
-              <th class="px-4 py-3 text-right font-semibold">Ações</th>
+              <th class="px-4 py-3 font-semibold"><%= User.human_attribute_name(:name) %></th>
+              <th class="hidden px-4 py-3 font-semibold md:table-cell"><%= User.human_attribute_name(:email) %></th>
+              <th class="hidden px-4 py-3 font-semibold sm:table-cell"><%= User.human_attribute_name(:role) %></th>
+              <th class="hidden px-4 py-3 font-semibold lg:table-cell"><%= Account.model_name.human %></th>
+              <th class="px-4 py-3 font-semibold"><%= t("users.index.table.status") %></th>
+              <th class="px-4 py-3 text-right font-semibold"><%= t("users.index.table.actions") %></th>
             </tr>
           </thead>
           <tbody class="divide-y divide-zinc-100">
@@ -34,9 +34,15 @@
     </div>
   <% else %>
     <div class="app-card px-6 py-16 text-center">
-      <p class="text-sm font-medium text-zinc-900">Nenhum usuário cadastrado</p>
-      <p class="mt-1 text-sm text-zinc-500">Crie o primeiro usuário para começar.</p>
-      <%= link_to "Novo usuário", new_user_path, class: "app-btn-primary mt-6 inline-flex" %>
+      <p class="text-sm font-medium text-zinc-900"><%= t("users.index.empty_title") %></p>
+      <p class="mt-1 text-sm text-zinc-500"><%= t("users.index.empty_subtitle") %></p>
+      <%= link_to t("users.index.new_user"), new_user_path, class: "app-btn-primary mt-6 inline-flex" %>
     </div>
   <% end %>
+
+  <%= render "shared/confirm_modal",
+        heading: t("users.confirm_modal.heading"),
+        body_prefix: t("users.confirm_modal.body_prefix"),
+        body_suffix: t("users.confirm_modal.body_suffix"),
+        confirm_text: t("users.confirm_modal.confirm") %>
 </div>

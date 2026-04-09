@@ -12,11 +12,10 @@
 <%= button_tag type: "button",
       class: btn_class,
       title: "Excluir conversa",
-      data: {
-        action: "click->conversation-delete-modal#open",
-        delete_url: account_conversation_path(account, conversation),
-        conversation_title: label
-      },
+      data: app_confirm_modal_open_data(
+        url: account_conversation_path(account, conversation),
+        item_label: label
+      ),
       aria: { label: "Excluir conversa" } do %>
   <%= heroicon "trash", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
 <% end %>

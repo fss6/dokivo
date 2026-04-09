@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class UsersTest < ApplicationSystemTestCase
   setup do
+    login_as users(:owner), scope: :user
     @user = users(:one)
   end
 
@@ -14,14 +15,14 @@ class UsersTest < ApplicationSystemTestCase
     visit users_url
     click_on "Novo usuário"
 
-    select @user.account_id.to_s, from: "Conta"
-    fill_in "Nome", with: @user.name
-    fill_in "E-mail", with: @user.email
-    fill_in "Função", with: @user.role
+    fill_in "Nome", with: "Usuário sistema"
+    fill_in "E-mail", with: "usuario_sistema@example.com"
+    select @user.role, from: "Função"
     check "Usuário ativo" if @user.active
     click_on "Criar usuário"
 
     assert_text "Usuário criado com sucesso."
+    assert_text "e-mail"
     click_on "Voltar"
   end
 
@@ -29,10 +30,9 @@ class UsersTest < ApplicationSystemTestCase
     visit user_url(@user)
     click_on "Editar", match: :first
 
-    select @user.account_id.to_s, from: "Conta"
     fill_in "Nome", with: @user.name
     fill_in "E-mail", with: @user.email
-    fill_in "Função", with: @user.role
+    select @user.role, from: "Função"
     check "Usuário ativo" if @user.active
     click_on "Atualizar usuário"
 
@@ -42,9 +42,8 @@ class UsersTest < ApplicationSystemTestCase
 
   test "should disable User" do
     visit user_url(@user)
-    accept_confirm do
-      click_on "Desabilitar usuário", match: :first
-    end
+    click_on "Desabilitar usuário", match: :first
+    click_on "Sim, desabilitar"
 
     assert_text "Usuário desabilitado com sucesso."
   end

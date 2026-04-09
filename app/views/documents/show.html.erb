@@ -1,6 +1,6 @@
 <% content_for :title, "Documento · Dokivo" %>
 
-<div class="space-y-6">
+<div class="space-y-6" data-controller="app-confirm-modal">
   <header class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
       <nav class="text-xs font-medium text-zinc-500" aria-label="Breadcrumb">
@@ -43,9 +43,10 @@
   <div class="app-card border-red-100 bg-red-50/30 p-4 sm:p-5">
     <p class="text-sm font-medium text-zinc-800">Zona de risco</p>
     <p class="mt-1 text-sm text-zinc-600">Excluir remove permanentemente este registro e o arquivo anexado.</p>
-    <%= button_to "Excluir documento", @document, method: :delete,
-          form: { class: "mt-4 inline" },
-          data: { turbo_confirm: "Excluir este documento? Esta ação não pode ser desfeita." },
-          class: "app-btn-danger cursor-pointer" %>
+    <%= button_tag t("documents.confirm_modal.confirm"), type: "button",
+          class: "app-btn-danger mt-4 cursor-pointer",
+          data: app_confirm_modal_open_data(url: document_path(@document), item_label: document_file_label(@document)) %>
   </div>
+
+  <%= render "documents/confirm_modal" %>
 </div>

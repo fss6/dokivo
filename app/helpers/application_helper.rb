@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include AppConfirmModalHelper
   # Atalho estável: /chat → ChatController → lista de conversas (primeira conta).
   def nav_chat_path
     chat_path

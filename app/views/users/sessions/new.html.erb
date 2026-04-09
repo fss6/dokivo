@@ -1,29 +1,29 @@
 <section class="app-card overflow-hidden">
   <div class="border-b border-zinc-200/80 bg-white/80 px-6 py-6 sm:px-8">
-    <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Entrar</h1>
-    <p class="mt-2 text-sm text-zinc-600">Acesse sua conta para continuar no Dokivo.</p>
+    <h1 class="text-2xl font-bold tracking-tight text-zinc-900"><%= t("auth.sessions.title") %></h1>
+    <p class="mt-2 text-sm text-zinc-600"><%= t("auth.sessions.subtitle") %></p>
   </div>
 
   <div class="px-6 py-6 sm:px-8">
     <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-5" }) do |f| %>
       <div>
-        <%= f.label :email, "E-mail", class: "app-label" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "app-input", placeholder: "voce@empresa.com" %>
+        <%= f.label :email, class: "app-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "app-input", placeholder: t("auth.sessions.email_placeholder") %>
       </div>
 
       <div>
-        <%= f.label :password, "Senha", class: "app-label" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "app-input", placeholder: "Sua senha" %>
+        <%= f.label :password, class: "app-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "app-input", placeholder: t("auth.sessions.password_placeholder") %>
       </div>
 
       <% if devise_mapping.rememberable? %>
         <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-zinc-600">
           <%= f.check_box :remember_me, class: "h-4 w-4 rounded border-zinc-300 text-accent focus:ring-accent/30" %>
-          <span>Lembrar de mim</span>
+          <span><%= t("auth.sessions.remember_me") %></span>
         </label>
       <% end %>
 
-      <%= f.submit "Entrar", class: "app-btn-primary w-full py-2.5 text-sm font-semibold" %>
+      <%= f.submit t("auth.sessions.submit"), class: "app-btn-primary w-full py-2.5 text-sm font-semibold" %>
     <% end %>
 
     <div class="mt-6 border-t border-zinc-200/80 pt-5 text-sm text-zinc-600">

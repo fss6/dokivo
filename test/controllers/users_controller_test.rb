@@ -2,6 +2,7 @@ require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
+    sign_in users(:owner)
     @user = users(:one)
   end
 
@@ -16,11 +17,14 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create user" do
-    assert_difference("User.count") do
-      post users_url, params: { user: { account_id: @user.account_id, active: @user.active, email: @user.email, name: @user.name, role: @user.role } }
+    assert_emails 1 do
+      assert_difference("User.count") do
+        post users_url, params: { user: { active: true, email: "novo_convite@example.com", name: "Novo", role: "member" } }
+      end
     end
 
     assert_redirected_to user_url(User.last)
+    assert_match(/e-mail|senha/i, flash[:notice].to_s)
   end
 
   test "should show user" do
@@ -34,7 +38,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update user" do
-    patch user_url(@user), params: { user: { account_id: @user.account_id, active: @user.active, email: @user.email, name: @user.name, role: @user.role } }
+    patch user_url(@user), params: { user: { active: @user.active, email: @user.email, name: @user.name, role: @user.role } }
     assert_redirected_to user_url(@user)
   end
 

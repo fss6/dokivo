@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: {
-    sessions: 'users/sessions'
+  # Prefix Devise so POST /users stays reserved for UsersController#create.
+  # (Default Devise registration also posts to /users and would shadow resources :users.)
+  devise_for :users, path: "auth", controllers: {
+    sessions: "users/sessions",
+    passwords: "users/passwords"
   }
   authenticated :user do
     root "dashboard#index", as: :authenticated_root

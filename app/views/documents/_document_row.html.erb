@@ -49,12 +49,11 @@
             aria: { label: "Ver documento" } do %>
         <%= heroicon "eye", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
       <% end %>
-      <%= button_to document, method: :delete,
-            form: { class: "inline" },
-            data: { turbo_confirm: "Excluir este documento?" },
+      <%= button_tag type: "button",
             class: "app-btn-danger inline-flex items-center justify-center cursor-pointer px-2.5 py-1.5 text-xs",
             title: "Excluir documento",
-            aria: { label: "Excluir documento" } do %>
+            aria: { label: "Excluir documento" },
+            data: app_confirm_modal_open_data(url: document_path(document), item_label: document_file_label(document)) do %>
         <%= heroicon "trash", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
       <% end %>
     </div>

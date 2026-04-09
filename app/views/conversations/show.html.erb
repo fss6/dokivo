@@ -4,7 +4,7 @@
 
 <div
   class="chat-module flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-[var(--shadow-float)] lg:flex-row"
-  data-controller="conversation-delete-modal"
+  data-controller="app-confirm-modal"
 >
   <%= render "conversations/sidebar",
         account: @account,
@@ -53,5 +53,5 @@
     </div>
   </div>
 
-  <%= render "conversations/delete_modal", account: @account %>
+  <%= render "conversations/delete_modal" %>
 </div>

@@ -1,6 +1,10 @@
 <% content_for :title, "Pastas · Dokivo" %>
 
-<div class="space-y-8" data-controller="folder-explorer" data-folder-explorer-selected-folder-id-value="<%= @selected_folder&.id %>">
+<div
+  class="space-y-8"
+  data-controller="folder-explorer app-confirm-modal"
+  data-folder-explorer-selected-folder-id-value="<%= @selected_folder&.id %>"
+>
   <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
     <div>
       <p class="text-xs font-semibold uppercase tracking-wide text-accent">Organização</p>
@@ -89,4 +93,6 @@
       <%= link_to "Nova pasta", new_folder_path, class: "app-btn-primary mt-6 inline-flex" %>
     </div>
   <% end %>
+
+  <%= render "documents/confirm_modal" %>
 </div>

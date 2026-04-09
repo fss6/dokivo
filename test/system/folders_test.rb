@@ -36,8 +36,10 @@ class FoldersTest < ApplicationSystemTestCase
 
   test "should destroy Folder" do
     visit folder_url(@folder)
-    accept_confirm do
-      click_on "Excluir pasta", match: :first
+    click_on "Excluir pasta", match: :first
+
+    within "dialog[open]" do
+      click_on "Excluir pasta"
     end
 
     assert_text "Pasta excluída com sucesso."

@@ -13,7 +13,7 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    @user = User.new
+    @user = User.new(active: true)
   end
 
   # GET /users/1/edit
@@ -22,11 +22,13 @@ class UsersController < ApplicationController
 
   # POST /users or /users.json
   def create
-    @user = User.new(user_params)
+    @user = User.new(user_params.merge(account: current_tenant))
+    @user.assign_initial_random_password! if @user.password.blank?
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: "Usuário criado com sucesso." }
+        @user.send_reset_password_instructions
+        format.html { redirect_to @user, notice: t("users.flashes.created") }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +41,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: "Usuário atualizado com sucesso.", status: :see_other }
+        format.html { redirect_to @user, notice: t("users.flashes.updated"), status: :see_other }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,7 +55,7 @@ class UsersController < ApplicationController
     @user.update!(active: false)
 
     respond_to do |format|
-      format.html { redirect_to users_path, notice: "Usuário desabilitado com sucesso.", status: :see_other }
+      format.html { redirect_to users_path, notice: t("users.flashes.disabled"), status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -70,6 +72,15 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.expect(user: [ :account_id, :email, :name, :role, :active ])
+      permitted_params = params.require(:user).permit(:email, :name, :active, :role)
+      return permitted_params if permitted_params[:role].blank?
+
+      permitted_roles.include?(permitted_params[:role]) ? permitted_params : permitted_params.except(:role)
+    end
+
+    def permitted_roles
+      return User.roles.keys if current_user.role_administrator?
+
+      User.roles.keys - [ "administrator" ]
     end
 end

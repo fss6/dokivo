@@ -24,12 +24,11 @@
             aria: { label: "Editar pasta" } do %>
         <%= heroicon "pencil-square", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
       <% end %>
-      <%= button_to folder, method: :delete,
-            form: { class: "inline" },
-            data: { turbo_confirm: "Excluir esta pasta?" },
+      <%= button_tag type: "button",
             class: "app-btn-danger inline-flex items-center justify-center cursor-pointer px-2.5 py-1.5 text-xs",
             title: "Excluir pasta",
-            aria: { label: "Excluir pasta" } do %>
+            aria: { label: "Excluir pasta" },
+            data: app_confirm_modal_open_data(url: folder_path(folder), item_label: folder.name) do %>
         <%= heroicon "trash", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
       <% end %>
     </div>

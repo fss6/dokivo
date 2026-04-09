@@ -1,0 +1,161 @@
+---
+pt-BR:
+  activerecord:
+    models:
+      user:
+        one: Usuário
+        other: Usuários
+      account:
+        one: Conta
+        other: Contas
+    attributes:
+      user:
+        name: Nome
+        email: E-mail
+        role: Função
+        active: Usuário ativo
+        account: Conta
+        password: Senha
+        password_confirmation: Confirmação da senha
+        current_password: Senha atual
+        remember_me: Lembrar-me
+        reset_password_token: Token de redefinição de senha
+    enums:
+      user:
+        role:
+          member: Membro
+          owner: Administrador da conta
+          administrator: Administrador do sistema
+    errors:
+      messages:
+        blank: não pode ficar em branco
+        taken: já está em uso
+        inclusion: não está incluído na lista
+        record_invalid: "Erro de validação: %{errors}"
+
+  shared:
+    confirm_modal:
+      cancel: Cancelar
+
+  helpers:
+    submit:
+      user:
+        create: Criar usuário
+        update: Atualizar usuário
+    user:
+      role_prompt: Selecione uma função
+
+  users:
+    flashes:
+      created: "Usuário criado com sucesso. Enviamos um e-mail com o link para definir a senha."
+      updated: Usuário atualizado com sucesso.
+      disabled: Usuário desabilitado com sucesso.
+    title_suffix: " · Dokivo"
+    breadcrumb: Usuários
+    status:
+      active: Ativo
+      inactive: Inativo
+    index:
+      eyebrow: Acesso
+      heading: Usuários
+      subtitle: Gerencie pessoas vinculadas às contas, funções e status de acesso.
+      new_user: Novo usuário
+      empty_title: Nenhum usuário cadastrado
+      empty_subtitle: Crie o primeiro usuário para começar.
+      table:
+        status: Status
+        actions: Ações
+    new:
+      title: Novo usuário
+      subtitle: Vincule o usuário à conta atual e defina função e acesso.
+    edit:
+      title: Editar usuário
+      subtitle: Atualize os dados deste usuário.
+      link_show: Ver detalhes
+    show:
+      edit: Editar
+      back: Voltar
+      risk_zone: Zona de risco
+      risk_disable_hint: Desabilitar bloqueia o login deste usuário no sistema.
+      disable_button: Desabilitar usuário
+    confirm_modal:
+      heading: Desabilitar usuário?
+      body_prefix: "Confirma desabilitar "
+      body_suffix: "? Ele não poderá mais entrar até ser reativado no cadastro."
+      confirm: Sim, desabilitar
+    row:
+      view: Ver
+      edit: Editar
+      disable: Desabilitar
+    form:
+      errors_header:
+        one: "1 erro impediu salvar este usuário:"
+        other: "%{count} erros impediram salvar este usuário:"
+      cancel: Cancelar
+    links:
+      back_to_index: ← Voltar aos usuários
+
+  auth:
+    sessions:
+      title: Entrar
+      subtitle: Acesse sua conta para continuar no Dokivo.
+      submit: Entrar
+      remember_me: Lembrar-me
+      email_placeholder: voce@empresa.com
+      password_placeholder: Sua senha
+
+  errors:
+    messages:
+      not_saved:
+        one: "1 erro impediu salvar este %{resource}:"
+        other: "%{count} erros impediram salvar este %{resource}:"
+
+  mailers:
+    layout:
+      tagline: Gestão inteligente de documentos
+      footer: Este e-mail foi enviado automaticamente pelo Dokivo.
+    reset_password:
+      preheader: Use o link seguro abaixo para criar uma nova senha no Dokivo.
+      greeting_html: "Olá, <strong>%{email}</strong>"
+      greeting_text: "Olá, %{email}"
+      body: Recebemos um pedido para alterar a senha da sua conta no Dokivo. Se foi você, use o botão abaixo. Se não foi, pode ignorar este e-mail com segurança.
+      cta: Redefinir minha senha
+      link_fallback: "Se o botão não funcionar, copie e cole o link abaixo no navegador:"
+      ignore_note: Sua senha só será alterada depois que você acessar o link e definir uma nova senha.
+
+  folders:
+    confirm_modal:
+      heading: Excluir pasta?
+      body_prefix: "A pasta "
+      body_suffix: " e os documentos vinculados serão removidos permanentemente. Esta ação não pode ser desfeita."
+      confirm: Excluir pasta
+
+  documents:
+    confirm_modal:
+      heading: Excluir documento?
+      body_prefix: "O documento "
+      body_suffix: " será removido permanentemente, incluindo o arquivo anexado. Esta ação não pode ser desfeita."
+      confirm: Excluir documento
+
+  devise:
+    mailer:
+      reset_password_instructions:
+        subject: "Dokivo — Redefinir sua senha"
+    passwords:
+      edit:
+        title: Nova senha
+        subtitle: Defina uma senha forte para proteger sua conta.
+        submit: Salvar nova senha
+        min_hint: "Mínimo de %{count} caracteres"
+      new:
+        title: Esqueceu a senha?
+        subtitle: Informe seu e-mail e enviaremos um link para redefinir a senha.
+        submit: Enviar link por e-mail
+    shared:
+      links:
+        login: Entrar
+        sign_up: Criar conta
+        forgot_password: Esqueceu a senha?
+        confirmation: Não recebeu o e-mail de confirmação?
+        unlock: Não recebeu o e-mail de desbloqueio?
+        omniauth: "Entrar com %{provider}"

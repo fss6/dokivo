@@ -2,7 +2,7 @@
   <% if user.errors.any? %>
     <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900 shadow-[var(--shadow-card)]" role="alert">
       <% err_n = user.errors.count %>
-      <p class="font-medium"><%= err_n %> <%= err_n == 1 ? "erro impediu" : "erros impediram" %> salvar este usuário:</p>
+      <p class="font-medium"><%= t("users.form.errors_header", count: err_n) %></p>
       <ul class="mt-2 list-inside list-disc space-y-0.5 text-red-800">
         <% user.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -13,35 +13,31 @@
 
   <div class="space-y-5">
     <div>
-      <%= form.label :account_id, "Conta", class: "app-label" %>
-      <%= form.collection_select :account_id, Account.order(:name), :id, :name,
-            { prompt: "Selecione uma conta" },
-            class: "app-input" %>
-    </div>
-
-    <div>
-      <%= form.label :name, "Nome", class: "app-label" %>
+      <%= form.label :name, class: "app-label" %>
       <%= form.text_field :name, class: "app-input", autocomplete: "name" %>
     </div>
 
     <div>
-      <%= form.label :email, "E-mail", class: "app-label" %>
+      <%= form.label :email, class: "app-label" %>
       <%= form.email_field :email, class: "app-input", autocomplete: "email" %>
     </div>
 
     <div>
-      <%= form.label :role, "Função", class: "app-label" %>
-      <%= form.select :role, User.roles.keys, { prompt: "Selecione uma função" }, class: "app-input" %>
+      <%= form.label :role, class: "app-label" %>
+      <%= form.select :role,
+            User.role_options_for_select(administrator: current_user.role_administrator?),
+            { prompt: t("helpers.user.role_prompt") },
+            class: "app-input" %>
     </div>
 
     <div class="flex items-center gap-3 rounded-lg border border-zinc-200 bg-zinc-50/80 px-4 py-3">
       <%= form.check_box :active, class: "h-4 w-4 rounded border-zinc-300 text-accent focus:ring-2 focus:ring-accent/25" %>
-      <%= form.label :active, "Usuário ativo", class: "text-sm font-medium text-zinc-700" %>
+      <%= form.label :active, class: "text-sm font-medium text-zinc-700" %>
     </div>
   </div>
 
   <div class="flex flex-col-reverse gap-3 border-t border-zinc-100 pt-6 sm:flex-row sm:justify-end">
-    <%= link_to "Cancelar", users_path, class: "app-btn-secondary text-center sm:text-left" %>
-    <%= form.submit user.persisted? ? "Atualizar usuário" : "Criar usuário", class: "app-btn-primary cursor-pointer border-0" %>
+    <%= link_to t("users.form.cancel"), users_path, class: "app-btn-secondary text-center sm:text-left" %>
+    <%= form.submit class: "app-btn-primary cursor-pointer border-0" %>
   </div>
 <% end %>

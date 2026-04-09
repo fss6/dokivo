@@ -1,26 +1,31 @@
-<% content_for :title, "#{@user.name} · Dokivo" %>
+<% content_for :title, "#{@user.name}#{t('users.title_suffix')}" %>
 
-<div class="space-y-6">
+<div class="space-y-6" data-controller="app-confirm-modal">
   <header class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
-      <p class="text-xs font-semibold uppercase tracking-wide text-accent">Usuários</p>
+      <p class="text-xs font-semibold uppercase tracking-wide text-accent"><%= t("users.breadcrumb") %></p>
       <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl"><%= @user.name %></h1>
       <p class="mt-1 text-sm text-zinc-500"><%= @user.email %></p>
     </div>
     <div class="flex flex-wrap gap-2">
-      <%= link_to "Editar", edit_user_path(@user), class: "app-btn-primary" %>
-      <%= link_to "Voltar", users_path, class: "app-btn-secondary" %>
+      <%= link_to t("users.show.edit"), edit_user_path(@user), class: "app-btn-primary" %>
+      <%= link_to t("users.show.back"), users_path, class: "app-btn-secondary" %>
     </div>
   </header>
 
   <%= render @user %>
 
   <div class="app-card border-red-100 bg-red-50/30 p-4 sm:p-5">
-    <p class="text-sm font-medium text-zinc-800">Zona de risco</p>
-    <p class="mt-1 text-sm text-zinc-600">Desabilitar bloqueia o login deste usuário no sistema.</p>
-    <%= button_to "Desabilitar usuário", @user, method: :delete,
-          form: { class: "mt-4 inline" },
-          data: { turbo_confirm: "Desabilitar este usuário?" },
-          class: "app-btn-danger cursor-pointer" %>
+    <p class="text-sm font-medium text-zinc-800"><%= t("users.show.risk_zone") %></p>
+    <p class="mt-1 text-sm text-zinc-600"><%= t("users.show.risk_disable_hint") %></p>
+    <%= button_tag t("users.show.disable_button"), type: "button",
+          class: "app-btn-danger mt-4 cursor-pointer",
+          data: app_confirm_modal_open_data(url: user_path(@user), item_label: @user.name) %>
   </div>
+
+  <%= render "shared/confirm_modal",
+        heading: t("users.confirm_modal.heading"),
+        body_prefix: t("users.confirm_modal.body_prefix"),
+        body_suffix: t("users.confirm_modal.body_suffix"),
+        confirm_text: t("users.confirm_modal.confirm") %>
 </div>
