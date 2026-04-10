@@ -156,6 +156,11 @@ pt-BR:
       body_suffix: " será removido permanentemente, incluindo o arquivo anexado. Esta ação não pode ser desfeita."
       confirm: Excluir documento
 
+  dokivo:
+    signup:
+      disabled: "O cadastro público está desativado. Entre com uma conta existente."
+      cta_login: "Entrar"
+
   devise:
     mailer:
       reset_password_instructions:

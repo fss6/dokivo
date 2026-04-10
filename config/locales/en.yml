@@ -29,3 +29,8 @@
 
 en:
   hello: "Hello world"
+
+  dokivo:
+    signup:
+      disabled: "Public sign-up is disabled. Sign in with an existing account."
+      cta_login: "Sign in"

@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   # (Default Devise registration also posts to /users and would shadow resources :users.)
   devise_for :users, path: "auth", controllers: {
     sessions: "users/sessions",
-    passwords: "users/passwords"
+    passwords: "users/passwords",
+    registrations: "users/registrations"
   }
   authenticated :user do
     root "dashboard#index", as: :authenticated_root
