@@ -1,9 +1,34 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# frozen_string_literal: true
+
+# Dados mínimos só em desenvolvimento (idempotente).
+if Rails.env.development?
+  plan = Plan.find_or_initialize_by(name: "Desenvolvimento")
+  plan.assign_attributes(price: 0, status: "active")
+  plan.save!
+
+  account = Account.find_or_initialize_by(name: "Conta de desenvolvimento")
+  account.assign_attributes(plan: plan, active: true, billing_status: "pending")
+  account.save!
+  Institution.seed_defaults_for!(account)
+
+  ActsAsTenant.with_tenant(account) do
+    user = User.find_or_initialize_by(email: "dev@dev.com")
+    user.assign_attributes(
+      account: account,
+      name: "Developer",
+      role: :owner,
+      active: true
+    )
+    if user.new_record?
+      user.password = "dev@dev.com"
+      user.password_confirmation = "dev@dev.com"
+    end
+    user.save!
+  end
+
+  puts <<~MSG
+    [seeds:dev] Plano: #{plan.name.inspect} (id=#{plan.id})
+    [seeds:dev] Conta: #{account.name.inspect} (id=#{account.id})
+    [seeds:dev] Utilizador: dev@dev.com / dev@dev.com (owner)
+  MSG
+end

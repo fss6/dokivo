@@ -7,6 +7,8 @@
   </div>
 
   <nav class="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto p-2">
+    <%# Lançamentos + importação na mesma página; sem cliente activo redireciona com alerta. %>
+    <% bank_statements_nav_path = bank_statements_path %>
     <% nav = [
       { key: :dashboard, label: "Painel", path: dashboard_path, icon: :home },
       { key: :conversations, label: "Conversas", path: nav_chat_path, icon: :conversations },
@@ -15,6 +17,8 @@
       { key: :documents_tags_search, label: "Busca por tags", path: documents_tags_search_path, icon: :search },
       { key: :folders, label: "Pastas", path: folders_path, icon: :folder },
       { key: :clients, label: "Clientes", path: clients_path, icon: :clients },
+      { key: :institutions, label: "Instituições", path: institutions_path, icon: :institutions },
+      { key: :bank_statements, label: "Extratos", path: bank_statements_nav_path, icon: :document },
       { key: :users, label: "Usuários", path: users_path, icon: :users },
       { key: :plans, label: "Planos", path: plans_path, icon: :plans },
       { key: :accounts, label: "Contas", path: accounts_path, icon: :building }, 
@@ -29,6 +33,8 @@
                    (item[:key] == :users && request.path.start_with?("/users")) ||
                    (item[:key] == :folders && request.path.start_with?("/folders")) ||
                    (item[:key] == :clients && request.path.start_with?("/clients")) ||
+                   (item[:key] == :institutions && request.path.start_with?("/institutions")) ||
+                   (item[:key] == :bank_statements && (request.path.start_with?("/bank_statements") || request.path.match?(%r{\A/bank_statement_imports/\d+}))) ||
                    (item[:key] == :documents_term_search && request.path.start_with?("/documents/search")) ||
                    (item[:key] == :documents_tags_search && request.path.start_with?("/documents/tags")) ||
                    (item[:key] == :settings && request.path.start_with?("/settings")) ||
@@ -47,6 +53,8 @@
         when :conversations then policy(Conversation).index?
         when :folders then policy(Folder).index?
         when :clients then policy(Client).index?
+        when :institutions then policy(Institution).index?
+        when :bank_statements then policy(BankStatement).index?
         when :documents_term_search then policy(Document).index?
         when :documents_tags_search then policy(Document).index?
         when :settings then policy(Setting).show?

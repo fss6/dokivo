@@ -13,25 +13,49 @@ module MistralOcr
     DEFAULT_ENDPOINT = "https://api.mistral.ai/v1/ocr"
     DEFAULT_MODEL = "mistral-ocr-latest"
 
-    def self.call(document:)
-      new(document).call
+    # @param document [Document, nil] usa +document.file+
+    # @param attachment [ActiveStorage::Attached::One, nil] ex.: +import.file+
+    def self.call(document: nil, attachment: nil)
+      resolved = resolve_attachment!(document: document, attachment: attachment)
+      new(resolved).call
     end
 
-    def initialize(document)
-      @document = document
+    def self.resolve_attachment!(document:, attachment:)
+      if document.present? && attachment.present?
+        raise ArgumentError, "use apenas document: ou attachment:"
+      end
+
+      if attachment.present?
+        raise ArgumentError, "attachment inválido" unless attachment.respond_to?(:attached?)
+        raise Error, "Arquivo não anexado" unless attachment.attached?
+
+        return attachment
+      end
+
+      if document.present?
+        att = document.file
+        raise Error, "Arquivo não anexado" unless att.attached?
+
+        return att
+      end
+
+      raise ArgumentError, "informe document: ou attachment:"
+    end
+
+    def initialize(attachment)
+      @attachment = attachment
     end
 
     def call
       api_key = ENV["MISTRAL_OCR_API_KEY"]
       raise Error, "MISTRAL_OCR_API_KEY não configurada" if api_key.blank?
 
-      attachment = @document.file
-      raise Error, "Arquivo não anexado" unless attachment.attached?
+      raise Error, "Arquivo não anexado" unless @attachment.attached?
 
-      url = attachment_url_for_mistral(attachment)
+      url = attachment_url_for_mistral(@attachment)
       payload = {
         model: ENV.fetch("MISTRAL_OCR_MODEL", DEFAULT_MODEL),
-        document: mistral_document_payload(attachment, url)
+        document: mistral_document_payload(@attachment, url)
       }
 
       response = http_post(ocr_endpoint, api_key, payload)

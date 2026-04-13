@@ -1,5 +1,15 @@
 ---
 pt-BR:
+  number:
+    currency:
+      format:
+        format: "%u %n"
+        negative_format: "%u -%n"
+        unit: "R$"
+        separator: ","
+        delimiter: "."
+        precision: 2
+
   activerecord:
     models:
       user:
@@ -26,6 +36,10 @@ pt-BR:
           member: Membro
           owner: Administrador da conta
           administrator: Administrador do sistema
+      bank_statement:
+        transaction_type:
+          credit: Crédito
+          debit: Débito
     errors:
       messages:
         blank: não pode ficar em branco

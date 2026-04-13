@@ -10,8 +10,12 @@ class Account < ApplicationRecord
   has_one :wiki_schema, dependent: :destroy
   has_many :folders, dependent: :destroy
   has_many :clients, dependent: :destroy
+  has_many :bank_statement_imports, dependent: :destroy
+  has_many :bank_statements, dependent: :destroy
+  has_many :institutions, dependent: :destroy
 
   after_create :create_default_setting!
+  after_create :seed_default_institutions!
 
   def generate_tags_automatically?
     setting&.generate_tags_automatically == true
@@ -21,5 +25,9 @@ class Account < ApplicationRecord
 
   def create_default_setting!
     create_setting! unless setting
+  end
+
+  def seed_default_institutions!
+    Institution.seed_defaults_for!(self)
   end
 end

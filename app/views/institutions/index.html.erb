@@ -1,0 +1,53 @@
+<% content_for :title, "Instituições · Dokivo" %>
+
+<div class="space-y-8">
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-accent">Contabilidade</p>
+      <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Instituições financeiras</h1>
+      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
+        Lista usada ao importar extratos. As entradas do sistema não podem ser editadas; pode acrescentar instituições personalizadas.
+      </p>
+    </div>
+    <% if policy(Institution).create? %>
+      <%= link_to "Nova instituição", new_institution_path, class: "app-btn-primary w-full shrink-0 sm:w-auto" %>
+    <% end %>
+  </header>
+
+  <% if @institutions.any? %>
+    <div class="app-card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-zinc-100 bg-zinc-50/80 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+              <th class="px-5 py-3 font-semibold sm:px-6">Nome</th>
+              <th class="px-5 py-3 font-semibold sm:px-6">Origem</th>
+              <th class="px-5 py-3 font-semibold sm:px-6"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-100">
+            <% @institutions.each do |inst| %>
+              <tr class="bg-white hover:bg-zinc-50/60">
+                <td class="px-5 py-3 font-medium text-zinc-900 sm:px-6">
+                  <%= link_to inst.name, inst, class: "text-accent no-underline hover:underline" %>
+                </td>
+                <td class="px-5 py-3 text-zinc-600 sm:px-6">
+                  <%= inst.system? ? "Sistema" : "Personalizada" %>
+                </td>
+                <td class="px-5 py-3 text-right sm:px-6">
+                  <% if policy(inst).edit? %>
+                    <%= link_to "Editar", edit_institution_path(inst), class: "text-sm font-medium text-zinc-600 no-underline hover:text-zinc-900" %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <div class="app-card p-8 text-center text-sm text-zinc-600">
+      <p>Nenhuma instituição cadastrada.</p>
+    </div>
+  <% end %>
+</div>

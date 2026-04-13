@@ -11,6 +11,12 @@
         <%= link_to "Contas", accounts_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
         <%= link_to "Usuários", users_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
         <%= link_to "Clientes", clients_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <% if policy(Institution).index? %>
+          <%= link_to "Instituições", institutions_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <% end %>
+        <% if policy(BankStatement).index? %>
+          <%= link_to "Extratos", bank_statements_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <% end %>
         <%= link_to "Pastas", folders_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
         <%= link_to "Chat", chat_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
         <%= link_to "Grupos", groups_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>

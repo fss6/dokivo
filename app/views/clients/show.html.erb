@@ -24,6 +24,9 @@
       <% end %>
     </div>
     <div class="flex flex-wrap gap-2">
+      <% if policy(BankStatement).index? %>
+        <%= link_to "Extratos bancários", bank_statements_path, class: "app-btn-secondary" %>
+      <% end %>
       <%= link_to "Editar", edit_client_path(@client), class: "app-btn-secondary" %>
       <%= button_to "Excluir", @client, method: :delete, form: { data: { turbo_confirm: "Excluir este cliente? Pastas vinculadas ficarão sem cliente." } }, class: "app-btn-secondary border-red-200 text-red-700 hover:border-red-300 hover:bg-red-50" %>
     </div>

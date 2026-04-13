@@ -1,0 +1,27 @@
+<% content_for :title, "#{@institution.name} · Instituições · Dokivo" %>
+
+<div class="space-y-8">
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div>
+      <nav class="text-xs font-medium text-zinc-500" aria-label="Breadcrumb">
+        <ol class="flex flex-wrap items-center gap-1.5">
+          <li><%= link_to "Instituições", institutions_path, class: "text-zinc-500 no-underline hover:text-accent" %></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-zinc-700"><%= @institution.name %></li>
+        </ol>
+      </nav>
+      <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl"><%= @institution.name %></h1>
+      <p class="mt-2 text-sm text-zinc-600">
+        <%= @institution.system? ? "Instituição do sistema (lista inicial Brasil)." : "Instituição personalizada da conta." %>
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <% if policy(@institution).edit? %>
+        <%= link_to "Editar", edit_institution_path(@institution), class: "app-btn-secondary" %>
+      <% end %>
+      <% if policy(@institution).destroy? %>
+        <%= button_to "Excluir", @institution, method: :delete, form: { data: { turbo_confirm: "Excluir esta instituição?" } }, class: "app-btn-secondary border-red-200 text-red-700 hover:border-red-300 hover:bg-red-50" %>
+      <% end %>
+    </div>
+  </header>
+</div>

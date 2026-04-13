@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+nubank:
+  account: one
+  name: Nubank
+  system: true
+
+outros:
+  account: one
+  name: Outros
+  system: true

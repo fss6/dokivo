@@ -44,6 +44,14 @@ class ApplicationController < ActionController::Base
     Current.client
   end
 
+  # Para páginas que dependem do cliente activo na sessão (sem `client_id` na URL).
+  def require_current_client!
+    return if current_client
+
+    skip_authorization
+    redirect_to clients_path, alert: "Seleccione um cliente para continuar."
+  end
+
   def documents_in_current_client_scope
     base = Document.all
     if current_client
