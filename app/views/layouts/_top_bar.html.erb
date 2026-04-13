@@ -1,23 +1,40 @@
 <header class="sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-zinc-200/90 bg-white px-4 shadow-[0_1px_0_0_rgb(0_0_0/0.03)] sm:px-6">
-  <details class="relative lg:hidden">
-    <summary class="app-btn-ghost list-none cursor-pointer [&::-webkit-details-marker]:hidden">
-      <span class="sr-only">Menu</span>
-      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
-    </summary>
-    <div class="absolute left-0 top-full mt-1 w-56 rounded-lg border border-zinc-200 bg-white py-1 shadow-[var(--shadow-float)]">
-      <%= link_to "Painel", root_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
-      <%= link_to "Planos", plans_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
-      <%= link_to "Contas", accounts_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
-      <%= link_to "Usuários", users_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
-      <%= link_to "Pastas", folders_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
-      <%= link_to "Chat", chat_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
-      <%= link_to "Grupos", groups_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
-      <%= link_to "Assinaturas", subscriptions_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
-    </div>
-  </details>
+  <div class="flex min-w-0 flex-1 items-center gap-3">
+    <details class="relative lg:hidden">
+      <summary class="app-btn-ghost list-none cursor-pointer [&::-webkit-details-marker]:hidden">
+        <span class="sr-only">Menu</span>
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+      </summary>
+      <div class="absolute left-0 top-full mt-1 w-56 rounded-lg border border-zinc-200 bg-white py-1 shadow-[var(--shadow-float)]">
+        <%= link_to "Painel", root_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <%= link_to "Planos", plans_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <%= link_to "Contas", accounts_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <%= link_to "Usuários", users_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <%= link_to "Clientes", clients_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <%= link_to "Pastas", folders_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <%= link_to "Chat", chat_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <%= link_to "Grupos", groups_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+        <%= link_to "Assinaturas", subscriptions_path, class: "block px-4 py-2 text-sm text-zinc-700 no-underline hover:bg-zinc-50" %>
+      </div>
+    </details>
+
+    <% if current_user && policy(Client).index? %>
+      <%= form_with url: current_client_path, method: :patch, class: "flex min-w-0 max-w-full items-center gap-2 sm:gap-3" do %>
+        <%= label_tag :client_id, "Cliente ativo", class: "hidden shrink-0 text-xs font-medium text-zinc-500 sm:inline" %>
+        <%= select_tag :client_id,
+              options_for_select(
+                [["Todos os clientes", ""]] + Client.order(:name).map { |c| [c.name, c.id] },
+                current_client&.id
+              ),
+              class: "app-input min-w-0 max-w-[11rem] shrink truncate py-1.5 text-sm sm:max-w-[18rem]",
+              aria: { label: "Cliente ativo no sistema" },
+              onchange: "this.form.requestSubmit()" %>
+      <% end %>
+    <% end %>
+  </div>
 
   <% user_display_name = current_user&.name.to_s.split.first(2).join(" ").presence || "Usuário" %>
-  <details class="group relative ml-auto">
+  <details class="group relative shrink-0">
     <summary class="flex h-9 list-none cursor-pointer items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 text-sm font-semibold text-zinc-700 shadow-sm transition-colors hover:border-zinc-300 hover:bg-white [&::-webkit-details-marker]:hidden">
       <span class="sr-only">Conta</span>
       <%= heroicon "user-circle", variant: :outline, options: { class: "h-4 w-4 shrink-0 text-zinc-500", "aria-hidden": "true" } %>

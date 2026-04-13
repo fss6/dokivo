@@ -11,7 +11,7 @@ class DocumentsController < ApplicationController
   end
 
   def tags_search
-    @available_tags = Document.pluck(:tags)
+    @available_tags = documents_in_current_client_scope.pluck(:tags)
       .flatten
       .compact
       .map { |tag| tag.to_s.strip }
@@ -24,7 +24,7 @@ class DocumentsController < ApplicationController
       .reject(&:blank?)
       .uniq
 
-    @documents = Document.includes(:user, :folder).with_attached_file.order(created_at: :desc)
+    @documents = documents_in_current_client_scope.includes(:user, :folder).with_attached_file.order(created_at: :desc)
 
     if @selected_tags.any?
       @selected_tags.each do |tag|
@@ -41,7 +41,7 @@ class DocumentsController < ApplicationController
 
   def term_search
     @query = params[:q].to_s.strip
-    @documents = Document.includes(:user, :folder).with_attached_file.order(created_at: :desc)
+    @documents = documents_in_current_client_scope.includes(:user, :folder).with_attached_file.order(created_at: :desc)
 
     if @query.present?
       like = "%#{ActiveRecord::Base.sanitize_sql_like(@query)}%"
@@ -94,7 +94,7 @@ class DocumentsController < ApplicationController
   end
 
   def move
-    destination_folder = Folder.find(params.expect(:folder_id))
+    destination_folder = Folder.for_nav_client(current_client).find(params.expect(:folder_id))
     @document.update!(folder: destination_folder)
     respond_to do |format|
       format.html do
@@ -143,11 +143,14 @@ class DocumentsController < ApplicationController
   end
 
   def set_folder
-    @folder = Folder.find(params.expect(:folder_id))
+    @folder = Folder.for_nav_client(current_client).find(params.expect(:folder_id))
   end
 
   def set_document
-    @document = Document.includes(:account, :user, :folder, :embedding_records).with_attached_file.find(params.expect(:id))
+    @document = documents_in_current_client_scope
+      .includes(:account, :user, :folder, :embedding_records)
+      .with_attached_file
+      .find(params.expect(:id))
   end
 
   # Preenchimento automático: conta da pasta, usuário logado, status pendente.

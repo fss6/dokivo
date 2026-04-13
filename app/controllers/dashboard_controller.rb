@@ -3,8 +3,8 @@ class DashboardController < ApplicationController
 
   def index
     account = current_user.account
-    documents = account.documents
-    ordered_documents = documents.order(created_at: :desc)
+    documents = account_documents_for_context(account)
+    ordered_documents = documents.order("documents.created_at DESC")
     @documents_last_30_days = documents_last_30_days_series(documents)
 
     @total_documents = documents.count
@@ -29,6 +29,13 @@ class DashboardController < ApplicationController
   end
 
   private
+
+  def account_documents_for_context(account)
+    rel = account.documents
+    return rel unless current_client
+
+    rel.joins(:folder).where(folders: { client_id: current_client.id })
+  end
 
   def authorize_policy
     authorize :dashboard, :index?
@@ -57,8 +64,8 @@ class DashboardController < ApplicationController
   def documents_last_30_days_series(documents)
     range = 29.days.ago.to_date..Date.current
     grouped = documents
-      .where(created_at: range.begin.beginning_of_day..range.end.end_of_day)
-      .group("DATE(created_at)")
+      .where(documents: { created_at: range.begin.beginning_of_day..range.end.end_of_day })
+      .group(Arel.sql("DATE(documents.created_at)"))
       .count
 
     range.map do |date|
@@ -85,8 +92,8 @@ class DashboardController < ApplicationController
   def wiki_pages_last_30_days_series(wiki_pages)
     range = 29.days.ago.to_date..Date.current
     grouped = wiki_pages
-      .where(created_at: range.begin.beginning_of_day..range.end.end_of_day)
-      .group("DATE(created_at)")
+      .where(wiki_pages: { created_at: range.begin.beginning_of_day..range.end.end_of_day })
+      .group(Arel.sql("DATE(wiki_pages.created_at)"))
       .count
 
     range.map do |date|

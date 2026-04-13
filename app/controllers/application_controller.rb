@@ -5,12 +5,51 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   set_current_tenant_through_filter
   before_action :find_current_tenant, unless: :devise_controller?
+  before_action :assign_current_client_from_session, unless: :devise_controller?
 
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
+  helper_method :current_client
+
   def find_current_tenant
     current_account = current_user.account
     set_current_tenant(current_account)
+  end
+
+  # Cliente ativo: ID na sessão (entre requests) + registro em Current (só nesta request).
+  def assign_current_client_from_session
+    tenant = ActsAsTenant.current_tenant
+    unless tenant
+      Current.client = nil
+      return
+    end
+
+    cid = session[:current_client_id]
+    if cid.blank?
+      Current.client = nil
+      return
+    end
+
+    client = Client.find_by(id: cid)
+    if client
+      Current.client = client
+    else
+      session.delete(:current_client_id)
+      Current.client = nil
+    end
+  end
+
+  def current_client
+    Current.client
+  end
+
+  def documents_in_current_client_scope
+    base = Document.all
+    if current_client
+      base.joins(:folder).where(folders: { client_id: current_client.id })
+    else
+      base
+    end
   end
 end

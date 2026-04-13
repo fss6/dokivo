@@ -4,7 +4,14 @@
   <header>
     <p class="text-xs font-semibold uppercase tracking-wide text-accent">Pastas</p>
     <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Nova pasta</h1>
-    <p class="mt-2 text-sm leading-relaxed text-zinc-600">Defina o nome e a conta à qual esta pasta pertence.</p>
+    <p class="mt-2 text-sm leading-relaxed text-zinc-600">
+      Defina o nome da pasta.
+      <% if current_client %>
+        Ela será vinculada automaticamente ao cliente ativo (<strong><%= current_client.name %></strong>) no topo da tela.
+      <% else %>
+        Com <strong>Todos os clientes</strong> selecionado no topo, a pasta fica sem vínculo a um cliente.
+      <% end %>
+    </p>
   </header>
 
   <div class="app-card p-6 sm:p-8">

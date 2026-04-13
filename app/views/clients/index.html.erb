@@ -1,0 +1,50 @@
+<% content_for :title, "Clientes · Dokivo" %>
+
+<div class="space-y-8">
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-accent">Contabilidade</p>
+      <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Clientes</h1>
+      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
+        Cadastro de empresas e pessoas atendidas pelo escritório. Escolha o cliente ativo no topo da tela para filtrar pastas, documentos e métricas do painel.
+      </p>
+    </div>
+    <%= link_to "Novo cliente", new_client_path, class: "app-btn-primary w-full shrink-0 sm:w-auto" %>
+  </header>
+
+  <% if @clients.any? %>
+    <div class="app-card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-zinc-100 bg-zinc-50/80 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+              <th class="px-5 py-3 font-semibold sm:px-6">Nome</th>
+              <th class="hidden px-5 py-3 font-semibold sm:table-cell sm:px-6">CNPJ / CPF</th>
+              <th class="hidden px-5 py-3 font-semibold md:table-cell md:px-6">E-mail</th>
+              <th class="px-5 py-3 font-semibold sm:px-6"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-100">
+            <% @clients.each do |client| %>
+              <tr class="bg-white hover:bg-zinc-50/60">
+                <td class="px-5 py-3 font-medium text-zinc-900 sm:px-6">
+                  <%= link_to client.name, client, class: "text-accent no-underline hover:underline" %>
+                </td>
+                <td class="hidden px-5 py-3 text-zinc-600 sm:table-cell sm:px-6"><%= client.tax_id.presence || "—" %></td>
+                <td class="hidden px-5 py-3 text-zinc-600 md:table-cell md:px-6"><%= client.email.presence || "—" %></td>
+                <td class="px-5 py-3 text-right sm:px-6">
+                  <%= link_to "Editar", edit_client_path(client), class: "text-sm font-medium text-zinc-600 no-underline hover:text-zinc-900" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <div class="app-card p-8 text-center text-sm text-zinc-600">
+      <p>Nenhum cliente cadastrado ainda.</p>
+      <p class="mt-2"><%= link_to "Criar o primeiro cliente", new_client_path, class: "font-medium text-accent no-underline hover:underline" %></p>
+    </div>
+  <% end %>
+</div>

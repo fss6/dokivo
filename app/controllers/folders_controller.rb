@@ -4,7 +4,8 @@ class FoldersController < ApplicationController
 
   # GET /folders or /folders.json
   def index
-    @folders = Folder.includes(:account)
+    @folders = Folder.includes(:account, :client)
+                     .for_nav_client(current_client)
                      .left_joins(:documents)
                      .select("folders.*, COUNT(documents.id) AS documents_count")
                      .group("folders.id")
@@ -34,6 +35,7 @@ class FoldersController < ApplicationController
   # POST /folders or /folders.json
   def create
     @folder = Folder.new(folder_params)
+    @folder.client_id = current_client.id if current_client
 
     respond_to do |format|
       if @folder.save
@@ -76,7 +78,8 @@ class FoldersController < ApplicationController
     
     # Use callbacks to share common setup or constraints between actions.
     def set_folder
-      @folder = Folder.includes(:account).find(params.expect(:id))
+      scope = Folder.for_nav_client(current_client)
+      @folder = scope.includes(:account, :client).find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.

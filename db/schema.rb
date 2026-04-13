@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_09_100005) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_13_120001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -54,6 +54,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_100005) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "name", null: false
+    t.string "tax_id"
+    t.string "email"
+    t.string "phone"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "tax_id"], name: "index_clients_on_account_id_and_tax_id", unique: true, where: "((tax_id IS NOT NULL) AND ((tax_id)::text <> ''::text))"
+    t.index ["account_id"], name: "index_clients_on_account_id"
   end
 
   create_table "conversations", force: :cascade do |t|
@@ -110,7 +123,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_100005) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
     t.index ["account_id"], name: "index_folders_on_account_id"
+    t.index ["client_id"], name: "index_folders_on_client_id"
   end
 
   create_table "group_memberships", force: :cascade do |t|
@@ -284,6 +299,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_100005) do
   add_foreign_key "accounts", "plans"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "clients", "accounts"
   add_foreign_key "conversations", "accounts"
   add_foreign_key "conversations", "integration_connections"
   add_foreign_key "conversations", "users"
@@ -292,6 +308,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_100005) do
   add_foreign_key "documents", "users"
   add_foreign_key "embedding_records", "accounts"
   add_foreign_key "folders", "accounts"
+  add_foreign_key "folders", "clients"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
   add_foreign_key "groups", "accounts"

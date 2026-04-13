@@ -1,0 +1,41 @@
+<%= form_with(model: client, class: "space-y-6") do |form| %>
+  <% if client.errors.any? %>
+    <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900 shadow-[var(--shadow-card)]" role="alert">
+      <% err_n = client.errors.count %>
+      <p class="font-medium"><%= err_n %> <%= err_n == 1 ? "erro impediu" : "erros impediram" %> salvar este cliente:</p>
+      <ul class="mt-2 list-inside list-disc space-y-0.5 text-red-800">
+        <% client.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="space-y-5">
+    <div>
+      <%= form.label :name, "Nome", class: "app-label" %>
+      <%= form.text_field :name, class: "app-input", autocomplete: "off", placeholder: "Razão social ou nome fantasia" %>
+    </div>
+    <div>
+      <%= form.label :tax_id, "CNPJ / CPF", class: "app-label" %>
+      <%= form.text_field :tax_id, class: "app-input", autocomplete: "off", placeholder: "Opcional" %>
+    </div>
+    <div>
+      <%= form.label :email, "E-mail", class: "app-label" %>
+      <%= form.email_field :email, class: "app-input", autocomplete: "email", placeholder: "Opcional" %>
+    </div>
+    <div>
+      <%= form.label :phone, "Telefone", class: "app-label" %>
+      <%= form.text_field :phone, class: "app-input", autocomplete: "tel", placeholder: "Opcional" %>
+    </div>
+    <div>
+      <%= form.label :notes, "Observações", class: "app-label" %>
+      <%= form.text_area :notes, class: "app-input min-h-[6rem]", rows: 4, placeholder: "Opcional" %>
+    </div>
+  </div>
+
+  <div class="flex flex-col-reverse gap-3 border-t border-zinc-100 pt-6 sm:flex-row sm:justify-end">
+    <%= link_to "Cancelar", clients_path, class: "app-btn-secondary text-center sm:text-left" %>
+    <%= form.submit client.persisted? ? "Atualizar cliente" : "Criar cliente", class: "app-btn-primary cursor-pointer border-0" %>
+  </div>
+<% end %>

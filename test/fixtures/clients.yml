@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+alpha:
+  account: one
+  name: Cliente Alpha
+  tax_id: "11222333000181"
+  email: alpha@example.com
+  phone: ""
+
+beta:
+  account: one
+  name: Cliente Beta
+  tax_id: ""
+  email: ""
+  phone: ""

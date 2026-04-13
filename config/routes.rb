@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   get "landing", to: "landing#index", as: :landing
   get "privacidade", to: "landing#privacy", as: :privacy
   get "dashboard", to: "dashboard#index", as: :dashboard
+  resource :current_client, only: [:update]
+  resources :clients
   get "documents/tags", to: "documents#tags_search", as: :documents_tags_search
   get "documents/search", to: "documents#term_search", as: :documents_term_search
   get "chat", to: "chat#index", as: :chat
