@@ -99,6 +99,25 @@ class BankStatementsController < ApplicationController
       allowed = current_client.bank_statement_imports.where(id: params[:import_id]).pick(:id)
       scope = scope.where(bank_statement_import_id: allowed) if allowed
     end
+
+    if params[:institution_id].present?
+      scope = scope.where(institution_id: params[:institution_id])
+    end
+    if params[:transaction_type].present?
+      scope = scope.where(transaction_type: params[:transaction_type])
+    end
+    if params[:occurred_from].present?
+      scope = scope.where("occurred_on >= ?", params[:occurred_from])
+    end
+    if params[:occurred_to].present?
+      scope = scope.where("occurred_on <= ?", params[:occurred_to])
+    end
+
     @bank_statements = scope.to_a
+    @institution_filter_options = Institution.alphabetical.pluck(:name, :id)
+    @transaction_type_filter_options = [
+      [I18n.t("activerecord.enums.bank_statement.transaction_type.credit", default: "Crédito"), "credit"],
+      [I18n.t("activerecord.enums.bank_statement.transaction_type.debit", default: "Débito"), "debit"]
+    ]
   end
 end

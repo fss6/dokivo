@@ -1,6 +1,6 @@
 <% content_for :title, "Extratos · #{current_client.name} · Dokivo" %>
 
-<div class="space-y-8">
+<div class="space-y-4">
   <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
     <div>
       <nav class="text-xs font-medium text-zinc-500" aria-label="Breadcrumb">
@@ -13,13 +13,6 @@
         </ol>
       </nav>
       <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Extratos e lançamentos</h1>
-      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
-        Lista de lançamentos do cliente ativo. Você pode incluir, editar e remover itens manualmente.
-        <% if params[:import_id].present? %>
-          <%= link_to "Ver todos os lançamentos", bank_statements_path, class: "font-medium text-accent no-underline hover:underline" %>
-          (filtro: <%= link_to "import ##{params[:import_id]}", bank_statement_import_path(params[:import_id]), class: "font-medium text-accent no-underline hover:underline" %>).
-        <% end %>
-      </p>
     </div>
     <div class="flex items-center gap-2">
       <% if policy(BankStatement).create? %>
@@ -29,7 +22,54 @@
   </header>
 
   <section class="min-w-0" aria-labelledby="launches-heading">
-    <h2 id="launches-heading" class="mb-3 text-sm font-semibold text-zinc-900">Lançamentos</h2>
+    <% active_filters_count = [params[:institution_id], params[:transaction_type], params[:occurred_from], params[:occurred_to]].count(&:present?) %>
+    <details class="app-card mb-3 group" <%= "open" if active_filters_count.positive? %>>
+      <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-left [&::-webkit-details-marker]:hidden">
+        <div class="flex items-center gap-2">
+          <span id="launches-heading" class="text-sm font-semibold text-zinc-900">Lançamentos</span>
+          <span class="text-xs text-zinc-500">Filtros</span>
+          <% if active_filters_count.positive? %>
+            <span class="inline-flex items-center rounded bg-accent/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-accent"><%= active_filters_count %> ativo(s)</span>
+          <% end %>
+        </div>
+        <svg class="h-4 w-4 shrink-0 text-zinc-400 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+        </svg>
+      </summary>
+      <div class="border-t border-zinc-100 px-4 py-4">
+        <%= form_with url: bank_statements_path, method: :get do %>
+          <% if params[:import_id].present? %>
+            <%= hidden_field_tag :import_id, params[:import_id] %>
+          <% end %>
+          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            <div class="sm:col-span-2 lg:col-span-2">
+              <%= label_tag :institution_id, "Instituição", class: "app-label" %>
+              <%= select_tag :institution_id,
+                    options_for_select([["Todas", ""]] + @institution_filter_options, params[:institution_id]),
+                    class: "app-input" %>
+            </div>
+            <div>
+              <%= label_tag :transaction_type, "Tipo", class: "app-label" %>
+              <%= select_tag :transaction_type,
+                    options_for_select([["Todos", ""]] + @transaction_type_filter_options, params[:transaction_type]),
+                    class: "app-input" %>
+            </div>
+            <div>
+              <%= label_tag :occurred_from, "Data inicial", class: "app-label" %>
+              <%= date_field_tag :occurred_from, params[:occurred_from], class: "app-input" %>
+            </div>
+            <div>
+              <%= label_tag :occurred_to, "Data final", class: "app-label" %>
+              <%= date_field_tag :occurred_to, params[:occurred_to], class: "app-input" %>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center justify-end gap-2">
+            <%= link_to "Limpar", bank_statements_path(import_id: params[:import_id].presence), class: "app-btn-secondary no-underline" %>
+            <%= submit_tag "Filtrar", class: "app-btn-primary cursor-pointer border-0" %>
+          </div>
+        <% end %>
+      </div>
+    </details>
 
     <% if @bank_statements.any? %>
       <div class="app-card overflow-hidden">
