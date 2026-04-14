@@ -18,6 +18,9 @@ class BankStatement < ApplicationRecord
   validates :institution, presence: true
   validates :occurred_on, presence: true
   validates :description, presence: true
+  validates :possible_duplicate, inclusion: { in: [true, false] }
+
+  before_validation :detect_possible_duplicate, on: [:create, :update]
 
   validate :client_matches_import
   validate :institution_matches_import
@@ -44,5 +47,22 @@ class BankStatement < ApplicationRecord
     return if client.account_id == account_id
 
     errors.add(:client_id, "deve pertencer à mesma conta")
+  end
+
+  def detect_possible_duplicate
+    return if occurred_on.blank? || institution_id.blank? || transaction_type.blank? || amount.blank?
+
+    normalized_description = description.to_s.strip.downcase
+
+    self.possible_duplicate = self.class
+      .where(client_id: client_id)
+      .where(
+        occurred_on: occurred_on,
+        institution_id: institution_id,
+        transaction_type: transaction_type,
+        amount: amount
+      )
+      .where("LOWER(TRIM(bank_statements.description)) = ?", normalized_description)
+      .exists?
   end
 end

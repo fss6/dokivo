@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_14_120003) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_14_133100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -83,6 +83,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_120003) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "institution_id", null: false
+    t.boolean "possible_duplicate", default: false, null: false
     t.index ["account_id"], name: "index_bank_statements_on_account_id"
     t.index ["bank_statement_import_id"], name: "index_bank_statements_on_bank_statement_import_id"
     t.index ["client_id", "occurred_on"], name: "index_bank_statements_on_client_id_and_occurred_on"

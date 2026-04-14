@@ -2,23 +2,49 @@
 
 class BankStatementsController < ApplicationController
   before_action :require_current_client!
+  before_action :set_bank_statement, only: %i[edit update destroy]
   before_action :authorize_policy
 
   def index
     load_index_data
   end
 
-  def create
-    @bank_statement_import = current_client.bank_statement_imports.build(import_params)
+  def new
+    @bank_statement = current_client.bank_statements.build(transaction_type: :debit, occurred_on: Date.current)
+    load_form_data
+  end
 
-    if @bank_statement_import.save
-      ProcessBankStatementImportJob.perform_later(@bank_statement_import.id)
-      redirect_to bank_statement_import_path(@bank_statement_import),
-                  notice: "Extrato enviado. O processamento pode demorar alguns instantes."
+  def create
+    @bank_statement = current_client.bank_statements.build(bank_statement_params)
+    assign_import_dependencies(@bank_statement)
+
+    if @bank_statement.save
+      redirect_to bank_statements_path, notice: "Lançamento criado com sucesso."
     else
-      load_index_data
-      render :index, status: :unprocessable_entity
+      load_form_data
+      render :new, status: :unprocessable_entity
     end
+  end
+
+  def edit
+    load_form_data
+  end
+
+  def update
+    @bank_statement.assign_attributes(bank_statement_params)
+    assign_import_dependencies(@bank_statement)
+
+    if @bank_statement.save
+      redirect_to bank_statements_path, notice: "Lançamento atualizado com sucesso."
+    else
+      load_form_data
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @bank_statement.destroy!
+    redirect_to bank_statements_path, notice: "Lançamento removido com sucesso."
   end
 
   private
@@ -27,13 +53,42 @@ class BankStatementsController < ApplicationController
     case action_name
     when "index"
       authorize BankStatement
-    when "create"
-      authorize BankStatementImport, :create?
+    when "new", "create"
+      authorize BankStatement, :create?
+    when "edit", "update"
+      authorize @bank_statement, :update?
+    when "destroy"
+      authorize @bank_statement, :destroy?
     end
   end
 
-  def import_params
-    params.expect(bank_statement_import: %i[file institution_id])
+  def set_bank_statement
+    @bank_statement = current_client.bank_statements.find(params.expect(:id))
+  end
+
+  def bank_statement_params
+    params.expect(bank_statement: %i[bank_statement_import_id occurred_on description transaction_type amount possible_duplicate])
+  end
+
+  def assign_import_dependencies(statement)
+    return if statement.bank_statement_import_id.blank?
+
+    import = current_client.bank_statement_imports.find_by(id: statement.bank_statement_import_id)
+    return unless import
+
+    statement.bank_statement_import = import
+    statement.client = current_client
+    statement.institution = import.institution
+  end
+
+  def load_form_data
+    @import_options = current_client.bank_statement_imports
+      .includes(:institution)
+      .order(created_at: :desc)
+      .map do |imp|
+        institution_name = imp.institution&.name.presence || "Sem instituição"
+        ["##{imp.id} · #{institution_name} · #{I18n.l(imp.created_at.to_date)}", imp.id]
+      end
   end
 
   def load_index_data
@@ -45,13 +100,5 @@ class BankStatementsController < ApplicationController
       scope = scope.where(bank_statement_import_id: allowed) if allowed
     end
     @bank_statements = scope.to_a
-    @institution_tabs =
-      @bank_statements
-        .group_by { |s| s.institution&.name.presence || "—" }
-        .sort_by { |name, _| name.to_s.downcase }
-    @bank_statement_import ||= current_client.bank_statement_imports.build
-    @institutions = Institution.alphabetical
-    @institutions_json = @institutions.map { |i| { id: i.id, name: i.name } }.to_json
-    @recent_imports = current_client.bank_statement_imports.includes(:bank_statements, :institution).order(created_at: :desc).limit(15)
   end
 end

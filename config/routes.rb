@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get "privacidade", to: "landing#privacy", as: :privacy
   get "dashboard", to: "dashboard#index", as: :dashboard
   resource :current_client, only: [:update]
-  resources :bank_statements, only: %i[index create]
+  resources :bank_statements, except: [:show]
   resources :bank_statement_imports, only: [:show] do
     member do
       get :original
