@@ -6,73 +6,66 @@
     <% end %>
   </div>
 
-  <nav class="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto p-2">
+  <nav class="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-2">
     <%# Lançamentos + importação na mesma página; sem cliente activo redireciona com alerta. %>
     <% bank_statements_nav_path = bank_statements_path %>
-    <% nav = [
-      { key: :dashboard, label: "Painel", path: dashboard_path, icon: :home },
-      { key: :conversations, label: "Conversas", path: nav_chat_path, icon: :conversations },
-      { key: :wiki, label: "Base de Conhecimento", path: wiki_path, icon: :book_open },
-      { key: :documents_term_search, label: "Busca por termo", path: documents_term_search_path, icon: :search_document },
-      { key: :documents_tags_search, label: "Busca por tags", path: documents_tags_search_path, icon: :search },
-      { key: :folders, label: "Pastas", path: folders_path, icon: :folder },
-      { key: :clients, label: "Clientes", path: clients_path, icon: :clients },
-      { key: :institutions, label: "Instituições", path: institutions_path, icon: :institutions },
-      { key: :bank_statements, label: "Extratos", path: bank_statements_nav_path, icon: :document },
-      { key: :users, label: "Usuários", path: users_path, icon: :users },
-      { key: :plans, label: "Planos", path: plans_path, icon: :plans },
-      { key: :accounts, label: "Contas", path: accounts_path, icon: :building }, 
-      { key: :groups, label: "Grupos", path: groups_path, icon: :group },
-      { key: :subscriptions, label: "Assinaturas", path: subscriptions_path, icon: :credit_card },
-      { key: :settings, label: "Configurações", path: settings_path, icon: :cog }
+    <% nav_sections = [
+      {
+        title: "Visão Geral",
+        items: [
+          { key: :dashboard, label: "Dashboard", path: dashboard_path, icon: :home, policy_ok: policy(:dashboard).index? },
+          { key: :wallet, label: "Carteira", icon: :credit_card, disabled: true, policy_ok: true }
+        ]
+      },
+      {
+        title: "Documentos",
+        items: [
+          { key: :timeline, label: "Timeline", icon: :queue_list, disabled: true, policy_ok: true },
+          { key: :bank_statements, label: "Extratos", path: bank_statements_nav_path, icon: :document, policy_ok: policy(BankStatement).index? },
+          { key: :conversations, label: "Chat IA", path: nav_chat_path, icon: :conversations, policy_ok: policy(Conversation).index? }
+        ]
+      },
+      {
+        title: "Inteligência",
+        items: [
+          { key: :wiki, label: "Wiki", path: wiki_path, icon: :book_open, policy_ok: WikiPagePolicy.new(current_user, :wiki_page).index? },
+          { key: :audit, label: "Auditoria", icon: :document_text, disabled: true, policy_ok: true },
+          { key: :upload_portal, label: "Portal Upload", icon: :arrow_up_on_square, disabled: true, policy_ok: true },
+          { key: :erp_export, label: "Exporta ERP", icon: :circle_stack, disabled: true, policy_ok: true }
+        ]
+      }
     ] %>
-    <% nav.each do |item| %>
-      <% active = (item[:key] == :dashboard && (current_page?(root_path) || request.path.start_with?("/dashboard"))) ||
-                   (item[:key] == :plans && request.path.start_with?("/plans")) ||
-                   (item[:key] == :accounts && request.path.start_with?("/accounts") && !request.path.match?(%r{\A/accounts/\d+/conversations})) ||
-                   (item[:key] == :users && request.path.start_with?("/users")) ||
-                   (item[:key] == :folders && request.path.start_with?("/folders")) ||
-                   (item[:key] == :clients && request.path.start_with?("/clients")) ||
-                   (item[:key] == :institutions && request.path.start_with?("/institutions")) ||
-                   (item[:key] == :bank_statements && (request.path.start_with?("/bank_statements") || request.path.match?(%r{\A/bank_statement_imports/\d+}))) ||
-                   (item[:key] == :documents_term_search && request.path.start_with?("/documents/search")) ||
-                   (item[:key] == :documents_tags_search && request.path.start_with?("/documents/tags")) ||
-                   (item[:key] == :settings && request.path.start_with?("/settings")) ||
-                   (item[:key] == :conversations && request.path.match?(%r{\A/accounts/\d+/conversations})) ||
-                   (item[:key] == :groups && request.path.start_with?("/groups")) ||
-                   (item[:key] == :subscriptions && request.path.start_with?("/subscriptions")) ||
-                   (item[:key] == :wiki && request.path.start_with?("/wiki")) %>
-      
-      <% allowed = case item[:key]
-        when :dashboard then policy(:dashboard).index?
-        when :plans then policy(Plan).index?
-        when :accounts then policy(Account).index?
-        when :users then policy(User).index? 
-        when :subscriptions then policy(Subscription).index?
-        when :groups then policy(Group).index?
-        when :conversations then policy(Conversation).index?
-        when :folders then policy(Folder).index?
-        when :clients then policy(Client).index?
-        when :institutions then policy(Institution).index?
-        when :bank_statements then policy(BankStatement).index?
-        when :documents_term_search then policy(Document).index?
-        when :documents_tags_search then policy(Document).index?
-        when :settings then policy(Setting).show?
-        when :wiki then WikiPagePolicy.new(current_user, :wiki_page).index?
-        else false
-      end %>
 
-      <% next unless allowed %>
+    <% nav_sections.each do |section| %>
+      <section class="space-y-0.5">
+        <p class="hidden px-2 pb-1 pt-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-500 xl:block"><%= section[:title] %></p>
+        <% section[:items].each do |item| %>
+          <% next unless item[:policy_ok] %>
+          <% active = (item[:key] == :dashboard && (current_page?(root_path) || request.path.start_with?("/dashboard"))) ||
+                       (item[:key] == :bank_statements && (request.path.start_with?("/bank_statements") || request.path.match?(%r{\A/bank_statement_imports/\d+}))) ||
+                       (item[:key] == :conversations && request.path.match?(%r{\A/accounts/\d+/conversations})) ||
+                       (item[:key] == :wiki && request.path.start_with?("/wiki")) %>
 
-      <%= link_to item[:path],
-            class: [
-              "group flex items-center justify-center gap-3 rounded-md px-2 py-2.5 text-zinc-400 transition-colors no-underline xl:justify-start",
-              (active ? "bg-zinc-800/80 text-white" : "hover:bg-zinc-800/60 hover:text-zinc-200")
-            ].join(" "),
-            data: (item[:key] == :dashboard ? { turbo: false } : {}) do %>
-        <%= render "layouts/nav_icon", name: item[:icon] %>
-        <span class="hidden text-sm font-medium xl:inline"><%= item[:label] %></span>
-      <% end %>
+          <% base_classes = "group flex items-center justify-center gap-3 rounded-md px-2 py-2.5 text-zinc-400 transition-colors xl:justify-start" %>
+          <% if item[:disabled] %>
+            <div class="<%= [base_classes, 'cursor-default opacity-70'].join(' ') %>" aria-disabled="true">
+              <%= render "layouts/nav_icon", name: item[:icon] %>
+              <span class="hidden text-sm font-medium xl:inline"><%= item[:label] %></span>
+            </div>
+          <% else %>
+            <%= link_to item[:path],
+                  class: [
+                    base_classes,
+                    "no-underline",
+                    (active ? "bg-zinc-800/80 text-white" : "hover:bg-zinc-800/60 hover:text-zinc-200")
+                  ].join(" "),
+                  data: (item[:key] == :dashboard ? { turbo: false } : {}) do %>
+              <%= render "layouts/nav_icon", name: item[:icon] %>
+              <span class="hidden text-sm font-medium xl:inline"><%= item[:label] %></span>
+            <% end %>
+          <% end %>
+        <% end %>
+      </section>
     <% end %>
   </nav>
 
