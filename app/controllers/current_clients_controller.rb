@@ -17,6 +17,15 @@ class CurrentClientsController < ApplicationController
       end
     end
 
-    redirect_back fallback_location: root_path, status: :see_other
+    redirect_to redirect_target, status: :see_other
+  end
+
+  private
+
+  def redirect_target
+    return_to = params[:return_to].to_s
+    return return_to if return_to.present? && return_to.start_with?("/")
+
+    request.referer.presence || root_path
   end
 end

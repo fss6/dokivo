@@ -1,0 +1,143 @@
+<% content_for :title, "Carteira · Dokivo" %>
+
+<div class="space-y-6">
+  <header>
+    <p class="text-xs font-semibold uppercase tracking-wide text-accent">Operação de fechamento</p>
+    <h1 class="text-2xl font-semibold text-zinc-900 sm:text-3xl">Carteira</h1>
+    <p class="mt-1 text-sm text-zinc-600">
+      Visão operacional por cliente para priorizar cobranças da competência
+      <strong><%= l(@period, format: "%m/%Y") %></strong>.
+    </p>
+  </header>
+
+  <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <article class="app-card p-4">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Clientes</p>
+        <%= heroicon "users", variant: :outline, options: { class: "h-4 w-4 text-zinc-400", "aria-hidden": "true" } %>
+      </div>
+      <p class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900"><%= @kpis[:total_clients] %></p>
+    </article>
+    <article class="app-card p-4">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Críticos</p>
+        <%= heroicon "exclamation-triangle", variant: :outline, options: { class: "h-4 w-4 text-red-400", "aria-hidden": "true" } %>
+      </div>
+      <p class="mt-2 text-3xl font-semibold tracking-tight text-red-600"><%= @kpis[:critical_clients] %></p>
+    </article>
+    <article class="app-card p-4">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Sem envio recente</p>
+        <%= heroicon "clock", variant: :outline, options: { class: "h-4 w-4 text-zinc-400", "aria-hidden": "true" } %>
+      </div>
+      <p class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900"><%= @kpis[:no_recent_documents] %></p>
+    </article>
+    <article class="app-card p-4">
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Completude média</p>
+        <%= heroicon "chart-bar", variant: :outline, options: { class: "h-4 w-4 text-zinc-400", "aria-hidden": "true" } %>
+      </div>
+      <p class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900"><%= @kpis[:average_progress] %>%</p>
+    </article>
+  </section>
+
+  <section class="app-card p-4 sm:p-5">
+    <%= form_with url: wallet_path, method: :get, local: true, class: "grid gap-3 lg:grid-cols-5" do %>
+      <div>
+        <label for="wallet_period" class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Competência</label>
+        <input id="wallet_period" name="period" type="month" value="<%= @period_param %>" class="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-800">
+      </div>
+      <div>
+        <label for="wallet_status" class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Status</label>
+        <%= select_tag :status,
+              options_for_select(
+                [
+                  ["Todos", ""],
+                  ["Crítico", "critical"],
+                  ["Aguardando envio", "awaiting"],
+                  ["Em validação", "in_review"],
+                  ["Em dia", "on_track"]
+                ],
+                @selected_status
+              ),
+              id: "wallet_status",
+              class: "mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-700" %>
+      </div>
+      <div class="lg:col-span-2">
+        <label for="wallet_q" class="text-xs font-semibold uppercase tracking-wide text-zinc-500">Cliente</label>
+        <input id="wallet_q" name="q" value="<%= @search_query %>" placeholder="Buscar por nome..." class="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-800">
+      </div>
+      <div class="flex flex-wrap items-end gap-3">
+        <label class="inline-flex items-center gap-2 text-sm text-zinc-700">
+          <%= check_box_tag :only_pending, "1", @only_pending, class: "rounded border-zinc-300 text-accent focus:ring-accent" %>
+          Só com pendência
+        </label>
+        <button type="submit" class="app-btn-primary">Aplicar</button>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="app-card overflow-hidden p-0">
+    <% if @rows.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-zinc-200 text-xs uppercase tracking-wide text-zinc-500">
+              <th class="px-4 py-3 sm:px-5">Cliente</th>
+              <th class="px-4 py-3 sm:px-5">Completude</th>
+              <th class="px-4 py-3 sm:px-5">Checklist</th>
+              <th class="px-4 py-3 sm:px-5">Último envio</th>
+              <th class="px-4 py-3 sm:px-5">Status</th>
+              <th class="px-4 py-3 text-right sm:px-5">Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @rows.each do |row| %>
+              <% status_badge_classes = case row[:status_key]
+                when "critical" then "border-red-200 bg-red-50 text-red-700"
+                when "awaiting" then "border-amber-200 bg-amber-50 text-amber-700"
+                when "in_review" then "border-sky-200 bg-sky-50 text-sky-700"
+                else "border-emerald-200 bg-emerald-50 text-emerald-700"
+              end %>
+              <tr class="border-b border-zinc-100 last:border-b-0">
+                <td class="px-4 py-3 font-medium text-zinc-900 sm:px-5"><%= row[:client].name %></td>
+                <td class="px-4 py-3 sm:px-5">
+                  <p class="text-sm font-medium text-zinc-800"><%= row[:progress_percent] %>%</p>
+                  <div class="mt-1 h-2 w-28 rounded-full bg-zinc-200">
+                    <div class="h-2 rounded-full bg-emerald-500 transition-all" style="width: <%= row[:progress_percent] %>%"></div>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-zinc-600 sm:px-5">
+                  <span><%= row[:validated_count] %>/<%= row[:total_count] %> validados</span>
+                  <span class="mx-1 text-zinc-300">·</span>
+                  <span class="font-medium text-red-600"><%= row[:pending_count] %> pendentes</span>
+                </td>
+                <td class="px-4 py-3 text-zinc-600 sm:px-5">
+                  <% if row[:last_document_at].present? %>
+                    <%= l(row[:last_document_at], format: :short) %>
+                  <% else %>
+                    <span class="text-zinc-400">Sem envio</span>
+                  <% end %>
+                </td>
+                <td class="px-4 py-3 sm:px-5">
+                  <span class="inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold <%= status_badge_classes %>"><%= row[:status_label] %></span>
+                </td>
+                <td class="px-4 py-3 text-right sm:px-5">
+                  <%= form_with url: current_client_path, method: :patch, local: true, class: "inline-flex" do %>
+                    <%= hidden_field_tag :client_id, row[:client].id %>
+                    <%= hidden_field_tag :return_to, monthly_collection_path(@period_param) %>
+                    <button type="submit" class="app-btn-secondary text-xs">Abrir Coleta Mensal</button>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="px-5 py-10 text-sm text-zinc-600 sm:px-6">
+        Nenhum cliente encontrado para os filtros selecionados.
+      </div>
+    <% end %>
+  </section>
+</div>

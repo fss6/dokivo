@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   get "landing", to: "landing#index", as: :landing
   get "privacidade", to: "landing#privacy", as: :privacy
   get "dashboard", to: "dashboard#index", as: :dashboard
+  get "wallet", to: "wallets#index", as: :wallet
+  get "timeline", to: "timelines#show", as: :timeline
+  get "timeline/:id", to: "timelines#show", as: :timeline_period, constraints: { id: /\d{4}-\d{2}/ }
   get "coleta-mensal", to: "monthly_collections#index", as: :monthly_collections
   post "coleta-mensal", to: "monthly_collections#create"
   get "coleta-mensal/:id", to: "monthly_collections#show", as: :monthly_collection, constraints: { id: /\d{4}-\d{2}/ }

@@ -14,13 +14,13 @@
         title: "Visão Geral",
         items: [
           { key: :dashboard, label: "Dashboard", path: dashboard_path, icon: :home, policy_ok: policy(:dashboard).index? },
-          { key: :wallet, label: "Carteira", icon: :credit_card, disabled: true, policy_ok: true }
+          { key: :wallet, label: "Carteira", path: wallet_path, icon: :credit_card, policy_ok: policy(Client).index? }
         ]
       },
       {
         title: "Documentos",
         items: [
-          { key: :timeline, label: "Timeline", icon: :queue_list, disabled: true, policy_ok: true },
+          { key: :timeline, label: "Timeline", path: timeline_path, icon: :queue_list, disabled: current_client.blank?, policy_ok: policy(Folder).index? },
           { key: :folders, label: "Pastas", path: folders_path, icon: :folder, policy_ok: policy(Folder).index? },
           { key: :bank_statements, label: "Extratos", path: bank_statements_nav_path, icon: :document, policy_ok: policy(BankStatement).index? },
           { key: :conversations, label: "Chat IA", path: nav_chat_path, icon: :conversations, policy_ok: policy(Conversation).index? }
@@ -43,7 +43,9 @@
         <% section[:items].each do |item| %>
           <% next unless item[:policy_ok] %>
           <% active = (item[:key] == :dashboard && (current_page?(root_path) || request.path.start_with?("/dashboard"))) ||
+                       (item[:key] == :wallet && request.path.start_with?("/wallet")) ||
                        (item[:key] == :folders && request.path.start_with?("/folders")) ||
+                       (item[:key] == :timeline && request.path.start_with?("/timeline")) ||
                        (item[:key] == :bank_statements && (request.path.start_with?("/bank_statements") || request.path.match?(%r{\A/bank_statement_imports/\d+}))) ||
                        (item[:key] == :conversations && request.path.match?(%r{\A/accounts/\d+/conversations})) ||
                        (item[:key] == :wiki && request.path.start_with?("/wiki")) ||
