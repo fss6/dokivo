@@ -19,9 +19,9 @@ Rails.application.routes.draw do
   get "wallet", to: "wallets#index", as: :wallet
   get "timeline", to: "timelines#show", as: :timeline
   get "timeline/:id", to: "timelines#show", as: :timeline_period, constraints: { id: /\d{4}-\d{2}/ }
-  get "coleta-mensal", to: "monthly_collections#index", as: :monthly_collections
-  post "coleta-mensal", to: "monthly_collections#create"
-  get "coleta-mensal/:id", to: "monthly_collections#show", as: :monthly_collection, constraints: { id: /\d{4}-\d{2}/ }
+  get "monthly-collections", to: "monthly_collections#index", as: :monthly_collections
+  post "monthly-collections", to: "monthly_collections#create"
+  get "monthly-collections/:id", to: "monthly_collections#show", as: :monthly_collection, constraints: { id: /\d{4}-\d{2}/ }
   resource :current_client, only: [:update]
   resources :bank_statements, except: [:show]
   resources :bank_statement_imports, only: [:show] do
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   get "documents/search", to: "documents#term_search", as: :documents_term_search
   get "chat", to: "chat#index", as: :chat
   get "wiki", to: "wiki_pages#index", as: :wiki
-  get "auditoria", to: "audits#index", as: :audits
+  get "audit", to: "audits#index", as: :audits
   get "wiki/log", to: "wiki_pages#log", as: :wiki_log
   get "wiki/lint_report", to: "wiki_pages#lint_report", as: :wiki_lint_report
   get "wiki/:slug", to: "wiki_pages#show", as: :wiki_page, constraints: { slug: /[^\/]+(?:\/[^\/]+)*/ }

@@ -129,7 +129,7 @@ class CompetencyChecklistsController < ApplicationController
 
   def redirect_path_with_fallback(fallback_path)
     return_to = params[:return_to].to_s
-    return fallback_path unless return_to.start_with?("/coleta-mensal")
+    return fallback_path unless return_to.start_with?("/monthly-collections")
 
     return_to
   end

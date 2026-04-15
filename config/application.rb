@@ -23,6 +23,14 @@ module Dokivo
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.active_record.yaml_column_permitted_classes = [
+      Symbol,
+      Date,
+      Time,
+      DateTime,
+      ActiveSupport::TimeWithZone,
+      BigDecimal
+    ]
 
     config.i18n.available_locales = [ :"pt-BR", :en ]
     config.i18n.default_locale = :"pt-BR"

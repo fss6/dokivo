@@ -7,7 +7,7 @@ class AuditsController < ApplicationController
     @actor_options = current_user.account.users.order(:name).pluck(:name, :id)
 
     logs_scope = unified_logs_scope
-    @pagy, @logs = pagy(logs_scope, limit: 20)
+    @pagy, @logs = pagy(logs_scope, limit: 10)
   end
 
   private

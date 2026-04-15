@@ -7,7 +7,7 @@ class MonthlyCollectionsController < ApplicationController
   before_action :set_available_documents, only: :show
 
   def index
-    @periods = available_periods
+    @pagy, @periods = pagy(available_periods_scope, limit: 8)
   end
 
   def create
@@ -92,13 +92,11 @@ class MonthlyCollectionsController < ApplicationController
     nil
   end
 
-  def available_periods
-    periods = CompetencyChecklist
+  def available_periods_scope
+    CompetencyChecklist
       .where(account: current_user.account, client: current_client)
+      .select(:period)
+      .distinct
       .order(period: :desc)
-      .pluck(:period)
-      .map { |period| period.beginning_of_month }
-
-    periods.uniq
   end
 end
