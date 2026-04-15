@@ -1,4 +1,4 @@
-<% content_for :title, "Dokivo — Gestão inteligente de documentos" %>
+<% content_for :title, "Dokivo — Coleta contábil por competência" %>
 
 <% content_for :head do %>
 <style>
@@ -77,13 +77,13 @@
     <div>
       <div class="anim-fade-up mb-7 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5" style="border-color:rgba(26,111,255,0.3);background:rgba(26,111,255,0.08);">
         <span class="anim-pulse-dot h-1.5 w-1.5 rounded-full bg-[#1A6FFF]"></span>
-        <span class="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#A8C8FF]">Gestão inteligente de documentos</span>
+        <span class="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#A8C8FF]">Plataforma para escritórios contábeis</span>
       </div>
       <h1 class="heading anim-fade-up d1 mb-6 font-extrabold leading-[1.08] tracking-[-0.03em] text-white" style="font-size:clamp(36px,4.5vw,54px);">
-        Transforme documentos em <em class="not-italic text-[#4D8FFF]">informação útil</em> em segundos.
+        Elimine trabalho manual e <em class="not-italic text-[#4D8FFF]">automatize a conferência</em>.
       </h1>
-      <p class="anim-fade-up d2 mb-10 max-w-[480px] text-[17px] font-light leading-[1.7] text-[#8CA0BC]">
-        O Dokivo transforma arquivos corporativos em conhecimento acessível. Faça upload, pergunte em linguagem natural e obtenha respostas precisas com rastreabilidade total.
+      <p class="anim-fade-up d2 mb-10 max-w-[560px] text-[17px] font-light leading-[1.7] text-[#8CA0BC]">
+        O Dokivo organiza e interpreta documentos natos digitais ou escaneados, extrai dados e acelera a conferência por competência. Você elimina digitação manual e reduz horas operacionais no fechamento.
       </p>
       <div class="anim-fade-up d3 flex flex-wrap items-center gap-3.5">
         <% hero_cta = { path: (signup_disabled? ? new_user_session_path : new_user_registration_path), label: (signup_disabled? ? t("dokivo.signup.cta_login") : "Começar grátis") } %>
@@ -91,7 +91,7 @@
           <%= hero_cta[:label] %>
           <%= heroicon "arrow-right", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
         <% end %>
-        <a href="#como-funciona" class="rounded-[10px] border px-7 py-3.5 text-[15px] font-medium text-[#C8D8EE] transition hover:border-[rgba(26,111,255,0.3)] hover:text-white" style="border-color:rgba(255,255,255,0.12);">Ver como funciona</a>
+        <a href="#como-funciona" class="rounded-[10px] border px-7 py-3.5 text-[15px] font-medium text-[#C8D8EE] transition hover:border-[rgba(26,111,255,0.3)] hover:text-white" style="border-color:rgba(255,255,255,0.12);">Testar com 1 cliente</a>
       </div>
       <div class="anim-fade-up d4 mt-10 flex items-center gap-2.5 text-[13px] text-[#8CA0BC]">
         <div class="flex">
@@ -100,7 +100,7 @@
           <div class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#060E1C] bg-[#3D85E0] text-[11px] font-semibold" style="margin-right:-8px;">MR</div>
           <div class="flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#060E1C] bg-[#2060C0] text-[11px] font-semibold">TS</div>
         </div>
-        <span>+200 empresas já usam o Dokivo</span>
+        <span>+200 escritórios e times fiscais usam o Dokivo</span>
       </div>
     </div>
 
@@ -110,7 +110,7 @@
         <div class="flex h-7 w-7 items-center justify-center rounded-[7px]" style="background:rgba(40,200,100,0.15);">
           <%= heroicon "check", variant: :outline, options: { class: "h-3.5 w-3.5 text-[#28C864]", "aria-hidden": "true" } %>
         </div>
-        Contrato aprovado
+        Competência 2026-03 validada
       </div>
 
       <div class="relative overflow-hidden rounded-[20px] border p-6 shadow-[0_40px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)_inset]" style="background:rgba(17,34,64,0.9);border-color:rgba(255,255,255,0.08);backdrop-filter:blur(8px);">
@@ -127,12 +127,12 @@
 
         <div class="mb-3.5 grid grid-cols-2 gap-2.5">
           <div class="rounded-[10px] border p-3.5" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
-            <div class="text-[11px] uppercase tracking-[0.06em] text-[#8CA0BC]">Arquivos na base</div>
-            <div class="heading mt-1.5 text-[26px] font-extrabold tracking-[-0.02em] text-white">247</div>
+            <div class="text-[11px] uppercase tracking-[0.06em] text-[#8CA0BC]">Clientes ativos</div>
+            <div class="heading mt-1.5 text-[26px] font-extrabold tracking-[-0.02em] text-white">84</div>
           </div>
           <div class="rounded-[10px] border p-3.5" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
-            <div class="text-[11px] uppercase tracking-[0.06em] text-[#8CA0BC]">Perguntas à IA hoje</div>
-            <div class="heading mt-1.5 text-[26px] font-extrabold tracking-[-0.02em] text-white">38</div>
+            <div class="text-[11px] uppercase tracking-[0.06em] text-[#8CA0BC]">Pendências resolvidas hoje</div>
+            <div class="heading mt-1.5 text-[26px] font-extrabold tracking-[-0.02em] text-white">126</div>
           </div>
         </div>
 
@@ -140,33 +140,33 @@
           <div class="mock-doc flex items-center gap-3 rounded-lg border p-2.5 px-3" style="background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08);">
             <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-[7px] text-sm" style="background:rgba(255,80,80,0.15);">📄</div>
             <div class="min-w-0 flex-1">
-              <div class="truncate text-[13px] font-medium text-white">Contrato ACME Corp — 2025</div>
-              <div class="mt-0.5 text-[11px] text-[#8CA0BC]">PDF · 2,4 MB · há 2h</div>
+              <div class="truncate text-[13px] font-medium text-white">Extrato Bancário — Cliente ACME — 03/2026</div>
+              <div class="mt-0.5 text-[11px] text-[#8CA0BC]">PDF · 1,2 MB · há 24 min</div>
             </div>
             <span class="shrink-0 rounded-[5px] px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(255,180,0,0.15);color:#FFB400;">Pendente</span>
           </div>
           <div class="mock-doc flex items-center gap-3 rounded-lg border p-2.5 px-3" style="background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08);">
             <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-[7px] text-sm" style="background:rgba(40,200,100,0.15);">📋</div>
             <div class="min-w-0 flex-1">
-              <div class="truncate text-[13px] font-medium text-white">Política de Privacidade v3</div>
-              <div class="mt-0.5 text-[11px] text-[#8CA0BC]">DOCX · 840 KB · ontem</div>
+              <div class="truncate text-[13px] font-medium text-white">NF de Serviços — Lote Março — Cliente Orion</div>
+              <div class="mt-0.5 text-[11px] text-[#8CA0BC]">XML · 920 KB · há 1h</div>
             </div>
-            <span class="shrink-0 rounded-[5px] px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(40,200,100,0.15);color:#28C864;">Aprovado</span>
+            <span class="shrink-0 rounded-[5px] px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(40,200,100,0.15);color:#28C864;">Recebido</span>
           </div>
           <div class="mock-doc flex items-center gap-3 rounded-lg border p-2.5 px-3" style="background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08);">
             <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-[7px] text-sm" style="background:rgba(26,111,255,0.15);">📊</div>
             <div class="min-w-0 flex-1">
-              <div class="truncate text-[13px] font-medium text-white">Relatório Auditoria Q2</div>
-              <div class="mt-0.5 text-[11px] text-[#8CA0BC]">PDF · 5,1 MB · 3 dias</div>
+              <div class="truncate text-[13px] font-medium text-white">Folha de Pagamento + Pró-labore — 03/2026</div>
+              <div class="mt-0.5 text-[11px] text-[#8CA0BC]">PDF · 2,8 MB · há 3h</div>
             </div>
-            <span class="shrink-0 rounded-[5px] px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(26,111,255,0.15);color:#A8C8FF;">Em revisão</span>
+            <span class="shrink-0 rounded-[5px] px-2 py-0.5 text-[10px] font-semibold" style="background:rgba(26,111,255,0.15);color:#A8C8FF;">Validado</span>
           </div>
         </div>
 
         <div class="mt-3.5 rounded-[10px] border p-3 px-3.5" style="background:rgba(26,111,255,0.08);border-color:rgba(26,111,255,0.3);">
-          <div class="mb-1.5 text-[12px] text-[#A8C8FF]">💬 "Qual o prazo de entrega no contrato ACME?"</div>
+          <div class="mb-1.5 text-[12px] text-[#A8C8FF]">💬 "Quais pendências da competência 2026-03 da ACME?"</div>
           <div class="text-[13px] leading-[1.5] text-[#C8D8EE]">
-            Conforme a Cláusula 4.2, o prazo é de <strong class="text-[#A8C8FF]">30 dias corridos</strong> após a assinatura, com prorrogação de até 15 dias.<span class="anim-blink"></span>
+            Faltam <strong class="text-[#A8C8FF]">DAS e Conciliação bancária</strong>. Extrato e NF já recebidos. Última cobrança enviada há 2 dias.<span class="anim-blink"></span>
           </div>
         </div>
       </div>
@@ -175,7 +175,7 @@
         <div class="flex h-7 w-7 items-center justify-center rounded-[7px]" style="background:rgba(26,111,255,0.15);">
           <%= heroicon "clock", variant: :outline, options: { class: "h-3.5 w-3.5 text-[#4D8FFF]", "aria-hidden": "true" } %>
         </div>
-        Resposta em &lt; 2s
+        Resposta em &lt; 2s com fonte
       </div>
     </div>
   </div>
@@ -186,18 +186,18 @@
   <div class="pointer-events-none absolute right-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/3 rounded-full" style="background:radial-gradient(circle,rgba(26,111,255,0.09) 0%,transparent 70%);filter:blur(70px);"></div>
   <div class="mx-auto max-w-[1160px] px-8">
     <div class="mb-4 flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#A8C8FF]">
-      O cenário atual
+      Rotina do escritório contábil
     </div>
-    <h2 class="heading mb-4 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(28px,3.5vw,42px);">Documentos espalhados custam<br>tempo e dinheiro.</h2>
-    <p class="max-w-[540px] text-[17px] font-light leading-[1.7] text-[#8CA0BC]">Equipes modernas precisam de acesso rápido e inteligente ao conteúdo dos seus arquivos — não de buscas manuais intermináveis.</p>
+    <h2 class="heading mb-4 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(28px,3.5vw,42px);">Conferência e digitação manual de documentos<br>desgastam o time e travam o fechamento.</h2>
+    <p class="max-w-[700px] text-[17px] font-light leading-[1.7] text-[#8CA0BC]">A maior dor operacional do escritório contábil é repetir tarefas manuais em documentos de vários formatos. Com IA e automações, o Dokivo reduz leitura manual, validação repetitiva e retrabalho por competência.</p>
 
     <div class="relative z-10 mt-14 grid gap-5 lg:grid-cols-2">
       <div class="rounded-[20px] border p-9" style="background:rgba(255,60,60,0.06);border-color:rgba(255,60,60,0.2);">
         <div class="mb-4 text-[11px] font-bold uppercase tracking-[0.1em] text-[#FF6B6B]">⚠ O problema</div>
-        <h3 class="heading mb-3 text-[22px] font-bold leading-[1.25]">Arquivos dispersos, histórico perdido e retrabalho constante.</h3>
-        <p class="mb-5 font-light leading-[1.7] text-[#8CA0BC]">Quando documentos ficam espalhados entre e-mails, pastas e sistemas, sua equipe gasta horas procurando informação em vez de decidir.</p>
+        <h3 class="heading mb-3 text-[22px] font-bold leading-[1.25]">Conferência manual e digitação repetitiva todos os meses.</h3>
+        <p class="mb-5 font-light leading-[1.7] text-[#8CA0BC]">Mesmo com os documentos em mãos, a equipe perde horas lendo arquivos, digitando dados e fazendo dupla checagem para evitar erro no fechamento.</p>
         <div class="flex flex-col gap-2.5">
-          <% ["Contratos desatualizados circulando por e-mail", "Horas perdidas para encontrar uma cláusula", "Risco de decisões com informação desatualizada"].each do |item| %>
+          <% ["Horas gastas para digitar informação que já está nos documentos", "Conferência manual sujeita a erro e retrabalho", "Fechamento atrasado por gargalo de validação operacional"].each do |item| %>
             <div class="flex items-start gap-2.5 text-[14px] text-[#C8D8EE]">
               <%= heroicon "x-circle", variant: :outline, options: { class: "mt-0.5 h-3.5 w-3.5 shrink-0 text-[#FF6B6B]", "aria-hidden": "true" } %>
               <%= item %>
@@ -208,10 +208,10 @@
 
       <div class="rounded-[20px] border p-9" style="background:rgba(26,111,255,0.09);border-color:rgba(26,111,255,0.28);">
         <div class="mb-4 text-[11px] font-bold uppercase tracking-[0.1em] text-[#A8C8FF]">✦ A solução</div>
-        <h3 class="heading mb-3 text-[22px] font-bold leading-[1.25]">Um hub único que lê, entende e responde sobre seus documentos.</h3>
-        <p class="mb-5 font-light leading-[1.7] text-[#8CA0BC]">Com o Dokivo, basta fazer upload e perguntar em linguagem natural. A IA localiza, interpreta e entrega a informação exata que você precisa.</p>
+        <h3 class="heading mb-3 text-[22px] font-bold leading-[1.25]">IA para automatizar leitura, extração e conferência.</h3>
+        <p class="mb-5 font-light leading-[1.7] text-[#8CA0BC]">No Dokivo, documentos de diferentes formatos viram dados pesquisáveis automaticamente. Você valida pendências por competência sem digitação manual e com histórico rastreável.</p>
         <div class="flex flex-col gap-2.5">
-          <% ["Busca semântica em todos os seus arquivos", "Respostas com referência exata ao trecho fonte", "Controle de acesso e rastreabilidade completa"].each do |item| %>
+          <% ["Extração automática de dados de documentos variados", "Conferência assistida com referência ao documento fonte", "Histórico auditável de recebimento e validação"].each do |item| %>
             <div class="flex items-start gap-2.5 text-[14px] text-[#C8D8EE]">
               <%= heroicon "check-circle", variant: :outline, options: { class: "mt-0.5 h-3.5 w-3.5 shrink-0 text-[#A8C8FF]", "aria-hidden": "true" } %>
               <%= item %>
@@ -228,16 +228,16 @@
   <div class="pointer-events-none absolute left-1/4 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full opacity-40" style="background:radial-gradient(circle,rgba(26,111,255,0.14) 0%,transparent 70%);filter:blur(60px);"></div>
   <div class="mx-auto max-w-[1160px] px-8 relative z-10">
     <div class="mb-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#A8C8FF]">O que dizem os clientes</div>
-    <h2 class="heading mb-12 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(24px,3vw,36px);">Equipes que já economizam horas<br>com o Dokivo.</h2>
+    <h2 class="heading mb-12 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(24px,3vw,36px);">Escritórios que reduziram retrabalho<br>na rotina mensal.</h2>
 
     <div class="grid gap-5 md:grid-cols-3">
       <% [
-        ["Antes perdíamos horas procurando cláusulas em contratos antigos. Agora fazemos a pergunta e o Dokivo localiza o trecho em segundos, com a referência exata.",
-         "Ana Lima", "Advogada Sênior", "Escritório Lima & Associados"],
-        ["Implementamos em menos de um dia. Nossa equipe financeira parou de depender de e-mail para localizar documentos — tudo centralizado e pesquisável.",
-         "Carlos Mendes", "CFO", "Grupo Meridian"],
-        ["O controle de acesso por equipe foi decisivo para nós. Cada área vê apenas o que deve ver, com auditoria completa para nossas exigências de compliance.",
-         "Rafaela Souza", "Gerente de Compliance", "TechFab Indústrias"]
+        ["No primeiro mês reduzimos em 32% o tempo de fechamento porque paramos de digitar dados manualmente.",
+         "Marina Rocha", "Sócia Contadora", "Rocha Contabilidade"],
+        ["Antes a equipe cobrava documentos no WhatsApp o dia todo. Agora cada competência tem checklist e o cliente entende exatamente o que falta.",
+         "Eduardo Paes", "Coordenador Fiscal", "Prime Contábil"],
+        ["Com conferência automática, a revisão ficou mais rápida e o time só atua nos casos com divergência.",
+         "Juliana Nunes", "Gestora de Operações", "Nunes Assessoria Contábil"]
       ].each_with_index do |(quote, name, role, company), i| %>
         <div class="flex flex-col rounded-[20px] border p-7" style="background:rgba(255,255,255,0.055);border-color:rgba(255,255,255,0.12);">
           <div class="mb-4 flex gap-0.5 text-[#1A6FFF]">
@@ -264,7 +264,7 @@
   <div class="pointer-events-none absolute left-0 bottom-0 h-[400px] w-[500px] -translate-x-1/3 rounded-full" style="background:radial-gradient(circle,rgba(26,111,255,0.08) 0%,transparent 70%);filter:blur(70px);"></div>
   <div class="mx-auto max-w-[1160px] px-8">
     <div class="mb-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#A8C8FF]">Funcionalidades</div>
-    <h2 class="heading mb-14 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(28px,3.5vw,42px);">Tudo que sua equipe precisa<br>para dominar os documentos.</h2>
+    <h2 class="heading mb-14 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(28px,3.5vw,42px);">Tudo que o escritório precisa<br>para rodar o mês sem gargalo.</h2>
 
     <div class="relative z-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <%# Card destaque — Chat com IA %>
@@ -276,22 +276,23 @@
               <%= heroicon "chat-bubble-left-right", variant: :outline, options: { class: "h-[22px] w-[22px] text-[#4D8FFF]", "aria-hidden": "true" } %>
             </div>
             <div class="mb-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-[#A8C8FF]">Funcionalidade principal</div>
-            <h4 class="mb-2 text-[18px] font-semibold text-white">Chat com IA (RAG)</h4>
-            <p class="text-[14px] font-light leading-[1.65] text-[#8CA0BC]">Pergunte em português e receba respostas precisas baseadas no conteúdo real dos seus documentos — com citação exata do trecho fonte para rastreabilidade total.</p>
+            <h4 class="mb-2 text-[18px] font-semibold text-white">Conferência automática de documentos</h4>
+            <p class="text-[14px] font-light leading-[1.65] text-[#8CA0BC]">A IA lê documentos fiscais em diferentes formatos, identifica dados e responde com fonte exata para a equipe conferir sem digitar manualmente.</p>
           </div>
           <div class="w-full shrink-0 rounded-[12px] border p-4 sm:w-52" style="background:rgba(6,14,28,0.6);border-color:rgba(26,111,255,0.2);">
-            <div class="mb-2 text-[11px] text-[#A8C8FF]">💬 "Qual a multa por rescisão?"</div>
-            <div class="text-[12px] leading-[1.5] text-[#C8D8EE]">Conforme Cláusula 8.1: <strong class="text-[#A8C8FF]">20% do valor</strong> restante do contrato.<span class="anim-blink"></span></div>
-            <div class="mt-3 border-t pt-2.5 text-[10px] text-[#8CA0BC]" style="border-color:rgba(255,255,255,0.06);">📄 Contrato ACME Corp — pág. 12</div>
+            <div class="mb-2 text-[11px] text-[#A8C8FF]">💬 "Quais dados foram extraídos deste DAS?"</div>
+            <div class="text-[12px] leading-[1.5] text-[#C8D8EE]">Competência <strong class="text-[#A8C8FF]">03/2026</strong>, vencimento 20/04 e valor total R$ 2.184,33.<span class="anim-blink"></span></div>
+            <div class="mt-3 border-t pt-2.5 text-[10px] text-[#8CA0BC]" style="border-color:rgba(255,255,255,0.06);">📄 DAS_2026-03_Cliente_ACME.pdf</div>
           </div>
         </div>
       </div>
 
       <% [
-        ["Upload inteligente", "PDF, Word, Excel e imagens. Indexação automática após o envio.", "document-text"],
-        ["Busca semântica", "Encontre informações mesmo sem saber a palavra exata. O contexto guia o resultado.", "magnifying-glass"],
-        ["OCR automático", "Documentos escaneados e imagens reconhecidos automaticamente com alta precisão.", "camera"],
-        ["Auditoria completa", "Log imutável de acessos e alterações para conformidade e compliance.", "shield-check"]
+        ["Coleta por competência", "Organize recebimentos por mês e cliente para reduzir pendência e retrabalho.", "calendar-days"],
+        ["Busca com contexto contábil", "Encontre comprovantes, notas e extratos mesmo sem lembrar o nome do arquivo.", "magnifying-glass"],
+        ["Leitura automática de documentos", "Interprete arquivos natos digitais e escaneados automaticamente para eliminar digitação operacional repetitiva.", "camera"],
+        ["Conferência automatizada", "Valide dados extraídos com apoio da IA e destaque divergências para revisão rápida.", "clipboard-document-check"],
+        ["Histórico auditável", "Registre recebimento, validação e alterações com trilha completa para revisão e conformidade.", "shield-check"]
       ].each do |feat| %>
         <div class="feat-card cursor-default rounded-[16px] border p-7" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.11);">
           <div class="mb-[18px] flex h-11 w-11 items-center justify-center rounded-[12px]" style="background:rgba(26,111,255,0.12);">
@@ -309,14 +310,14 @@
 <section class="border-y py-24" style="background:#091829;border-color:rgba(255,255,255,0.1);" id="como-funciona">
   <div class="mx-auto max-w-[1160px] px-8">
     <div class="mb-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#A8C8FF]">Como funciona</div>
-    <h2 class="heading mb-14 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(28px,3.5vw,42px);">De zero ao primeiro insight<br>em menos de 5 minutos.</h2>
+    <h2 class="heading mb-14 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(28px,3.5vw,42px);">Da primeira competência ao<br>fechamento com controle em minutos.</h2>
 
     <div class="steps-row grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <% [
-        ["1", "Crie sua conta", "Cadastro em segundos. Sem cartão de crédito para começar."],
-        ["2", "Faça upload", "Envie PDFs, contratos e documentos. A indexação é automática."],
-        ["3", "Pergunte", "Digite sua pergunta em português. A IA localiza a resposta na fonte."],
-        ["4", "Decida mais rápido", "Respostas com rastreabilidade. Sua equipe ganha velocidade e precisão."]
+        ["1", "Crie o escritório", "Cadastro em segundos. Convide o time sem precisar de cartão."],
+        ["2", "Abra a competência", "Defina mês e cliente para organizar documentos com padrão."],
+        ["3", "Receba e valide", "Acompanhe o que chegou, o que falta e o status de cada item."],
+        ["4", "Consulte com IA", "Pergunte em português e resolva dúvidas com fonte rastreável."]
       ].each do |step| %>
         <div class="relative z-10 rounded-[16px] border px-5 py-7 text-center" style="background:#152a50;border-color:rgba(255,255,255,0.12);">
           <div class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#1A6FFF]" style="box-shadow:0 0 0 8px rgba(26,111,255,0.12);">
@@ -335,52 +336,75 @@
   <div class="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-[500px]" style="background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(26,111,255,0.1) 0%,transparent 70%);"></div>
   <div class="relative z-10 mx-auto max-w-[1160px] px-8">
     <div class="mb-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#A8C8FF]">Planos</div>
-    <h2 class="heading mb-4 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(28px,3.5vw,42px);">Simples, transparente<br>e sem surpresas.</h2>
-    <p class="mb-14 max-w-[540px] text-[17px] font-light leading-[1.7] text-[#8CA0BC]">Todos os planos incluem suporte em português e dados hospedados no Brasil.</p>
+    <h2 class="heading mb-4 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(28px,3.5vw,42px);">Planos para contador solo,<br>escritório e operação em escala.</h2>
+    <p class="mb-14 max-w-[620px] text-[17px] font-light leading-[1.7] text-[#8CA0BC]">Todos os planos incluem suporte em português, dados hospedados no Brasil e fluxo mensal por competência.</p>
 
     <div class="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
       <%# Starter %>
       <div class="flex h-full flex-col rounded-[20px] border p-8" style="background:rgba(255,255,255,0.045);border-color:rgba(255,255,255,0.11);">
-        <div class="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#8CA0BC]">Starter</div>
+        <div class="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#8CA0BC]">Solo</div>
         <div class="heading mb-1 text-[42px] font-extrabold leading-none tracking-[-0.02em]"><sup class="mr-1.5 text-[18px] font-bold align-super">R$</sup>149</div>
-        <div class="mb-6 text-[13px] text-[#8CA0BC]">/ mês · até 3 usuários</div>
+        <div class="mb-6 text-[13px] text-[#8CA0BC]">/ mês · até 3 usuários · até 20 clientes</div>
         <div class="mb-6 h-px" style="background:rgba(255,255,255,0.08);"></div>
         <ul class="mb-7 flex flex-col gap-3">
-          <% ["5 GB de documentos indexados", "Chat com IA ilimitado", "OCR automático", "Suporte por e-mail"].each do |f| %>
+          <% ["Fluxo mensal por competência", "Checklist de pendências por cliente", "Chat com IA ilimitado", "Suporte por e-mail"].each do |f| %>
             <li class="flex items-start gap-2.5 text-[14px] text-[#C8D8EE]"><span class="text-[#A8C8FF]">✓</span><%= f %></li>
           <% end %>
         </ul>
-        <%= link_to (signup_disabled? ? t("dokivo.signup.cta_login") : "Começar grátis"), (signup_disabled? ? new_user_session_path : new_user_registration_path), class: "mt-auto block rounded-lg border py-3 text-center text-[14px] font-semibold text-[#C8D8EE] transition hover:border-[rgba(26,111,255,0.3)] hover:text-white", style: "border-color:rgba(255,255,255,0.08);" %>
+        <%= link_to (signup_disabled? ? t("dokivo.signup.cta_login") : "Testar no plano Solo"), (signup_disabled? ? new_user_session_path : new_user_registration_path), class: "mt-auto block rounded-lg border py-3 text-center text-[14px] font-semibold text-[#C8D8EE] transition hover:border-[rgba(26,111,255,0.3)] hover:text-white", style: "border-color:rgba(255,255,255,0.08);" %>
       </div>
 
       <%# Pro — featured %>
       <div class="price-featured relative flex h-full flex-col rounded-[20px] border p-8">
         <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#1A6FFF] px-4 py-1 text-[11px] font-bold uppercase tracking-[0.06em] text-white">Mais popular</div>
-        <div class="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#8CA0BC]">Pro</div>
+        <div class="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#8CA0BC]">Escritório</div>
         <div class="heading mb-1 text-[42px] font-extrabold leading-none tracking-[-0.02em]"><sup class="mr-1.5 text-[18px] font-bold align-super">R$</sup>449</div>
-        <div class="mb-6 text-[13px] text-[#8CA0BC]">/ mês · até 15 usuários</div>
+        <div class="mb-6 text-[13px] text-[#8CA0BC]">/ mês · até 15 usuários · até 120 clientes</div>
         <div class="mb-6 h-px" style="background:rgba(255,255,255,0.08);"></div>
         <ul class="mb-7 flex flex-col gap-3">
-          <% ["25 GB de documentos indexados", "Chat com IA ilimitado", "OCR + busca semântica avançada", "Permissões por equipe", "Auditoria completa", "Suporte prioritário"].each do |f| %>
+          <% ["Fluxo por competência com equipe", "Leitura automática + busca semântica avançada", "Permissões por equipe", "Histórico auditável completo", "Suporte prioritário", "Onboarding guiado"].each do |f| %>
             <li class="flex items-start gap-2.5 text-[14px] text-[#C8D8EE]"><span class="text-[#A8C8FF]">✓</span><%= f %></li>
           <% end %>
         </ul>
-        <%= link_to (signup_disabled? ? t("dokivo.signup.cta_login") : "Assinar Pro"), (signup_disabled? ? new_user_session_path : new_user_registration_path), class: "mt-auto block rounded-lg bg-[#1A6FFF] py-3 text-center text-[14px] font-semibold text-white transition hover:bg-[#4D8FFF]" %>
+        <%= link_to (signup_disabled? ? t("dokivo.signup.cta_login") : "Testar no plano Escritório"), (signup_disabled? ? new_user_session_path : new_user_registration_path), class: "mt-auto block rounded-lg bg-[#1A6FFF] py-3 text-center text-[14px] font-semibold text-white transition hover:bg-[#4D8FFF]" %>
       </div>
 
       <%# Enterprise %>
       <div class="flex h-full flex-col rounded-[20px] border p-8" style="background:rgba(255,255,255,0.045);border-color:rgba(255,255,255,0.11);">
-        <div class="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#8CA0BC]">Enterprise</div>
+        <div class="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#8CA0BC]">Escala</div>
         <div class="heading mb-1 text-[32px] font-extrabold leading-none tracking-[-0.02em]">Sob consulta</div>
-        <div class="mb-6 text-[13px] text-[#8CA0BC]">volumes e usuários customizados</div>
+        <div class="mb-6 text-[13px] text-[#8CA0BC]">volumes, usuários e clientes customizados</div>
         <div class="mb-6 h-px" style="background:rgba(255,255,255,0.08);"></div>
         <ul class="mb-7 flex flex-col gap-3">
-          <% ["GB ilimitado de documentos", "Usuários ilimitados", "SSO e integração via API", "SLA garantido", "Onboarding dedicado", "Gerente de conta"].each do |f| %>
+          <% ["Capacidade expandida por operação", "Usuários e clientes ilimitados", "SSO e integração via API", "SLA garantido", "Onboarding dedicado", "Gerente de conta"].each do |f| %>
             <li class="flex items-start gap-2.5 text-[14px] text-[#C8D8EE]"><span class="text-[#A8C8FF]">✓</span><%= f %></li>
           <% end %>
         </ul>
         <a href="mailto:contato@dokivo.com.br" class="mt-auto block rounded-lg border py-3 text-center text-[14px] font-semibold text-[#C8D8EE] transition hover:border-[rgba(26,111,255,0.3)] hover:text-white" style="border-color:rgba(255,255,255,0.08);">Falar com vendas</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<%# ─── SUCCESS METRICS ─── %>
+<section class="border-y py-20" style="background:#081525;border-color:rgba(255,255,255,0.1);">
+  <div class="mx-auto max-w-[1160px] px-8">
+    <div class="mb-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-[#A8C8FF]">Métricas de sucesso</div>
+    <h2 class="heading mb-4 font-extrabold leading-[1.1] tracking-[-0.02em] text-white" style="font-size:clamp(26px,3.2vw,38px);">Indicadores para acompanhar<br>os ganhos da operação contábil.</h2>
+    <p class="mb-10 max-w-[700px] text-[16px] font-light leading-[1.7] text-[#8CA0BC]">Após publicar a nova mensagem da landing, acompanhe estes indicadores para validar aumento de conversão e ativação.</p>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <% [
+        ["CTR do CTA principal", "Percentual de cliques no botão do hero para iniciar teste."],
+        ["Cliques em preços e contato", "Taxa de acesso em #precos e no botão de falar com especialista."],
+        ["Conversão visita para cadastro", "Visitantes que criam conta após acessar a landing."],
+        ["Ativação do primeiro fluxo", "Cadastros que abrem a primeira competência ou checklist."]
+      ].each do |title, description| %>
+        <div class="rounded-[16px] border p-6" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.11);">
+          <h4 class="mb-2 text-[15px] font-semibold text-white"><%= title %></h4>
+          <p class="text-[13px] font-light leading-[1.65] text-[#8CA0BC]"><%= description %></p>
+        </div>
+      <% end %>
     </div>
   </div>
 </section>
@@ -394,17 +418,21 @@
     <div class="divide-y" style="border-color:rgba(255,255,255,0.12);">
       <% [
         ["Meus documentos ficam seguros e privados?",
-         "Sim. Todos os dados são criptografados em trânsito (TLS) e em repouso (AES-256). Os documentos ficam hospedados em servidores no Brasil e nunca são compartilhados com terceiros. Cada empresa tem seu próprio ambiente isolado."],
+         "Sim. Todos os dados são criptografados em trânsito (TLS) e em repouso (AES-256). Os documentos contábeis e fiscais ficam hospedados em servidores no Brasil e nunca são compartilhados com terceiros. Cada escritório opera em ambiente isolado."],
         ["Quais tipos de arquivo são suportados?",
-         "PDF, Word (.docx), Excel (.xlsx), imagens (JPG, PNG) e documentos escaneados via OCR. O sistema indexa automaticamente o conteúdo após o upload."],
+         "PDF, Word (.docx), Excel (.xlsx), XML e imagens (JPG, PNG), incluindo arquivos natos digitais e escaneados. O sistema indexa automaticamente o conteúdo após o upload."],
         ["A IA responde em português?",
-         "Sim. O Dokivo foi desenvolvido para equipes brasileiras e responde em português, inclusive com termos jurídicos, contábeis e técnicos do contexto dos seus documentos."],
+         "Sim. O Dokivo foi desenvolvido para equipes brasileiras e responde em português, incluindo termos contábeis e fiscais do contexto dos seus documentos."],
+        ["É difícil migrar para o Dokivo no meio da operação?",
+         "Não. Você pode começar com poucos clientes e uma única competência, validar o fluxo com o time e expandir gradualmente sem interromper a operação atual."],
+        ["Minha equipe precisa de muito treinamento?",
+         "Não. O onboarding é guiado e o fluxo é simples: competência, checklist e status. Em geral, o time começa a operar no mesmo dia."],
         ["Posso cancelar a qualquer momento?",
          "Sim. Não há fidelidade mínima. Você pode cancelar quando quiser, sem multa ou burocracia. Seus dados ficam disponíveis para exportação por 30 dias após o cancelamento."],
         ["Quantos usuários posso ter por plano?",
-         "O plano Starter permite até 3 usuários, o Pro até 15, e o Enterprise é customizado sem limite de usuários. Você pode fazer upgrade entre planos a qualquer momento."],
+         "O plano Solo permite até 3 usuários, o Escritório até 15, e o Escala é customizado sem limite. Você pode fazer upgrade entre planos a qualquer momento."],
         ["Preciso migrar toda a infraestrutura atual?",
-         "Não. O Dokivo funciona em paralelo com o que você já usa. Basta fazer upload dos documentos relevantes e começar a consultar. Não é necessário alterar outros sistemas."]
+         "Não. O Dokivo funciona em paralelo com o que você já usa. Comece por uma carteira piloto, organize por competência e evolua no seu ritmo sem alterar outros sistemas."]
       ].each do |question, answer| %>
         <details class="group py-1">
           <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-[15px] font-medium text-white transition hover:text-[#A8C8FF]">
@@ -428,12 +456,12 @@
   <div class="relative z-10 mx-auto max-w-[1160px] px-8">
     <div class="mb-5 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5" style="border-color:rgba(26,111,255,0.3);background:rgba(26,111,255,0.1);">
       <span class="h-1.5 w-1.5 rounded-full bg-[#1A6FFF]" style="animation:pulse-dot 2s infinite;"></span>
-      <span class="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#A8C8FF]">Comece hoje, sem cartão</span>
+      <span class="text-[11px] font-semibold uppercase tracking-[0.06em] text-[#A8C8FF]">Comece hoje com uma carteira piloto</span>
     </div>
-    <h2 class="heading mb-4 font-extrabold leading-tight tracking-[-0.02em] text-white" style="font-size:clamp(30px,4vw,48px);">Pronto para transformar<br>como sua equipe usa documentos?</h2>
-    <p class="mx-auto mb-10 max-w-[520px] text-[17px] font-light leading-[1.7] text-[#8CA0BC]">Crie sua conta grátis e veja o Dokivo em ação. Setup em menos de 5 minutos, sem necessidade de cartão.</p>
+    <h2 class="heading mb-4 font-extrabold leading-tight tracking-[-0.02em] text-white" style="font-size:clamp(30px,4vw,48px);">Pronto para reduzir pendências<br>e fechar o mês com previsibilidade?</h2>
+    <p class="mx-auto mb-10 max-w-[620px] text-[17px] font-light leading-[1.7] text-[#8CA0BC]">Crie sua conta grátis, teste com 1 cliente e acompanhe a competência em tempo real. Setup em menos de 5 minutos, sem cartão.</p>
     <div class="flex flex-wrap items-center justify-center gap-3.5">
-      <% final_cta = { path: (signup_disabled? ? new_user_session_path : new_user_registration_path), label: (signup_disabled? ? t("dokivo.signup.cta_login") : "Criar conta grátis") } %>
+      <% final_cta = { path: (signup_disabled? ? new_user_session_path : new_user_registration_path), label: (signup_disabled? ? t("dokivo.signup.cta_login") : "Testar com 1 cliente grátis") } %>
       <%= link_to final_cta[:path], class: "inline-flex items-center gap-2 rounded-[10px] bg-[#1A6FFF] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#4D8FFF] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(26,111,255,0.35)]" do %>
         <%= final_cta[:label] %>
         <%= heroicon "arrow-right", variant: :outline, options: { class: "h-4 w-4", "aria-hidden": "true" } %>
