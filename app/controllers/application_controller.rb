@@ -72,4 +72,16 @@ class ApplicationController < ActionController::Base
       base
     end
   end
+
+  def record_audit_event(event_type:, subject:, metadata: {})
+    return unless current_user&.account
+
+    AuditEvents::Recorder.call(
+      account: current_user.account,
+      user: current_user,
+      event_type: event_type,
+      subject: subject,
+      metadata: metadata
+    )
+  end
 end

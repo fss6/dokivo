@@ -23,11 +23,16 @@ class MonthlyCollectionsController < ApplicationController
       period: period
     ).call
 
-    Folder.find_or_create_by!(
+    folder = Folder.find_or_create_by!(
       account: current_user.account,
       client: current_client,
       name: period.strftime("%Y-%m"),
       visible: false
+    )
+    record_audit_event(
+      event_type: "monthly_collection.created",
+      subject: folder,
+      metadata: { period: period.strftime("%Y-%m"), client_id: current_client.id }
     )
 
     redirect_to monthly_collection_path(period.strftime("%Y-%m")), notice: "Competência criada com sucesso."

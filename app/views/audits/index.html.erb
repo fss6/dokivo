@@ -1,0 +1,111 @@
+<% content_for :title, "Auditoria · Dokivo" %>
+
+<div class="space-y-4">
+  <header class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-accent">Inteligência</p>
+      <h1 class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Auditoria</h1>
+      <p class="mt-1 text-sm text-zinc-600">Logs de alterações de dados e eventos operacionais da conta.</p>
+    </div>
+  </header>
+
+  <details class="app-card group" <%= "open" if params.slice(:source, :actor_id, :verb, :item_type, :from, :to, :q).values.any?(&:present?) %>>
+    <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-left [&::-webkit-details-marker]:hidden">
+      <span class="text-sm font-semibold text-zinc-900">Filtros</span>
+      <svg class="h-4 w-4 shrink-0 text-zinc-400 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+      </svg>
+    </summary>
+    <div class="border-t border-zinc-100 px-4 py-4">
+      <%= form_with url: audits_path, method: :get do %>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <%= label_tag :source, "Origem", class: "app-label" %>
+            <%= select_tag :source, options_for_select([["Todas", ""], ["Mudança de dados", "audit"], ["Evento de negócio", "event"]], params[:source]), class: "app-input" %>
+          </div>
+          <div>
+            <%= label_tag :actor_id, "Usuário", class: "app-label" %>
+            <%= select_tag :actor_id, options_for_select([["Todos", ""]] + @actor_options, params[:actor_id]), class: "app-input" %>
+          </div>
+          <div>
+            <%= label_tag :verb, "Ação", class: "app-label" %>
+            <%= text_field_tag :verb, params[:verb], class: "app-input", placeholder: "create, update, document.moved..." %>
+          </div>
+          <div>
+            <%= label_tag :item_type, "Tipo do item", class: "app-label" %>
+            <%= text_field_tag :item_type, params[:item_type], class: "app-input", placeholder: "Folder, BankStatementImport..." %>
+          </div>
+          <div>
+            <%= label_tag :from, "Data inicial", class: "app-label" %>
+            <%= date_field_tag :from, params[:from], class: "app-input" %>
+          </div>
+          <div>
+            <%= label_tag :to, "Data final", class: "app-label" %>
+            <%= date_field_tag :to, params[:to], class: "app-input" %>
+          </div>
+          <div class="sm:col-span-2">
+            <%= label_tag :q, "Busca", class: "app-label" %>
+            <%= text_field_tag :q, params[:q], class: "app-input", placeholder: "busca em ação, tipo, usuário e payload" %>
+          </div>
+        </div>
+        <div class="mt-3 flex items-center justify-end gap-2">
+          <%= link_to "Limpar", audits_path, class: "app-btn-secondary no-underline" %>
+          <%= submit_tag "Aplicar", class: "app-btn-primary cursor-pointer border-0" %>
+        </div>
+      <% end %>
+    </div>
+  </details>
+
+  <div class="app-card overflow-hidden">
+    <% if @logs.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-zinc-100 bg-zinc-50/80 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+              <th class="px-4 py-3">Data</th>
+              <th class="px-4 py-3">Origem</th>
+              <th class="px-4 py-3">Ação</th>
+              <th class="px-4 py-3">Item</th>
+              <th class="px-4 py-3">Usuário</th>
+              <th class="px-4 py-3">Detalhes</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-100">
+            <% @logs.each do |log| %>
+              <tr class="bg-white">
+                <td class="whitespace-nowrap px-4 py-3 text-zinc-700"><%= l(log.created_at, format: :short) %></td>
+                <td class="px-4 py-3">
+                  <% source_classes = log.source == "event" ? "bg-blue-50 text-blue-700" : "bg-emerald-50 text-emerald-700" %>
+                  <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium <%= source_classes %>">
+                    <%= log.source == "event" ? "Evento" : "Dados" %>
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-zinc-800"><%= log.verb %></td>
+                <td class="px-4 py-3 text-zinc-700">
+                  <%= log.item_type %>
+                  <% if log.item_id.present? %>
+                    <span class="text-zinc-400">#<%= log.item_id %></span>
+                  <% end %>
+                </td>
+                <td class="px-4 py-3 text-zinc-700"><%= log.actor_name.presence || "Sistema" %></td>
+                <td class="max-w-xl px-4 py-3 text-xs text-zinc-600">
+                  <span class="block truncate" title="<%= log.payload.to_s %>"><%= log.payload.to_s.truncate(150) %></span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% if @pagy.pages > 1 %>
+        <div class="px-4 py-3">
+          <%== @pagy.series_nav %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="px-6 py-12 text-center">
+        <p class="text-sm font-medium text-zinc-900">Nenhum log encontrado</p>
+        <p class="mt-1 text-sm text-zinc-500">Ajuste os filtros ou execute ações no sistema para gerar trilhas.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

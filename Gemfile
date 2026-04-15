@@ -79,3 +79,4 @@ end
 
 gem "tailwindcss-rails", "~> 4.4"
 gem "heroicons", "~> 2.2"
+gem "audited", "~> 5.8"

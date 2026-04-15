@@ -16,6 +16,7 @@ class Account < ApplicationRecord
   has_many :bank_statement_imports, dependent: :destroy
   has_many :bank_statements, dependent: :destroy
   has_many :institutions, dependent: :destroy
+  has_many :audit_events, dependent: :destroy
 
   after_create :create_default_setting!
   after_create :seed_default_institutions!

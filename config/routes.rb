@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get "documents/search", to: "documents#term_search", as: :documents_term_search
   get "chat", to: "chat#index", as: :chat
   get "wiki", to: "wiki_pages#index", as: :wiki
+  get "auditoria", to: "audits#index", as: :audits
   get "wiki/log", to: "wiki_pages#log", as: :wiki_log
   get "wiki/lint_report", to: "wiki_pages#lint_report", as: :wiki_lint_report
   get "wiki/:slug", to: "wiki_pages#show", as: :wiki_page, constraints: { slug: /[^\/]+(?:\/[^\/]+)*/ }

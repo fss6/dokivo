@@ -2,6 +2,7 @@
 
 class BankStatement < ApplicationRecord
   acts_as_tenant(:account)
+  audited on: %i[create update destroy], except: %i[created_at updated_at possible_duplicate]
 
   belongs_to :client
   belongs_to :bank_statement_import

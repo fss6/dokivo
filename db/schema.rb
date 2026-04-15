@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_14_194000) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_15_182717) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -54,6 +54,47 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_194000) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "audit_events", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "user_id"
+    t.string "event_type", null: false
+    t.string "subject_type", null: false
+    t.bigint "subject_id", null: false
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "event_type", "created_at"], name: "index_audit_events_on_account_event_and_created_at"
+    t.index ["account_id"], name: "index_audit_events_on_account_id"
+    t.index ["subject_type", "subject_id"], name: "index_audit_events_on_subject"
+    t.index ["user_id", "created_at"], name: "index_audit_events_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_audit_events_on_user_id"
+  end
+
+  create_table "audits", force: :cascade do |t|
+    t.bigint "auditable_id"
+    t.string "auditable_type"
+    t.bigint "associated_id"
+    t.string "associated_type"
+    t.bigint "user_id"
+    t.string "user_type"
+    t.string "username"
+    t.string "action"
+    t.text "audited_changes"
+    t.integer "version", default: 0
+    t.string "comment"
+    t.string "remote_address"
+    t.string "request_uuid"
+    t.datetime "created_at", null: false
+    t.bigint "account_id"
+    t.index ["account_id", "created_at"], name: "index_audits_on_account_id_and_created_at"
+    t.index ["account_id"], name: "index_audits_on_account_id"
+    t.index ["associated_type", "associated_id"], name: "associated_index"
+    t.index ["auditable_type", "auditable_id", "version"], name: "auditable_index"
+    t.index ["created_at"], name: "index_audits_on_created_at"
+    t.index ["request_uuid"], name: "index_audits_on_request_uuid"
+    t.index ["user_id", "user_type"], name: "user_index"
   end
 
   create_table "bank_statement_imports", force: :cascade do |t|
@@ -394,6 +435,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_194000) do
   add_foreign_key "accounts", "plans"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "audit_events", "accounts"
+  add_foreign_key "audit_events", "users"
+  add_foreign_key "audits", "accounts"
   add_foreign_key "bank_statement_imports", "accounts"
   add_foreign_key "bank_statement_imports", "clients"
   add_foreign_key "bank_statement_imports", "institutions"

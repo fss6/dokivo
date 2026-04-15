@@ -1,5 +1,6 @@
 class Folder < ApplicationRecord
   acts_as_tenant(:account)
+  audited on: %i[create update destroy], except: %i[created_at updated_at]
 
   belongs_to :client, optional: true
 

@@ -30,7 +30,7 @@
         title: "Inteligência",
         items: [
           { key: :wiki, label: "Wiki", path: wiki_path, icon: :book_open, policy_ok: WikiPagePolicy.new(current_user, :wiki_page).index? },
-          { key: :audit, label: "Auditoria", icon: :document_text, disabled: true, policy_ok: true },
+          { key: :audit, label: "Auditoria", path: audits_path, icon: :document_text, policy_ok: policy(:audit).index? },
           { key: :monthly_collection, label: "Coleta Mensal", path: monthly_collections_path, icon: :arrow_up_on_square, policy_ok: policy(Folder).index? },
           { key: :erp_export, label: "Exporta ERP", icon: :circle_stack, disabled: true, policy_ok: true }
         ]
@@ -49,6 +49,7 @@
                        (item[:key] == :bank_statements && (request.path.start_with?("/bank_statements") || request.path.match?(%r{\A/bank_statement_imports/\d+}))) ||
                        (item[:key] == :conversations && request.path.match?(%r{\A/accounts/\d+/conversations})) ||
                        (item[:key] == :wiki && request.path.start_with?("/wiki")) ||
+                       (item[:key] == :audit && request.path.start_with?("/auditoria")) ||
                        (item[:key] == :monthly_collection && request.path.start_with?("/coleta-mensal")) %>
 
           <% base_classes = "group flex items-center justify-center gap-3 rounded-md px-2 py-2.5 text-zinc-400 transition-colors xl:justify-start" %>

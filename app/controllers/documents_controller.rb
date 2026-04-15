@@ -103,7 +103,13 @@ class DocumentsController < ApplicationController
 
   def move
     destination_folder = Folder.for_nav_client(current_client).find(params.expect(:folder_id))
+    source_folder_id = @document.folder_id
     @document.update!(folder: destination_folder)
+    record_audit_event(
+      event_type: "document.moved",
+      subject: @document,
+      metadata: { from_folder_id: source_folder_id, to_folder_id: destination_folder.id }
+    )
     respond_to do |format|
       format.html do
         redirect_back fallback_location: folders_path(folder_id: destination_folder.id),
@@ -118,6 +124,11 @@ class DocumentsController < ApplicationController
     return redirect_back(fallback_location: document_path(@document), alert: "Informe uma tag válida.") if tags == @document.tags
 
     @document.update!(tags: tags)
+    record_audit_event(
+      event_type: "document.tag_added",
+      subject: @document,
+      metadata: { tag: params[:tag].to_s }
+    )
 
     redirect_back fallback_location: document_path(@document), notice: "Tag adicionada com sucesso."
   end
@@ -131,6 +142,11 @@ class DocumentsController < ApplicationController
     updated = @document.tags.reject { |tag| tag.casecmp(old_tag).zero? }
     updated << new_tag
     @document.update!(tags: Document.normalize_tags(updated))
+    record_audit_event(
+      event_type: "document.tag_replaced",
+      subject: @document,
+      metadata: { old_tag: old_tag, new_tag: new_tag }
+    )
 
     redirect_back fallback_location: document_path(@document), notice: "Tag atualizada com sucesso."
   end
@@ -139,6 +155,11 @@ class DocumentsController < ApplicationController
     tag_to_remove = params[:tag].to_s
     tags = @document.tags.reject { |tag| tag.casecmp(tag_to_remove).zero? }
     @document.update!(tags: tags)
+    record_audit_event(
+      event_type: "document.tag_removed",
+      subject: @document,
+      metadata: { tag: tag_to_remove }
+    )
 
     redirect_back fallback_location: document_path(@document), notice: "Tag removida com sucesso."
   end
@@ -217,6 +238,11 @@ class DocumentsController < ApplicationController
 
     import.file.attach(@document.file.blob)
     ProcessBankStatementImportJob.perform_later(import.id)
+    record_audit_event(
+      event_type: "bank_statement_import.enqueued",
+      subject: import,
+      metadata: { source_document_id: @document.id, institution_id: import.institution_id }
+    )
   end
 
   def selected_statement_institution
