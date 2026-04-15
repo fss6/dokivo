@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_14_133100) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_14_181000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
@@ -91,6 +91,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_133100) do
     t.index ["institution_id"], name: "index_bank_statements_on_institution_id"
   end
 
+  create_table "client_checklist_items", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "client_id", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.boolean "active", default: true, null: false
+    t.jsonb "match_terms", default: [], null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "client_id", "active"], name: "idx_on_account_id_client_id_active_80dda41374"
+    t.index ["account_id", "client_id", "position"], name: "idx_on_account_id_client_id_position_7f36bb5353"
+    t.index ["account_id"], name: "index_client_checklist_items_on_account_id"
+    t.index ["client_id"], name: "index_client_checklist_items_on_client_id"
+  end
+
   create_table "clients", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "name", null: false
@@ -102,6 +117,38 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_133100) do
     t.datetime "updated_at", null: false
     t.index ["account_id", "tax_id"], name: "index_clients_on_account_id_and_tax_id", unique: true, where: "((tax_id IS NOT NULL) AND ((tax_id)::text <> ''::text))"
     t.index ["account_id"], name: "index_clients_on_account_id"
+  end
+
+  create_table "competency_checklist_items", force: :cascade do |t|
+    t.bigint "competency_checklist_id", null: false
+    t.bigint "client_checklist_item_id"
+    t.bigint "last_document_id"
+    t.bigint "validated_by_user_id"
+    t.string "name_snapshot", null: false
+    t.string "state", default: "pending", null: false
+    t.datetime "received_at"
+    t.datetime "validated_at"
+    t.text "validation_note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "match_terms", default: [], null: false
+    t.index ["client_checklist_item_id"], name: "index_competency_checklist_items_on_client_checklist_item_id"
+    t.index ["competency_checklist_id", "client_checklist_item_id"], name: "idx_comp_checklist_items_on_competency_and_template", unique: true
+    t.index ["competency_checklist_id"], name: "index_competency_checklist_items_on_competency_checklist_id"
+    t.index ["last_document_id"], name: "index_competency_checklist_items_on_last_document_id"
+    t.index ["state"], name: "index_competency_checklist_items_on_state"
+    t.index ["validated_by_user_id"], name: "index_competency_checklist_items_on_validated_by_user_id"
+  end
+
+  create_table "competency_checklists", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "client_id", null: false
+    t.date "period", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "client_id", "period"], name: "idx_on_account_id_client_id_period_7cc7b2bb99", unique: true
+    t.index ["account_id"], name: "index_competency_checklists_on_account_id"
+    t.index ["client_id"], name: "index_competency_checklists_on_client_id"
   end
 
   create_table "conversations", force: :cascade do |t|
@@ -353,7 +400,15 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_133100) do
   add_foreign_key "bank_statements", "bank_statement_imports"
   add_foreign_key "bank_statements", "clients"
   add_foreign_key "bank_statements", "institutions"
+  add_foreign_key "client_checklist_items", "accounts"
+  add_foreign_key "client_checklist_items", "clients"
   add_foreign_key "clients", "accounts"
+  add_foreign_key "competency_checklist_items", "client_checklist_items"
+  add_foreign_key "competency_checklist_items", "competency_checklists"
+  add_foreign_key "competency_checklist_items", "documents", column: "last_document_id"
+  add_foreign_key "competency_checklist_items", "users", column: "validated_by_user_id"
+  add_foreign_key "competency_checklists", "accounts"
+  add_foreign_key "competency_checklists", "clients"
   add_foreign_key "conversations", "accounts"
   add_foreign_key "conversations", "integration_connections"
   add_foreign_key "conversations", "users"

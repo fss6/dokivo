@@ -4,6 +4,8 @@ class Client < ApplicationRecord
   acts_as_tenant(:account)
 
   has_many :folders, dependent: :nullify
+  has_many :client_checklist_items, dependent: :destroy
+  has_many :competency_checklists, dependent: :destroy
   has_many :bank_statement_imports, dependent: :destroy
   has_many :bank_statements, dependent: :destroy
 

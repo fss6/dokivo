@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   get "landing", to: "landing#index", as: :landing
   get "privacidade", to: "landing#privacy", as: :privacy
   get "dashboard", to: "dashboard#index", as: :dashboard
+  get "coleta-mensal", to: "monthly_collections#index", as: :monthly_collections
+  post "coleta-mensal", to: "monthly_collections#create"
+  get "coleta-mensal/:id", to: "monthly_collections#show", as: :monthly_collection, constraints: { id: /\d{4}-\d{2}/ }
   resource :current_client, only: [:update]
   resources :bank_statements, except: [:show]
   resources :bank_statement_imports, only: [:show] do
@@ -36,6 +39,15 @@ Rails.application.routes.draw do
 
   resources :folders do
     resources :documents, shallow: true, only: %i[index create show destroy]
+    resource :competency_checklist, only: %i[show], controller: "competency_checklists" do
+      post :create_template_item
+      delete :remove_item
+      patch :attach_document
+      patch :detach_document
+      patch :refresh_receipts
+      patch :mark_validated
+      patch :mark_pending
+    end
   end
   resources :documents, only: [] do
     member do

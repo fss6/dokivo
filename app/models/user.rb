@@ -10,6 +10,7 @@ class User < ApplicationRecord
 
   has_many :conversations, dependent: :destroy
   has_many :documents, dependent: :destroy
+  has_many :validated_competency_checklist_items, class_name: "CompetencyChecklistItem", foreign_key: :validated_by_user_id, dependent: :nullify, inverse_of: :validated_by_user
   has_many :group_memberships, dependent: :destroy
   has_many :groups, through: :group_memberships
 

@@ -57,6 +57,13 @@ class DocumentsController < ApplicationController
   end
 
   def create
+    if monthly_collection_bank_statement_upload? && selected_statement_institution.blank?
+      redirect_back fallback_location: after_upload_path,
+                    alert: "Selecione a instituição do extrato.",
+                    status: :see_other
+      return
+    end
+
     @document = @folder.documents.build
     assign_defaults_for_upload!(@document)
     @document.assign_attributes(upload_params)
@@ -64,6 +71,7 @@ class DocumentsController < ApplicationController
     respond_to do |format|
       if @document.save
         DocumentOcrJob.perform_later(@document.id) if @document.file.attached?
+        enqueue_bank_statement_import! if monthly_collection_bank_statement_upload?
 
         format.html do
           redirect_back fallback_location: after_upload_path,
@@ -170,6 +178,51 @@ class DocumentsController < ApplicationController
   end
 
   def after_upload_path
-    params[:upload_context].to_s == "folder" ? folder_path(@folder) : folder_documents_path(@folder)
+    return monthly_collection_path(upload_period.strftime("%Y-%m")) if monthly_collection_upload?
+    return folder_competency_checklist_path(@folder, period: upload_period.strftime("%Y-%m")) if competency_checklist_upload?
+    return folder_path(@folder) if params[:upload_context].to_s == "folder"
+
+    folder_documents_path(@folder)
   end
+
+  def competency_checklist_upload?
+    params[:upload_context].to_s == "competency_checklist"
+  end
+
+  def monthly_collection_upload?
+    params[:upload_context].to_s == "monthly_collection"
+  end
+
+  def monthly_collection_bank_statement_upload?
+    monthly_collection_upload? && params[:document_kind].to_s == "bank_statement"
+  end
+
+  def upload_period
+    Date.strptime(params[:period].to_s, "%Y-%m").beginning_of_month
+  rescue ArgumentError
+    Date.current.beginning_of_month
+  end
+
+  def enqueue_bank_statement_import!
+    return unless @folder.client
+    return unless @document.file.attached?
+    return if selected_statement_institution.blank?
+
+    import = current_user.account.bank_statement_imports.create(
+      client: @folder.client,
+      institution: selected_statement_institution,
+      metadata: { source_document_id: @document.id }
+    )
+    return unless import.persisted?
+
+    import.file.attach(@document.file.blob)
+    ProcessBankStatementImportJob.perform_later(import.id)
+  end
+
+  def selected_statement_institution
+    return @selected_statement_institution if defined?(@selected_statement_institution)
+
+    @selected_statement_institution = current_user.account.institutions.find_by(id: params[:institution_id])
+  end
+
 end

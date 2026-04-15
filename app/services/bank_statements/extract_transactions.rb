@@ -115,6 +115,9 @@ module BankStatements
     private
 
     def build_insert_rows(transactions, now)
+      existing_signatures = load_existing_duplicate_signatures(transactions)
+      batch_signatures = {}
+
       transactions.filter_map do |tx|
         date_str = tx["date"].to_s
         occurred =
@@ -129,6 +132,15 @@ module BankStatements
 
         amount_f = tx["amount"]
         ttype = tx["type"].to_s.strip.downcase
+        signature = duplicate_signature(
+          occurred_on: occurred,
+          institution_id: @import.institution_id,
+          transaction_type: ttype,
+          amount: amount_f,
+          description: description
+        )
+        possible_duplicate = existing_signatures.key?(signature) || batch_signatures.key?(signature)
+        batch_signatures[signature] = true
 
         {
           "account_id" => @import.account_id,
@@ -139,10 +151,60 @@ module BankStatements
           "amount" => amount_f,
           "transaction_type" => ttype,
           "description" => description,
+          "possible_duplicate" => possible_duplicate,
           "created_at" => now,
           "updated_at" => now
         }
       end
+    end
+
+    def load_existing_duplicate_signatures(transactions)
+      occurred_on_values = []
+      amount_values = []
+      transaction_type_values = []
+      description_values = []
+
+      transactions.each do |tx|
+        occurred = Date.parse(tx["date"].to_s) rescue nil
+        next if occurred.blank?
+
+        description = tx["description"].to_s.strip.squeeze(" ")
+        next if description.blank?
+
+        occurred_on_values << occurred
+        amount_values << tx["amount"]
+        transaction_type_values << tx["type"].to_s.strip.downcase
+        description_values << description.downcase
+      end
+
+      return {} if occurred_on_values.empty? || amount_values.empty? || transaction_type_values.empty? || description_values.empty?
+
+      BankStatement
+        .where(client_id: @import.client_id, institution_id: @import.institution_id)
+        .where(occurred_on: occurred_on_values.uniq)
+        .where(amount: amount_values.uniq)
+        .where(transaction_type: transaction_type_values.uniq)
+        .where("LOWER(TRIM(bank_statements.description)) IN (?)", description_values.uniq)
+        .pluck(:occurred_on, :institution_id, :transaction_type, :amount, Arel.sql("LOWER(TRIM(bank_statements.description))"))
+        .index_by do |occurred_on, institution_id, transaction_type, amount, normalized_description|
+          duplicate_signature(
+            occurred_on: occurred_on,
+            institution_id: institution_id,
+            transaction_type: transaction_type,
+            amount: amount,
+            description: normalized_description
+          )
+        end
+    end
+
+    def duplicate_signature(occurred_on:, institution_id:, transaction_type:, amount:, description:)
+      [
+        occurred_on.to_s,
+        institution_id.to_i,
+        transaction_type.to_s,
+        amount.to_d.to_s("F"),
+        description.to_s.strip.downcase
+      ].join("|")
     end
 
     def parse_json_array(raw)

@@ -20,7 +20,7 @@ class BankStatement < ApplicationRecord
   validates :description, presence: true
   validates :possible_duplicate, inclusion: { in: [true, false] }
 
-  before_validation :detect_possible_duplicate, on: [:create, :update]
+  before_validation :detect_possible_duplicate
 
   validate :client_matches_import
   validate :institution_matches_import
