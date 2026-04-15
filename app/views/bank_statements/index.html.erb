@@ -22,7 +22,7 @@
   </header>
 
   <section class="min-w-0" aria-labelledby="launches-heading">
-    <div class="grid gap-3 sm:grid-cols-3">
+    <div class="grid gap-3 sm:grid-cols-3 mb-3">
       <article class="app-card p-4">
         <p class="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">Total entradas</p>
         <p class="mt-1 text-xl font-semibold text-emerald-700"><%= bank_statement_amount_currency(@total_entries) %></p>
@@ -41,8 +41,8 @@
     <details class="app-card mb-3 group" <%= "open" if active_filters_count.positive? %>>
       <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-left [&::-webkit-details-marker]:hidden">
         <div class="flex items-center gap-2">
-          <span id="launches-heading" class="text-sm font-semibold text-zinc-900">Lançamentos</span>
-          <span class="text-xs text-zinc-500">Filtros</span>
+          <span id="launches-heading" class="text-sm font-semibold text-zinc-900">Filtros</span>
+          <span class="text-xs text-zinc-500">Clique para expandir</span>
           <% if active_filters_count.positive? %>
             <span class="inline-flex items-center rounded bg-accent/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-accent"><%= active_filters_count %> ativo(s)</span>
           <% end %>
