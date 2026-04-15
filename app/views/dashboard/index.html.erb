@@ -124,7 +124,6 @@
     <article class="app-card p-5 xl:col-span-8">
       <header class="mb-4 flex items-center justify-between">
         <h2 class="text-base font-semibold text-zinc-900">Arquivos recentes</h2>
-        <%= link_to "Ver todos", folders_path, class: "text-xs font-medium text-accent no-underline hover:underline" %>
       </header>
       <% if @recent_documents.any? %>
         <div class="overflow-x-auto">
@@ -170,7 +169,6 @@
                   <%= l(entry[:created_at], format: :short) %> em <%= entry[:document].folder&.name || "Sem pasta" %>
                 </p>
               </div>
-              <%= link_to "Ver", document_path(entry[:document]), class: "text-xs font-medium text-accent no-underline hover:underline" %>
             </li>
           <% end %>
         </ul>
