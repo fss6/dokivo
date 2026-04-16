@@ -14,6 +14,12 @@ services:
       - .env
     environment:
       REDIS_URL: ${REDIS_URL}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/up"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
     networks:
       - coolify
       - ipv6_net
@@ -30,6 +36,18 @@ services:
       REDIS_URL: ${REDIS_URL}
     env_file:
       - .env
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "ruby",
+          "-e",
+          "f='tmp/pids/sidekiq.pid'; exit(1) unless File.exist?(f); pid=File.read(f).strip; exit(system('kill','-0',pid)?0:1)",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     networks:
       - coolify
       - ipv6_net
