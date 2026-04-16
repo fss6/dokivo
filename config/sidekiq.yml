@@ -12,5 +12,5 @@
 
 # Redis configuration
 :redis:
-  :url: <%= ENV['REDIS_URL'] || 'redis://localhost:6379/0' %>
-  :namespace: chista_api 
+  :url: "<%= ENV['REDIS_URL'] || 'redis://localhost:6379/0' %>"
+  :namespace: dokivo_redis 
