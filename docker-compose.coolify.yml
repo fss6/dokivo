@@ -14,12 +14,6 @@ services:
       - .env
     environment:
       REDIS_URL: ${REDIS_URL}
-    healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/up"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 120s
     networks:
       - coolify
       - ipv6_net
