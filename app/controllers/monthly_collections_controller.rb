@@ -1,7 +1,7 @@
 class MonthlyCollectionsController < ApplicationController
   before_action :authorize_policy
   before_action :require_current_client!
-  before_action :set_period_from_id!, only: %i[show document_statuses]
+  before_action :set_period_from_id!, only: %i[show document_statuses destroy]
   before_action :set_collection_folder, only: %i[show document_statuses]
   before_action :set_checklist, only: :show
   before_action :set_available_documents, only: :show
@@ -48,6 +48,22 @@ class MonthlyCollectionsController < ApplicationController
     render json: {
       documents: docs.map { |doc| document_status_payload(doc) }
     }
+  end
+
+  def destroy
+    checklist = CompetencyChecklist.find_by(
+      account: current_user.account,
+      client: current_client,
+      period: @period
+    )
+
+    unless checklist
+      redirect_to monthly_collections_path, alert: "Competência não encontrada."
+      return
+    end
+
+    checklist.destroy!
+    redirect_to monthly_collections_path, notice: "Competência removida com sucesso."
   end
 
   private

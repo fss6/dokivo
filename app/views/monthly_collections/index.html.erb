@@ -1,6 +1,6 @@
 <% content_for :title, "Competências · Dokivo" %>
 
-<div class="space-y-6">
+<div class="space-y-6" data-controller="app-confirm-modal">
   <header>
     <p class="text-xs font-semibold uppercase tracking-wide text-accent">Envio e validação</p>
     <h1 class="text-2xl font-semibold text-zinc-900 sm:text-3xl">Competências</h1>
@@ -39,7 +39,22 @@
                 <p class="text-sm font-medium text-zinc-900"><%= l(period, format: "%m/%Y") %></p>
                 <p class="text-xs text-zinc-500">Acompanhe as pendências desta competência.</p>
               </div>
-              <%= link_to "Abrir", monthly_collection_path(period.strftime("%Y-%m")), class: "app-btn-secondary shrink-0 text-xs" %>
+              <div class="flex items-center gap-2">
+                <%= link_to "Abrir", monthly_collection_path(period.strftime("%Y-%m")), class: "app-btn-secondary shrink-0 text-xs" %>
+                <%= button_tag type: "button",
+                      class: "app-btn-secondary shrink-0 text-xs !border-red-200 !text-red-700 hover:!bg-red-50",
+                      data: app_confirm_modal_open_data(
+                        url: monthly_collection_path(period.strftime("%Y-%m")),
+                        item_label: l(period, format: "%m/%Y"),
+                        heading: "Remover competência?",
+                        body_prefix: "Você está prestes a remover a competência ",
+                        body_suffix: ". Esta ação não pode ser desfeita.",
+                        confirm_text: "Remover competência",
+                        confirm_variant: "danger"
+                      ) do %>
+                  Remover
+                <% end %>
+              </div>
             </li>
           <% end %>
         </ul>
@@ -53,4 +68,10 @@
       <% end %>
     </section>
   </div>
+
+  <%= render "shared/confirm_modal",
+        heading: "Remover competência?",
+        body_prefix: "Você está prestes a remover a competência ",
+        body_suffix: ". Esta ação não pode ser desfeita.",
+        confirm_text: "Remover competência" %>
 </div>
