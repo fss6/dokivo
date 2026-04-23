@@ -99,7 +99,7 @@ class RagQueryJob < ApplicationJob
       LlmService.stream(context: context, history: history, user_content: user_message.content) do |token|
         next if token.blank?
 
-        new_content = ai_message.content.to_s + token
+        new_content = append_stream_token(ai_message.content.to_s, token)
         ai_message.update_column(:content, new_content)
         Turbo::StreamsChannel.broadcast_replace_to(
           "conversation_#{conversation.id}",
@@ -157,5 +157,25 @@ class RagQueryJob < ApplicationJob
       partial: "messages/message",
       locals: { message: ai_message.reload, account: conversation.account }
     )
+  end
+
+  # Streaming pode quebrar em fronteiras estranhas (ex.: "de" + "8").
+  # Ajusta só casos simples de letra<->número para reduzir textos "colados".
+  def append_stream_token(current_text, token)
+    return current_text + token if current_text.blank?
+
+    last_char = current_text[-1]
+    first_char = token[0]
+    needs_space = (letter?(last_char) && digit?(first_char)) || (digit?(last_char) && letter?(first_char))
+
+    needs_space ? "#{current_text} #{token}" : current_text + token
+  end
+
+  def letter?(char)
+    char.to_s.match?(/[[:alpha:]]/)
+  end
+
+  def digit?(char)
+    char.to_s.match?(/\d/)
   end
 end
