@@ -12,11 +12,6 @@ class FoldersController < ApplicationController
                      .group("folders.id")
                      .order(:name)
     @selected_folder = @folders.find { |folder| folder.id == params[:folder_id].to_i } || @folders.first
-    @documents = if @selected_folder
-      @selected_folder.documents.includes(:user, :folder).with_attached_file.order(created_at: :desc)
-    else
-      Document.none
-    end
   end
 
   # GET /folders/1 or /folders/1.json
