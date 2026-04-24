@@ -8,12 +8,18 @@ export default class extends Controller {
     this.openingValue = false
     this.resetOpeningState()
     this.beforeCacheHandler = () => this.resetOpeningState()
+    this.pageShowHandler = () => {
+      this.openingValue = false
+      this.resetOpeningState()
+    }
     document.addEventListener("turbo:before-cache", this.beforeCacheHandler)
+    window.addEventListener("pageshow", this.pageShowHandler)
     this.syncFolderSelection()
   }
 
   disconnect() {
     document.removeEventListener("turbo:before-cache", this.beforeCacheHandler)
+    window.removeEventListener("pageshow", this.pageShowHandler)
   }
 
   selectFolder(event) {
