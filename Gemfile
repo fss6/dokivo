@@ -20,7 +20,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 # Authentication
-gem 'devise', '~> 5.0', '>= 5.0.3'
+gem 'devise', '~> 5.0'
 gem 'pundit', '~> 2.5', '>= 2.5.2'
 
 # Multi-tenancy
